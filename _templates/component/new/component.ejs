@@ -1,0 +1,27 @@
+---
+to: src/components/<%= h.inflection.undasherize(name) %>/<%= h.inflection.undasherize(name) %>.tsx
+---
+<% const comp = h.inflection.undasherize(name) -%>
+import * as React from "react";
+
+
+interface Props extends React.HTMLAttributes<HTMLElement> {
+}
+
+export const <%= comp %>: React.FC<Props> = ({ children, style, className }) => {
+    // STATE
+    // STATE:END
+
+    // CALLBACKS
+    // CALLBACKS:END
+
+    // EFFECT
+    // EFFECT:END
+    
+    return (
+    <div style={style}>
+        {children}
+    </div>
+    );
+};
+export default <%= comp %>;
