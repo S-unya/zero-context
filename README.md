@@ -1,4 +1,4 @@
-# Gatsby Image visualiser and explorer
+# WORK IN PROGRESS: Gatsby Image visualiser and explorer
 
 This project is a way of visually exploring what each part of the GraphQL query you pass into the awesome [gatsby-plugin-sharp](https://www.gatsbyjs.org/packages/gatsby-plugin-sharp/) does and how that is output by the equally amazing [gatsby-image](https://www.gatsbyjs.org/packages/gatsby-image/).
 
