@@ -13,6 +13,7 @@ interface Props extends React.FormHTMLAttributes<HTMLFormElement> {
     ) => void;
 }
 
+// @TODO: add fragments support
 export const ImageForm: React.FC<Props> = ({
     sourceImageProps,
     displayImageProps,
@@ -102,7 +103,7 @@ export const ImageForm: React.FC<Props> = ({
                     <label htmlFor="image-width">Display width</label>{" "}
                     <input
                         type="number"
-                        value={displayImageProps.maxWidth}
+                        value={displayImageProps.maxWidth || ""}
                         onChange={setDisplayImageWidth}
                     />
                 </div>
@@ -110,7 +111,7 @@ export const ImageForm: React.FC<Props> = ({
                     <label htmlFor="image-height">Display height</label>{" "}
                     <input
                         type="number"
-                        value={displayImageProps.maxHeight}
+                        value={displayImageProps.maxHeight || ""}
                         onChange={setDisplayImageHeight}
                     />
                 </div>
@@ -118,7 +119,7 @@ export const ImageForm: React.FC<Props> = ({
                     <label htmlFor="image-quality">Display quality</label>{" "}
                     <input
                         type="number"
-                        value={displayImageProps.quality}
+                        value={displayImageProps.quality || ""}
                         onChange={setDisplayImageQuality}
                     />
                 </div>
@@ -133,7 +134,7 @@ export const ImageForm: React.FC<Props> = ({
                     </label>{" "}
                     <input
                         type="text"
-                        value={displayImageProps.displayBreakpoints}
+                        value={displayImageProps.displayBreakpoints || ""}
                         onChange={setDisplayImageBreakpoints}
                         placeholder="e.g. 320, 800, 1024"
                     />
@@ -161,7 +162,8 @@ export const ImageForm: React.FC<Props> = ({
                     <input
                         type="number"
                         id="source-image-width"
-                        value={sourceImageProps.width}
+                        value={sourceImageProps.width || ""}
+                        onChange={setImageWidth}
                     />{" "}
                     <span>px</span>
                 </div>
@@ -169,7 +171,11 @@ export const ImageForm: React.FC<Props> = ({
                     <label htmlFor="source-image-type">
                         Type of source image:
                     </label>{" "}
-                    <select id="source-image-type" name="source-image-type">
+                    <select
+                        id="source-image-type"
+                        name="source-image-type"
+                        onChange={setImageType}
+                    >
                         <option value="">-- Choose --</option>
                         <option value="jpg">.jpg</option>
                         <option value="webp">.webp</option>
