@@ -4,6 +4,7 @@ import { useImmer } from "use-immer";
 import { ImageForm } from "../components/ImageForm";
 import { Layout } from "../components/Layout";
 import GraphQlExplorer from "../components/GraphQlExplorer/GraphQlExplorer";
+import PictureElementExplorer from "../components/PictureElementExplorer/PictureElementExplorer";
 
 export interface SourceImageProps {
     width: number | null;
@@ -55,6 +56,10 @@ export default () => {
                 updateSourceImageProps={updateSourceImageProps}
             />
             <GraphQlExplorer
+                displayImageProps={displayImageProps}
+                sourceImageProps={sourceImageProps}
+            />
+            <PictureElementExplorer
                 displayImageProps={displayImageProps}
                 sourceImageProps={sourceImageProps}
             />
