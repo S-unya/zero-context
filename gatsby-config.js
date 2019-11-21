@@ -6,6 +6,14 @@ module.exports = {
         // SEO for react
         "gatsby-plugin-react-helmet",
         // Expose `/content` to graphQL layer
+        {
+            resolve: `gatsby-source-filesystem`,
+            options: {
+                name: `images`,
+                // eslint-disable-next-line no-undef
+                path: `${__dirname}/src/assets`
+            }
+        },
         // {
         //     resolve: `gatsby-source-filesystem`,
         //     options: {
