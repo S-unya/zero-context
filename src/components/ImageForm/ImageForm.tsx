@@ -1,5 +1,5 @@
 import * as React from "react";
-import { SourceImageProps, DisplayImageProps } from "../../pages";
+import { SourceImageProps, DisplayImageProps, FieldType } from "../../pages";
 import { Draft } from "immer";
 
 interface Props extends React.FormHTMLAttributes<HTMLFormElement> {
@@ -11,6 +11,7 @@ interface Props extends React.FormHTMLAttributes<HTMLFormElement> {
     updateDisplayImageProps: (
         f: (draft: DisplayImageProps) => void | DisplayImageProps
     ) => void;
+    currentFocus: FieldType;
 }
 
 // @TODO: add fragments support
@@ -18,7 +19,8 @@ export const ImageForm: React.FC<Props> = ({
     sourceImageProps,
     displayImageProps,
     updateDisplayImageProps,
-    updateSourceImageProps
+    updateSourceImageProps,
+    currentFocus
 }) => {
     function setImageType(event: React.ChangeEvent<HTMLSelectElement>) {
         updateSourceImageProps((draft: SourceImageProps) => {
@@ -98,13 +100,13 @@ export const ImageForm: React.FC<Props> = ({
 
         const baseProperties = (
             <>
-                <legend>Display properties</legend>
                 <div className="input-wrap">
                     <label htmlFor="image-width">Display width</label>{" "}
                     <input
                         type="number"
                         value={displayImageProps.maxWidth || ""}
                         onChange={setDisplayImageWidth}
+                        placeholder="800"
                     />
                 </div>
                 <div className="input-wrap">
@@ -116,11 +118,16 @@ export const ImageForm: React.FC<Props> = ({
                     />
                 </div>
                 <div className="input-wrap">
-                    <label htmlFor="image-quality">Display quality</label>{" "}
+                    <label htmlFor="image-quality">
+                        Image compression quality
+                    </label>{" "}
                     <input
                         type="number"
                         value={displayImageProps.quality || ""}
                         onChange={setDisplayImageQuality}
+                        max="100"
+                        min="0"
+                        placeholder="50"
                     />
                 </div>
             </>
@@ -136,7 +143,7 @@ export const ImageForm: React.FC<Props> = ({
                         type="text"
                         value={displayImageProps.displayBreakpoints || ""}
                         onChange={setDisplayImageBreakpoints}
-                        placeholder="e.g. 320, 800, 1024"
+                        placeholder="800"
                     />
                 </div>
             </>
@@ -155,6 +162,11 @@ export const ImageForm: React.FC<Props> = ({
         <form>
             <fieldset>
                 <legend>About your image</legend>
+                <p>
+                    These options are about your source image, they would
+                    normally be read directly from the file by{" "}
+                    <code>gatsby-plugin-sharp</code>
+                </p>
                 <div className="input-wrap">
                     <label htmlFor="source-image-width">
                         Width in pixels of your source image:
@@ -185,8 +197,14 @@ export const ImageForm: React.FC<Props> = ({
             </fieldset>
             <fieldset>
                 <legend>How will the image display?</legend>
+                <p>
+                    These options are about how you want your image to display,
+                    there is more help available for each field.
+                </p>
                 <div className="input-wrap">
-                    <label htmlFor="image-type-fixed">Fixed size:</label>{" "}
+                    <label htmlFor="image-type-fixed">
+                        Fixed size (with appropriate images for hi-res screens):
+                    </label>{" "}
                     <input
                         type="radio"
                         id="image-type-fixed"
@@ -195,7 +213,9 @@ export const ImageForm: React.FC<Props> = ({
                         checked={displayImageProps.displayType === "fixed"}
                         onChange={setImageDisplayType}
                     />
-                    <label htmlFor="image-type-fluid">Fluid size:</label>{" "}
+                    <label htmlFor="image-type-fluid">
+                        Fluid size (adapts to the width of the screen):
+                    </label>{" "}
                     <input
                         type="radio"
                         id="image-type-fluid"
