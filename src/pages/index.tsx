@@ -1,6 +1,8 @@
+/** @jsx jsx */
 import * as React from "react";
 import { useImmer } from "use-immer";
 import { useStaticQuery, graphql } from "gatsby";
+import { jsx } from "theme-ui";
 import { Image } from "gatsby-image";
 
 import { ImageForm } from "../components/ImageForm";
@@ -121,7 +123,14 @@ export default () => {
                 currentFocus={currentFocus}
                 setCurrentFocus={setCurrentFocus}
             />
-            <div aria-atomic="true" aria-live="assertive">
+            <div
+                aria-atomic="true"
+                aria-live="assertive"
+                sx={{
+                    gridColumn: `2 / 3`,
+                    gridRow: `1 / 2`
+                }}
+            >
                 {infoMessage}
             </div>
             {/* {img && img.fixed ? (

@@ -13,6 +13,7 @@
     "@emotion/core": "^10.0.22",
     "@mdx-js/mdx": "^1.5.1",
     "@mdx-js/react": "^1.5.1",
+    "@theme-ui/presets": "^0.2.44",
     "gatsby": "^2.17.11",
     "gatsby-image": "^2.2.33",
     "gatsby-plugin-manifest": "^2.2.27",
@@ -27,7 +28,7 @@
     "immer": "^5.0.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
-    "theme-ui": "^0.2.46",
+    "theme-ui": "^0.2.49",
     "use-immer": "^0.3.5"
   },
   "devDependencies": {
@@ -39,6 +40,7 @@
     "@storybook/addon-storyshots": "^5.2.6",
     "@storybook/addons": "^5.2.6",
     "@storybook/react": "^5.2.6",
+    "@types/theme-ui": "^0.2.5",
     "babel-loader": "^8.0.6",
     "react-helmet": "^5.2.1",
     "typescript": "^3.7.2"
