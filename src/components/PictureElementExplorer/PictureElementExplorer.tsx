@@ -1,8 +1,12 @@
 import * as React from "react";
 import { DisplayImageProps, SourceImageProps, FieldType } from "../../pages";
 
-const calculateSizes = ({ maxWidth }: DisplayImageProps): string => {
-    return `(max-width: ${maxWidth || "800px"}) 100vw, ${maxWidth || "800px"}`;
+const calculateSizes = (
+    { maxWidth }: DisplayImageProps,
+    { width }: SourceImageProps
+): string => {
+    const w = `${Math.min(maxWidth, width) || 800}px`;
+    return `(max-width: ${w}) 100vw, ${w}`;
 };
 const outputSrcsSetFromArray = (
     arr: number[],
@@ -65,6 +69,12 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
     setCurrentFocus: (field: FieldType) => void;
 }
 
+const gatsbyImagePre = `<div className="gatsby-image-wrapper">
+    <picture>
+        `;
+const gatsbyImagePost = `
+    </picture>
+</div>`;
 export const PictureElementExplorer: React.FC<Props> = props => {
     const {
         displayImageProps,
@@ -72,7 +82,7 @@ export const PictureElementExplorer: React.FC<Props> = props => {
         currentFocus,
         setCurrentFocus
     } = props;
-    const sizes = calculateSizes(displayImageProps);
+    const sizes = calculateSizes(displayImageProps, sourceImageProps);
     const srcSet = calculateSrcSet(displayImageProps, sourceImageProps);
     const src = calculateSrc(srcSet, displayImageProps);
 
@@ -89,24 +99,28 @@ export const PictureElementExplorer: React.FC<Props> = props => {
     // Ugly :(
     return (
         <pre>
-            &lt;div className="gatsby-image-wrapper"&gt;
-            {`
-    `}
-            &lt;picture&gt;
-            {`
-        `}
-            &lt;img{` `}
-            <span onFocus={setSrcsetFocus}>{`srcSet="${srcSet.join(
+            {gatsbyImagePre}
+            {`<img 
+            `}
+            <span onFocus={setSrcsetFocus} tabIndex={0}>{`srcSet="${srcSet.join(
                 ", "
-            )}"`}</span>{" "}
-            <span onFocus={setSrcFocus}>{`src="${src}"`}</span> alt=""{" "}
-            <span onFocus={setSizesFocus}>{`sizes="${sizes}"`}</span> /&gt;
-            {`
-    `}{" "}
-            &lt;/picture&gt;
-            {`
-`}
-            &lt;/div&gt;
+            )}"`}</span>
+            {` 
+            `}
+            <span onFocus={setSrcFocus} tabIndex={0}>{`src="${src}"`}</span>
+            {` 
+            `}
+            alt=""
+            {` 
+            `}
+            <span
+                onFocus={setSizesFocus}
+                tabIndex={0}
+            >{`sizes="${sizes}"`}</span>
+            {` 
+        />
+    `}
+            {gatsbyImagePost}
         </pre>
     );
 };
