@@ -41,6 +41,7 @@ export enum FieldType {
     "IMGBG" = "imageBackground",
     "FIT" = "fit",
     "BRKPNTS" = "displayBreakpoints",
+    "SPACER" = "spacer",
     // Source image parameters
     "SOURCEWIDTH" = "sourceImageWidth",
     "SOURCEHEIGHT" = "sourceImageHeight",

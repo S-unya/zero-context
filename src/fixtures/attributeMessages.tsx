@@ -127,6 +127,17 @@ export const messages = {
             </p>
         </>
     ),
+    spacer: (
+        <>
+            <p>
+                The spacer div is used to make a placeholder element the same
+                size as your image, it is based on the aspect ratio of your
+                original image that is passed through from the GraphQL result.
+                It uses the fact that padding precentage is{" "}
+                <em>relative to the width</em> of the element.
+            </p>
+        </>
+    ),
     // Source image parameters
     sourceImageWidth: (
         <>
