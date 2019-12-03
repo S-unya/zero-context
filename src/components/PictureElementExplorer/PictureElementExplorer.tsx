@@ -1,5 +1,19 @@
 import * as React from "react";
-import { DisplayImageProps, SourceImageProps, FieldType } from "../../pages";
+import jsx from "theme-ui";
+import { DisplayImageProps, SourceImageProps } from "../../pages/index";
+
+import { activePreButton, preButton, secondaryPreButton } from "../../theme";
+import { QueryFieldType } from "../GraphQlExplorer/GraphQlExplorer";
+import { FormFieldType } from "../ImageForm/ImageForm";
+
+export enum PictureFieldType {
+    "DISPLAYTYPE" = "displayType",
+    "FIT" = "fit",
+    "SPACER" = "spacer",
+    "SRC" = "src",
+    "SRCSET" = "srcSet",
+    "SIZES" = "sizes"
+}
 
 export interface AlignedImageProps {
     displayImageBreakpoints: number[];
@@ -66,8 +80,19 @@ const formatSrc = (width: number, type = "jpg"): string =>
 interface Props extends React.HTMLAttributes<HTMLElement> {
     displayImageProps: DisplayImageProps;
     sourceImageProps: SourceImageProps;
-    currentFocus: FieldType;
-    setCurrentFocus: (field: FieldType) => void;
+    outgoingFocus: (
+        | PictureFieldType
+        | QueryFieldType
+        | FormFieldType
+        | undefined
+    )[];
+    incomingFocus: (
+        | PictureFieldType
+        | QueryFieldType
+        | FormFieldType
+        | undefined
+    )[];
+    setCurrentFocus: (field: PictureFieldType) => void;
 }
 
 const alignDisplayImageProps = (
@@ -111,7 +136,8 @@ export const PictureElementExplorer: React.FC<Props> = props => {
     const {
         displayImageProps,
         sourceImageProps,
-        currentFocus,
+        incomingFocus,
+        outgoingFocus,
         setCurrentFocus
     } = props;
     const alignedProps = alignDisplayImageProps(
@@ -126,24 +152,39 @@ export const PictureElementExplorer: React.FC<Props> = props => {
     const src = formatSrc(alignedProps.width, sourceImageProps.type);
 
     const setSrcsetFocus = (): void => {
-        setCurrentFocus(FieldType.SRCSET);
+        setCurrentFocus(PictureFieldType.SRCSET);
     };
     const setSrcFocus = (): void => {
-        setCurrentFocus(FieldType.SRC);
+        setCurrentFocus(PictureFieldType.SRC);
     };
     const setSizesFocus = (): void => {
-        setCurrentFocus(FieldType.SIZES);
+        setCurrentFocus(PictureFieldType.SIZES);
     };
     const setSpacerFocus = (): void => {
-        setCurrentFocus(FieldType.SPACER);
+        setCurrentFocus(PictureFieldType.SPACER);
     };
+
+    const checkFocus = (
+        fieldType: PictureFieldType,
+        focusArray: (PictureFieldType | undefined)[]
+    ): boolean => focusArray.some(val => val === fieldType);
 
     // @todo: put in the <source> elements based on the gatsby query
     // @todo: put in the lowsource image 64bit or svg
     return (
         <pre>
             {gatbyImageStrings.wrapStart}
-            <button onFocus={setSpacerFocus} onClick={setSpacerFocus}>
+            <button
+                onFocus={setSpacerFocus}
+                onClick={setSpacerFocus}
+                sx={
+                    checkFocus(PictureFieldType.FIT, outgoingFocus)
+                        ? activePreButton
+                        : checkFocus(PictureFieldType.FIT, incomingFocus)
+                        ? secondaryPreButton
+                        : preButton
+                }
+            >
                 {gatbyImageStrings.spacerDiv.replace(
                     "###",
                     `${100 /
@@ -158,6 +199,13 @@ export const PictureElementExplorer: React.FC<Props> = props => {
                 onFocus={setSrcsetFocus}
                 onClick={setSrcsetFocus}
                 tabIndex={0}
+                sx={
+                    checkFocus(PictureFieldType.SRCSET, outgoingFocus)
+                        ? activePreButton
+                        : checkFocus(PictureFieldType.SRCSET, incomingFocus)
+                        ? secondaryPreButton
+                        : preButton
+                }
             >{`srcSet="${srcSet.join(", ")}"`}</button>
             {` 
             `}
@@ -165,6 +213,13 @@ export const PictureElementExplorer: React.FC<Props> = props => {
                 onFocus={setSrcFocus}
                 onClick={setSrcFocus}
                 tabIndex={0}
+                sx={
+                    checkFocus(PictureFieldType.SRC, outgoingFocus)
+                        ? activePreButton
+                        : checkFocus(PictureFieldType.SRC, incomingFocus)
+                        ? secondaryPreButton
+                        : preButton
+                }
             >{`src="${src}"`}</button>
             {` 
             `}
@@ -175,6 +230,13 @@ export const PictureElementExplorer: React.FC<Props> = props => {
                 onFocus={setSizesFocus}
                 onClick={setSizesFocus}
                 tabIndex={0}
+                sx={
+                    checkFocus(PictureFieldType.SIZES, outgoingFocus)
+                        ? activePreButton
+                        : checkFocus(PictureFieldType.SIZES, incomingFocus)
+                        ? secondaryPreButton
+                        : preButton
+                }
             >{`sizes="${sizes}"`}</button>
             {` loading="lazy" 
         />

@@ -1,6 +1,20 @@
 import * as React from "react";
-import { SourceImageProps, DisplayImageProps, FieldType } from "../../pages";
-import { Draft } from "immer";
+import { SourceImageProps, DisplayImageProps } from "../../pages";
+
+export enum FormFieldType {
+    // display parameters
+    "MAXWIDTH" = "maxWidth",
+    "MAXHEIGHT" = "maxHeight",
+    "DISPLAYTYPE" = "displayType",
+    "QUALITY" = "quality",
+    "IMGBG" = "imageBackground",
+    "FIT" = "fit",
+    "BRKPNTS" = "displayBreakpoints",
+    // Source image parameters
+    "SOURCEWIDTH" = "sourceImageWidth",
+    "SOURCEHEIGHT" = "sourceImageHeight",
+    "SOURCETYPE" = "sourceImageType"
+}
 
 interface Props extends React.FormHTMLAttributes<HTMLFormElement> {
     sourceImageProps: SourceImageProps;

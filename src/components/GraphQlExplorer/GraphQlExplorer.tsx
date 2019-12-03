@@ -88,7 +88,18 @@ childImageSharp {
                     ...GatsbyImageSharpFluid_withWebp
                 }
             }*/
-
+export enum QueryFieldType {
+    // display parameters
+    "MAXWIDTH" = "maxWidth",
+    "MAXHEIGHT" = "maxHeight",
+    "DISPLAYTYPE" = "displayType",
+    "QUALITY" = "quality",
+    "IMGBG" = "imageBackground",
+    "FIT" = "fit",
+    "BRKPNTS" = "displayBreakpoints",
+    "TOFORMAT" = "toFormat",
+    "FRAGMENT" = "fragment"
+}
 // @TODO: add fragments support
 // @TODO: add fit support
 // @TODO: add background support
