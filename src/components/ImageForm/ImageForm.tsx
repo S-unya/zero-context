@@ -38,7 +38,7 @@ export const ImageForm: React.FC<Props> = ({
 }) => {
     function setImageType(event: React.ChangeEvent<HTMLSelectElement>) {
         updateSourceImageProps((draft: SourceImageProps) => {
-            const type = event.target.value;
+            const type = event.currentTarget.value;
 
             draft.type = type;
         });
@@ -113,7 +113,7 @@ export const ImageForm: React.FC<Props> = ({
         }
 
         const baseProperties = (
-            <>
+            <div key="base-props">
                 <div className="input-wrap">
                     <label htmlFor="image-width">Display width</label>{" "}
                     <input
@@ -144,11 +144,11 @@ export const ImageForm: React.FC<Props> = ({
                         placeholder="50"
                     />
                 </div>
-            </>
+            </div>
         );
 
         const fluidProperties = (
-            <>
+            <div key="fluid-props">
                 <div className="input-wrap">
                     <label htmlFor="image-breakpoints">
                         Display image sizes (comma separated)
@@ -160,7 +160,7 @@ export const ImageForm: React.FC<Props> = ({
                         placeholder="800"
                     />
                 </div>
-            </>
+            </div>
         );
 
         return (
@@ -182,14 +182,24 @@ export const ImageForm: React.FC<Props> = ({
                     <code>gatsby-plugin-sharp</code>
                 </p>
                 <div className="input-wrap">
-                    <label htmlFor="source-image-width">
-                        Width in pixels of your source image:
-                    </label>{" "}
+                    <label htmlFor="source-image-width">Width in pixels:</label>{" "}
                     <input
                         type="number"
                         id="source-image-width"
                         value={sourceImageProps.width || ""}
                         onChange={setImageWidth}
+                    />{" "}
+                    <span>px</span>
+                </div>
+                <div className="input-wrap">
+                    <label htmlFor="source-image-height">
+                        height in pixels:
+                    </label>{" "}
+                    <input
+                        type="number"
+                        id="source-image-height"
+                        value={sourceImageProps.height || ""}
+                        onChange={setImageHeight}
                     />{" "}
                     <span>px</span>
                 </div>
@@ -227,6 +237,7 @@ export const ImageForm: React.FC<Props> = ({
                         checked={displayImageProps.displayType === "fixed"}
                         onChange={setImageDisplayType}
                     />
+                    <br />
                     <label htmlFor="image-type-fluid">
                         Fluid size (adapts to the width of the screen):
                     </label>{" "}
