@@ -1,7 +1,4 @@
-/** @jsx jsx */
-import * as React from "react";
-import { ThemeProvider, jsx } from "theme-ui";
-import theme from "../../theme";
+import React from "react";
 
 interface Props extends React.HTMLAttributes<HTMLElement> {}
 
@@ -16,18 +13,16 @@ export const Layout: React.FC<Props> = ({ children, style }) => {
     // EFFECT:END
 
     return (
-        <ThemeProvider theme={theme}>
-            <main
-                sx={{
-                    display: "grid",
-                    gridTemplateColumns: `1fr 1fr`,
-                    gridAutoRows: `1fr`,
-                    gridGap: theme.space[4]
-                }}
-            >
-                {children}
-            </main>
-        </ThemeProvider>
+        <main
+            style={{
+                display: "grid",
+                gridTemplateColumns: `1fr 1fr`,
+                gridAutoRows: `1fr`,
+                gridGap: "32px"
+            }}
+        >
+            {children}
+        </main>
     );
 };
 export default Layout;

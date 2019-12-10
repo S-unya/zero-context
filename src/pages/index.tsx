@@ -1,8 +1,6 @@
-/** @jsx jsx */
-import * as React from "react";
+import React from "react";
 import { useImmer, useImmerReducer } from "use-immer";
 import { useStaticQuery, graphql } from "gatsby";
-import { jsx } from "theme-ui";
 import Image from "gatsby-image";
 
 import { ImageForm } from "../components/ImageForm";
@@ -19,7 +17,8 @@ import { FormFieldType } from "../components/ImageForm/ImageForm";
 export interface SourceImageProps {
     width: number | null;
     height: number | null;
-    type: string | null;
+    fileType: string | null;
+    name: string | null;
 }
 
 export interface DisplayImageProps {
@@ -269,9 +268,10 @@ export default () => {
     const [sourceImageProps, updateSourceImageProps] = useImmer<
         SourceImageProps
     >({
-        width: 400,
+        width: null,
         height: null,
-        type: null
+        fileType: null,
+        name: null
     } as SourceImageProps);
 
     const [displayImageProps, updateDisplayImageProps] = useImmer<
@@ -302,12 +302,7 @@ export default () => {
         <Layout>
             <ImageForm
                 sourceImageProps={sourceImageProps}
-                displayImageProps={displayImageProps}
-                updateDisplayImageProps={updateDisplayImageProps}
                 updateSourceImageProps={updateSourceImageProps}
-                incomingFocus={state.incomingFocus}
-                outgoingFocus={state.outgoingFocus}
-                setCurrentFocus={dispatch}
             />
             <GraphQlExplorer
                 displayImageProps={displayImageProps}
@@ -323,14 +318,7 @@ export default () => {
                 outgoingFocus={state.outgoingFocus}
                 setCurrentFocus={dispatch}
             />
-            <div
-                aria-atomic="true"
-                aria-live="assertive"
-                sx={{
-                    gridColumn: `2 / 3`,
-                    gridRow: `1 / 2`
-                }}
-            >
+            <div aria-atomic="true" aria-live="assertive">
                 {infoMessage}
             </div>
             {img && img.fixed ? (

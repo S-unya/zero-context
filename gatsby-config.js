@@ -2,7 +2,6 @@
 module.exports = {
     plugins: [
         `gatsby-plugin-typescript`,
-        `gatsby-plugin-theme-ui`,
         // SEO for react
         "gatsby-plugin-react-helmet",
         // Expose `/content` to graphQL layer
