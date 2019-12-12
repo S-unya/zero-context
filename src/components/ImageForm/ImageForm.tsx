@@ -91,22 +91,24 @@ export const ImageForm: React.FC<Props> = ({
                     />{" "}
                 </div>
                 <table>
-                    <tr>
-                        <th>Name:</th>
-                        <td>{sourceImageProps.name}</td>
-                    </tr>
-                    <tr>
-                        <th>Width:</th>
-                        <td>{sourceImageProps.width}</td>
-                    </tr>
-                    <tr>
-                        <th>Height:</th>
-                        <td>{sourceImageProps.height}</td>
-                    </tr>
-                    <tr>
-                        <th>File type:</th>
-                        <td>{sourceImageProps.fileType}</td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <th>Name:</th>
+                            <td>{sourceImageProps.name}</td>
+                        </tr>
+                        <tr>
+                            <th>Width:</th>
+                            <td>{sourceImageProps.width}</td>
+                        </tr>
+                        <tr>
+                            <th>Height:</th>
+                            <td>{sourceImageProps.height}</td>
+                        </tr>
+                        <tr>
+                            <th>File type:</th>
+                            <td>{sourceImageProps.fileType}</td>
+                        </tr>
+                    </tbody>
                 </table>
             </fieldset>
             <canvas ref={canvasRef} />

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { DisplayImageProps, SourceImageProps } from "../../pages";
+import CodeBlock from "../CodeBlock";
 
 interface ParsedPath {
     /**
@@ -171,18 +172,63 @@ export const GraphQlExplorer: React.FC<Props> = ({
     sourceImageProps
 }) => {
     // STATE
+    const [editing, setEditing] = useState<boolean>(false);
+    const [graphQL, setGraphQL] = useState<string>(`childImageSharp {
+
+    }`);
+
     // STATE:END
 
     // CALLBACKS
+    const updateEditing = useCallback(() => {
+        setEditing(!editing);
+    }, [setEditing, editing]);
+
+    const handleChange = useCallback(
+        (event: React.KeyboardEvent<HTMLElement>) => {
+            const target = event.target as HTMLElement;
+            console.log(event.keyCode, event.key);
+
+            // escape = 27
+            // tab == 9
+            switch (event.keyCode) {
+                case 27:
+                    return setEditing(!editing);
+                case 9:
+                    /// add 4 spaces
+                    return;
+                default:
+                    return;
+            }
+        },
+        [setEditing, editing]
+    );
+    const updateGraphQl = useCallback(
+        (code: string) => {
+            console.log({ code });
+
+            setGraphQL(code);
+        },
+        [graphQL]
+    );
     // CALLBACKS:END
 
     // EFFECT
     // EFFECT:END
 
     return (
-        <figure style={style}>
-            {parseParamsIntoGraphQl(displayImageProps)}
-        </figure>
+        <section>
+            <button onClick={updateEditing}>{editing ? "Save" : "Edit"}</button>
+
+            <div>{parseParamsIntoGraphQl(displayImageProps)}</div>
+            <CodeBlock
+                live={editing}
+                className="language-graphql"
+                changeHandler={updateGraphQl}
+            >
+                {graphQL}
+            </CodeBlock>
+        </section>
     );
 };
 export default GraphQlExplorer;
