@@ -1,8 +1,13 @@
 import React from "react";
 
-interface Props extends React.HTMLAttributes<HTMLElement> {}
+import "../../theme.css";
+import styles from "./Layout.module.css";
 
-export const Layout: React.FC<Props> = ({ children, style }) => {
+interface Props extends React.HTMLAttributes<HTMLElement> {
+    headerContent: React.FunctionComponent;
+}
+
+export const Layout: React.FC<Props> = ({ children, style, headerContent }) => {
     // STATE
     // STATE:END
 
@@ -13,15 +18,9 @@ export const Layout: React.FC<Props> = ({ children, style }) => {
     // EFFECT:END
 
     return (
-        <main
-            style={{
-                display: "grid",
-                gridTemplateColumns: `1fr 1fr`,
-                gridAutoRows: `1fr`,
-                gridGap: "32px"
-            }}
-        >
-            {children}
+        <main className={styles.component}>
+            <header className={styles.header}>{headerContent}</header>
+            <article className={styles.row}>{children}</article>
         </main>
     );
 };

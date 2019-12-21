@@ -3,7 +3,7 @@ import { Layout } from "../components/Layout";
 import { Seo } from "../components/Seo";
 import { Link } from "gatsby";
 
-export default () => {
+const FourOhFour = () => {
     return (
         <Layout>
             <Seo title="404" />
@@ -18,3 +18,5 @@ export default () => {
         </Layout>
     );
 };
+
+export default FourOhFour;

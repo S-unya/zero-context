@@ -1,0 +1,22 @@
+.component {
+    display: grid;
+    /* grid-template-areas: "full main main full"; */
+    grid-template-columns:
+        [full-start] minmax(32px, 1fr) [content-start] minmax(0, 1400px)
+        [content-end] minmax(32px, 1fr) [full-end];
+    grid-auto-rows: auto;
+}
+
+.component > * {
+    grid-area: content;
+}
+.header {
+    grid-column: full !important;
+    grid-row: 1 / 2;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: max-content;
+}

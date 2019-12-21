@@ -33,22 +33,17 @@ export interface DisplayImageProps {
 
 interface Reducer {
     message: MessageFieldType;
-    outgoingFocus: (
-        | PictureFieldType
-        | FormFieldType
-        | QueryFieldType
-        | undefined
-    )[];
-    incomingFocus: (
-        | PictureFieldType
-        | FormFieldType
-        | QueryFieldType
-        | undefined
-    )[];
+    outgoingFocus: Array<
+        PictureFieldType | FormFieldType | QueryFieldType | undefined
+    >;
+    incomingFocus: Array<
+        PictureFieldType | FormFieldType | QueryFieldType | undefined
+    >;
 }
 
 const initialState = { message: null, outgoingFocus: [], incomingFocus: [] };
 
+// eslint-disable-next-line complexity
 function reducer(
     draft: Reducer,
     action: { type: PictureFieldType | FormFieldType | QueryFieldType }
@@ -242,13 +237,26 @@ function reducer(
             return void draft;
     }
 }
+const HeaderContent: React.FC<React.AllHTMLAttributes<HTMLElement>> = () => (
+    <>
+        <h1>Gatsby image visualiser</h1>
+        <p>
+            This tool is to help understand the moving parts of the
+            gatsby-image-sharp queries and the gatsby-image output.
+        </p>
+        <p>
+            It is still a work in progress and any useful addition suggestions
+            are welcome
+        </p>
+    </>
+);
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
     sourceImageProps: any;
     displayImageProps: any;
 }
 
-export default () => {
+const Index: React.FC<Props> = () => {
     const imageData = useStaticQuery(graphql`
         query imgs {
             allFile {
@@ -296,10 +304,10 @@ export default () => {
         console.log({ img });
 
         setInfoMessage(msg);
-    }, [state, setInfoMessage]);
+    }, [state, setInfoMessage, img]);
 
     return (
-        <Layout>
+        <Layout headerContent={<HeaderContent />}>
             <ImageForm
                 sourceImageProps={sourceImageProps}
                 updateSourceImageProps={updateSourceImageProps}
@@ -329,3 +337,5 @@ export default () => {
         </Layout>
     );
 };
+
+export default Index;

@@ -2,6 +2,8 @@ import React, { useState, useCallback } from "react";
 import { DisplayImageProps, SourceImageProps } from "../../pages";
 import CodeBlock from "../CodeBlock";
 
+import styles from "./GraphQlExplorer.module.css";
+
 interface ParsedPath {
     /**
      * The root of the path such as '/' or 'c:\'
@@ -166,6 +168,7 @@ childImageSharp {
     return <pre>{graphQLFragment}</pre>;
 };
 
+// @TODO: Actually use the child-image-sharp schema and parse the graphql here
 export const GraphQlExplorer: React.FC<Props> = ({
     style,
     displayImageProps,
@@ -175,7 +178,7 @@ export const GraphQlExplorer: React.FC<Props> = ({
     const [editing, setEditing] = useState<boolean>(false);
     const [graphQL, setGraphQL] = useState<string>(`childImageSharp {
 
-    }`);
+}`);
 
     // STATE:END
 
@@ -184,50 +187,28 @@ export const GraphQlExplorer: React.FC<Props> = ({
         setEditing(!editing);
     }, [setEditing, editing]);
 
-    const handleChange = useCallback(
-        (event: React.KeyboardEvent<HTMLElement>) => {
-            const target = event.target as HTMLElement;
-            console.log(event.keyCode, event.key);
-
-            // escape = 27
-            // tab == 9
-            switch (event.keyCode) {
-                case 27:
-                    return setEditing(!editing);
-                case 9:
-                    /// add 4 spaces
-                    return;
-                default:
-                    return;
-            }
-        },
-        [setEditing, editing]
-    );
-    const updateGraphQl = useCallback(
-        (code: string) => {
-            console.log({ code });
-
-            setGraphQL(code);
-        },
-        [graphQL]
-    );
+    const updateGraphQl = useCallback((code: string) => {
+        setGraphQL(code);
+    }, []);
     // CALLBACKS:END
 
     // EFFECT
     // EFFECT:END
 
     return (
-        <section>
-            <button onClick={updateEditing}>{editing ? "Save" : "Edit"}</button>
-
-            <div>{parseParamsIntoGraphQl(displayImageProps)}</div>
+        <section className={styles.component}>
+            <button onClick={updateEditing} className={styles.button}>
+                {editing ? "Save" : "Edit"}
+            </button>
             <CodeBlock
                 live={editing}
                 className="language-graphql"
                 changeHandler={updateGraphQl}
+                onExit={updateEditing}
             >
                 {graphQL}
             </CodeBlock>
+            <pre>{parseParamsIntoGraphQl(displayImageProps)}</pre>
         </section>
     );
 };
