@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useImmer, useImmerReducer } from "use-immer";
 import { useStaticQuery, graphql } from "gatsby";
 import Image from "gatsby-image";
@@ -29,6 +29,7 @@ export interface DisplayImageProps {
     imageBackground: string;
     fit: string | null;
     displayBreakpoints: string;
+    fragment: string | null;
 }
 
 interface Reducer {
@@ -251,6 +252,17 @@ const HeaderContent: React.FC<React.AllHTMLAttributes<HTMLElement>> = () => (
     </>
 );
 
+export const emptyDisplayParams: DisplayImageProps = {
+    maxWidth: 800,
+    maxHeight: null,
+    displayType: null,
+    quality: 50,
+    fit: "cover",
+    imageBackground: "rgba(0, 0, 0, 0)",
+    displayBreakpoints: "",
+    fragment: null
+};
+
 interface Props extends React.HTMLAttributes<HTMLElement> {
     sourceImageProps: any;
     displayImageProps: any;
@@ -284,24 +296,30 @@ const Index: React.FC<Props> = () => {
 
     const [displayImageProps, updateDisplayImageProps] = useImmer<
         DisplayImageProps
-    >({
-        maxWidth: 800,
-        maxHeight: null,
-        displayType: null,
-        quality: 50,
-        fit: "cover",
-        imageBackground: "rgba(0, 0, 0, 0)",
-        displayBreakpoints: ""
-    } as DisplayImageProps);
+    >(emptyDisplayParams);
     const [
         infoMessage,
         setInfoMessage
     ] = React.useState<null | React.ReactFragment>(null);
 
+    const setDisplayImageProps = useCallback(
+        (props: DisplayImageProps) => {
+            updateDisplayImageProps(draft => {
+                draft.maxWidth = props.maxWidth;
+                draft.maxHeight = props.maxHeight;
+                draft.displayBreakpoints = props.displayBreakpoints;
+                draft.displayType = props.displayType;
+                draft.fit = props.fit;
+                draft.fragment = props.fragment;
+                draft.quality = props.quality;
+                draft.imageBackground = props.imageBackground;
+            });
+        },
+        [updateDisplayImageProps]
+    );
+
     React.useEffect(() => {
         const msg = messages[state.message];
-        console.log({ msg });
-        console.log({ img });
 
         setInfoMessage(msg);
     }, [state, setInfoMessage, img]);
@@ -318,6 +336,7 @@ const Index: React.FC<Props> = () => {
                 incomingFocus={state.incomingFocus}
                 outgoingFocus={state.outgoingFocus}
                 setCurrentFocus={dispatch}
+                setDisplayImageProps={setDisplayImageProps}
             />
             <PictureElementExplorer
                 displayImageProps={displayImageProps}
