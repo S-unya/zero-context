@@ -6,7 +6,7 @@ import styles from "./CodeBlock.module.css";
 interface Props extends React.HTMLAttributes<HTMLElement> {
     live: boolean;
     changeHandler: (code: string) => void;
-    onExit: () => void;
+    onExit: (code: string) => void;
     children: string;
 }
 
@@ -39,8 +39,6 @@ export const CodeBlock: React.FC<Props> = ({
 
     const handleKeyPress = useCallback(
         (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-            const target = event.currentTarget;
-
             console.log(event.keyCode, event.key);
 
             // escape = 27
@@ -48,7 +46,9 @@ export const CodeBlock: React.FC<Props> = ({
             switch (event.keyCode) {
                 case 27:
                     event.preventDefault();
-                    return onExit;
+                    const code = event.currentTarget.value;
+
+                    return onExit(code);
                 case 9:
                     event.preventDefault();
                     /// add 4 spaces
@@ -65,7 +65,9 @@ export const CodeBlock: React.FC<Props> = ({
             const code = event.currentTarget.value;
 
             changeHandler(code);
-            setCursorPosition(textareaRef?.current?.selectionEnd);
+
+            textareaRef.current &&
+                setCursorPosition(textareaRef.current.selectionEnd);
         },
         [changeHandler]
     );
