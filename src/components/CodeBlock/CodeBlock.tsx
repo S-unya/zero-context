@@ -2,11 +2,13 @@ import React, { useCallback, useRef, useState, useLayoutEffect } from "react";
 import cx from "classnames";
 
 import styles from "./CodeBlock.module.css";
+import { GqlError } from "../GraphQlExplorer/GraphQlExplorer";
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
     live: boolean;
     changeHandler: (code: string) => void;
     onExit: (code: string) => void;
+    error?: GqlError;
     children: string;
 }
 
@@ -16,7 +18,8 @@ export const CodeBlock: React.FC<Props> = ({
     className,
     live,
     changeHandler,
-    onExit
+    onExit,
+    error
 }) => {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     // STATE
@@ -51,7 +54,7 @@ export const CodeBlock: React.FC<Props> = ({
                     return onExit(code);
                 case 9:
                     event.preventDefault();
-                    /// add 4 spaces
+                    /// add 2 spaces
                     setTab(textareaRef);
                     return;
                 default:
@@ -94,6 +97,12 @@ export const CodeBlock: React.FC<Props> = ({
             >
                 {children}
             </textarea>
+            {error && (
+                <p className={styles.error}>
+                    {error.message} at line {error.location.line}, column{" "}
+                    {error.location.line}
+                </p>
+            )}
         </div>
     );
 };

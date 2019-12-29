@@ -26,7 +26,6 @@
         "immer": "^5.0.0",
         "react": "^16.11.0",
         "react-dom": "^16.11.0",
-        "react-live": "^2.2.2",
         "use-immer": "^0.3.5"
     },
     "devDependencies": {
