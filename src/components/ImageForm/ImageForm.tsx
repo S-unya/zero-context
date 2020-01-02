@@ -20,14 +20,14 @@ export const ImageForm: React.FC<Props> = ({
     sourceImageProps,
     updateSourceImageProps
 }) => {
-    const canvasRef = React.useRef<undefined | HTMLCanvasElement>();
+    const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
     const setImage = React.useCallback(
         async (event: React.ChangeEvent<HTMLInputElement>) => {
             const target: HTMLInputElement = event.nativeEvent
                 .target as HTMLInputElement;
-            const files: FileList =
-                typeof target.files !== "undefined" && target.files;
+
+            const files: FileList | null = target?.files;
             const getInfoFromUpload = (
                 file: File
             ): Promise<SourceImageProps> => {
@@ -40,11 +40,12 @@ export const ImageForm: React.FC<Props> = ({
                             height: null
                         };
                         const fileReader = new FileReader();
+
                         fileReader.readAsDataURL(file);
                         fileReader.onload = () => {
                             const img = new Image();
 
-                            // @todo: may wish to save this for making a real image example
+                            // @todo: may wish to use this for making a live image example
                             img.src = fileReader.result as string;
                             imageProps.width = img.width;
                             imageProps.height = img.height;
@@ -57,7 +58,7 @@ export const ImageForm: React.FC<Props> = ({
                 });
             };
 
-            if (files.length) {
+            if (files?.length) {
                 const imageInfo = await getInfoFromUpload(files[0]);
 
                 updateSourceImageProps((draft: SourceImageProps) => {
@@ -68,7 +69,7 @@ export const ImageForm: React.FC<Props> = ({
                 });
             }
         },
-        []
+        [updateSourceImageProps]
     );
 
     return (
@@ -76,8 +77,9 @@ export const ImageForm: React.FC<Props> = ({
             <fieldset>
                 <legend>Your image</legend>
                 <p>
-                    This is used to get information about your image. It stays
-                    on your computer.
+                    This is used to calculate information about your image that
+                    would normally be done by Gatsby's infrastructure. No need
+                    to worry, it will not leave your computer.
                 </p>
                 <div className="input-wrap">
                     <label htmlFor="source-image">
@@ -90,26 +92,17 @@ export const ImageForm: React.FC<Props> = ({
                         accept="image/png, image/jpg, image/webp"
                     />{" "}
                 </div>
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>Name:</th>
-                            <td>{sourceImageProps.name}</td>
-                        </tr>
-                        <tr>
-                            <th>Width:</th>
-                            <td>{sourceImageProps.width}</td>
-                        </tr>
-                        <tr>
-                            <th>Height:</th>
-                            <td>{sourceImageProps.height}</td>
-                        </tr>
-                        <tr>
-                            <th>File type:</th>
-                            <td>{sourceImageProps.fileType}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h3>About your image</h3>
+                <dl>
+                    <dt>Name:</dt>
+                    <dd>{sourceImageProps.name}</dd>
+                    <dt>Width:</dt>
+                    <dd>{sourceImageProps.width}</dd>
+                    <dt>Height:</dt>
+                    <dd>{sourceImageProps.height}</dd>
+                    <dt>File type:</dt>
+                    <dd>{sourceImageProps.fileType}</dd>
+                </dl>
             </fieldset>
             <canvas ref={canvasRef} />
         </form>

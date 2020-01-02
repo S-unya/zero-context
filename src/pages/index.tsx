@@ -5,6 +5,7 @@ import Image from "gatsby-image";
 
 import { ImageForm } from "../components/ImageForm";
 import { Layout } from "../components/Layout";
+import { PageHeader } from "../components/PageHeader";
 import GraphQlExplorer, {
     QueryFieldType
 } from "../components/GraphQlExplorer/GraphQlExplorer";
@@ -51,56 +52,6 @@ function reducer(
 ) {
     draft.outgoingFocus = [action.type];
     switch (action.type) {
-        case FormFieldType.MAXWIDTH:
-            draft.incomingFocus = [
-                PictureFieldType.SIZES,
-                PictureFieldType.SRCSET,
-                PictureFieldType.SRC,
-                QueryFieldType.MAXWIDTH
-            ];
-            draft.message = MessageFieldType.MAXWIDTH;
-
-            return void draft;
-        case FormFieldType.MAXHEIGHT:
-            draft.incomingFocus = [PictureFieldType.SPACER];
-            draft.message = MessageFieldType.MAXHEIGHT;
-
-            return void draft;
-        case FormFieldType.DISPLAYTYPE:
-            draft.incomingFocus = [QueryFieldType.DISPLAYTYPE];
-            draft.message = MessageFieldType.DISPLAYTYPE;
-
-            return void draft;
-        case FormFieldType.QUALITY:
-            draft.incomingFocus = [QueryFieldType.QUALITY];
-            draft.message = MessageFieldType.QUALITY;
-
-            return void draft;
-        case FormFieldType.IMGBG:
-            draft.incomingFocus = [
-                QueryFieldType.IMGBG,
-                FormFieldType.SOURCETYPE,
-                QueryFieldType.TOFORMAT
-            ];
-            draft.message = MessageFieldType.IMGBG;
-
-            return void draft;
-        case FormFieldType.FIT:
-            draft.incomingFocus = [
-                QueryFieldType.FIT,
-                FormFieldType.DISPLAYTYPE
-            ];
-            draft.message = MessageFieldType.FIT;
-
-            return void draft;
-        case FormFieldType.BRKPNTS:
-            draft.incomingFocus = [
-                PictureFieldType.SRCSET,
-                QueryFieldType.BRKPNTS
-            ];
-            draft.message = MessageFieldType.BRKPNTS;
-
-            return void draft;
         case FormFieldType.SOURCEWIDTH:
             draft.incomingFocus = [
                 PictureFieldType.SRCSET,
@@ -123,7 +74,6 @@ function reducer(
         // picture field types
         case PictureFieldType.DISPLAYTYPE:
             draft.incomingFocus = [
-                FormFieldType.DISPLAYTYPE,
                 QueryFieldType.DISPLAYTYPE,
                 PictureFieldType.SRCSET
             ];
@@ -131,7 +81,7 @@ function reducer(
 
             return void draft;
         case PictureFieldType.FIT:
-            draft.incomingFocus = [FormFieldType.FIT];
+            draft.incomingFocus = [QueryFieldType.FIT];
             draft.message = MessageFieldType.FIT;
 
             return void draft;
@@ -148,8 +98,6 @@ function reducer(
             draft.incomingFocus = [
                 FormFieldType.SOURCEWIDTH,
                 QueryFieldType.TOFORMAT,
-                FormFieldType.MAXWIDTH,
-                FormFieldType.BRKPNTS,
                 QueryFieldType.BRKPNTS,
                 QueryFieldType.MAXWIDTH
             ];
@@ -159,8 +107,6 @@ function reducer(
         case PictureFieldType.SRCSET:
             draft.incomingFocus = [
                 FormFieldType.SOURCEWIDTH,
-                FormFieldType.MAXWIDTH,
-                FormFieldType.BRKPNTS,
                 QueryFieldType.BRKPNTS,
                 QueryFieldType.MAXWIDTH
             ];
@@ -170,8 +116,6 @@ function reducer(
         case PictureFieldType.SIZES:
             draft.incomingFocus = [
                 FormFieldType.SOURCEWIDTH,
-                FormFieldType.MAXWIDTH,
-                FormFieldType.BRKPNTS,
                 QueryFieldType.BRKPNTS,
                 QueryFieldType.MAXWIDTH
             ];
@@ -204,25 +148,22 @@ function reducer(
 
             return void draft;
         case QueryFieldType.QUALITY:
-            draft.incomingFocus = [FormFieldType.QUALITY];
+            draft.incomingFocus = [];
             draft.message = MessageFieldType.QUALITY;
 
             return void draft;
         case QueryFieldType.IMGBG:
-            draft.incomingFocus = [FormFieldType.IMGBG];
+            draft.incomingFocus = [];
             draft.message = MessageFieldType.IMGBG;
 
             return void draft;
         case QueryFieldType.FIT:
-            draft.incomingFocus = [FormFieldType.FIT];
+            draft.incomingFocus = [];
             draft.message = MessageFieldType.FIT;
 
             return void draft;
         case QueryFieldType.BRKPNTS:
-            draft.incomingFocus = [
-                PictureFieldType.SRCSET,
-                FormFieldType.BRKPNTS
-            ];
+            draft.incomingFocus = [PictureFieldType.SRCSET];
             draft.message = MessageFieldType.BRKPNTS;
 
             return void draft;
@@ -237,35 +178,14 @@ function reducer(
 
             return void draft;
     }
+    return void draft;
 }
-const HeaderContent: React.FC<React.AllHTMLAttributes<HTMLElement>> = () => (
-    <>
-        <h1>Gatsby image visualiser</h1>
-        <p>
-            This tool is to help understand the moving parts of the
-            gatsby-image-sharp queries and the gatsby-image output.
-        </p>
-        <p>
-            It is still a work in progress and any useful addition suggestions
-            are welcome
-        </p>
-    </>
-);
 
-export const emptyDisplayParams: DisplayImageProps = {
-    maxWidth: 800,
-    maxHeight: null,
-    displayType: null,
-    quality: 50,
-    fit: "cover",
-    imageBackground: "rgba(0, 0, 0, 0)",
-    displayBreakpoints: "",
-    fragment: null
-};
+export const emptyDisplayParams: DisplayImageProps = {};
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
-    sourceImageProps: any;
-    displayImageProps: any;
+    sourceImageProps: SourceImageProps;
+    displayImageProps: DisplayImageProps;
 }
 
 const Index: React.FC<Props> = () => {
@@ -325,7 +245,19 @@ const Index: React.FC<Props> = () => {
     }, [state, setInfoMessage, img]);
 
     return (
-        <Layout headerContent={<HeaderContent />}>
+        <Layout>
+            <PageHeader heading="Gatsby image visualiser">
+                <>
+                    <p>
+                        This tool is to help understand the moving parts of the
+                        gatsby-image-sharp queries and the gatsby-image output.
+                    </p>
+                    <p>
+                        It is still a work in progress and any useful addition
+                        suggestions are welcome
+                    </p>
+                </>
+            </PageHeader>
             <ImageForm
                 sourceImageProps={sourceImageProps}
                 updateSourceImageProps={updateSourceImageProps}

@@ -37,6 +37,7 @@
         "@storybook/addon-storyshots": "^5.2.6",
         "@storybook/addons": "^5.2.6",
         "@storybook/react": "^5.2.6",
+        "@testing-library/react": "^9.4.0",
         "@types/classnames": "^2.2.9",
         "@types/theme-ui": "^0.2.5",
         "babel-loader": "^8.0.6",

@@ -445,15 +445,18 @@ export const GraphQlExplorer: React.FC<Props> = ({
             <button onClick={updateEditing} className={styles.button}>
                 {editing ? "Save" : "Edit"}
             </button>
-            <CodeBlock
-                live={editing}
-                changeHandler={updateGraphQl}
-                onExit={updateEditing}
-                error={error}
-            >
-                {graphql}
-            </CodeBlock>
-            <pre>{parseParamsIntoInteractive(displayImageProps)}</pre>
+            {editing ? (
+                <CodeBlock
+                    live={editing}
+                    changeHandler={updateGraphQl}
+                    onExit={updateEditing}
+                    error={error}
+                >
+                    {graphql}
+                </CodeBlock>
+            ) : (
+                <pre>{parseParamsIntoInteractive(displayImageProps)}</pre>
+            )}
         </section>
     );
 };
