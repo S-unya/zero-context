@@ -94,6 +94,7 @@ export const CodeBlock: React.FC<Props> = ({
                 onChange={onChange}
                 onKeyDown={handleKeyPress}
                 disabled={!live}
+                autoFocus={true}
             >
                 {children}
             </textarea>
