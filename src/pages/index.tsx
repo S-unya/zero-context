@@ -3,35 +3,18 @@ import { useImmer, useImmerReducer } from "use-immer";
 import { useStaticQuery, graphql } from "gatsby";
 import Image from "gatsby-image";
 
-import { ImageForm } from "../components/ImageForm";
-import { Layout } from "../components/Layout";
-import { PageHeader } from "../components/PageHeader";
-import GraphQlExplorer, {
-    QueryFieldType
-} from "../components/GraphQlExplorer/GraphQlExplorer";
-import PictureElementExplorer, {
-    PictureFieldType
-} from "../components/PictureElementExplorer/PictureElementExplorer";
-import { messages, MessageFieldType } from "../fixtures/attributeMessages";
-import { FormFieldType } from "../components/ImageForm/ImageForm";
+import ImageForm from "../components/ImageForm";
+import Layout from "../components/Layout";
+import PageHeader from "../components/PageHeader";
+import GraphQlExplorer from "../components/GraphQlExplorer";
+import { messages } from "../fixtures/attributeMessages";
 
-export interface SourceImageProps {
-    width: number | null;
-    height: number | null;
-    fileType: string | null;
-    name: string | null;
-}
-
-export interface DisplayImageProps {
-    maxWidth: number | null;
-    maxHeight: number | null;
-    displayType: "fluid" | "fixed" | null;
-    quality: number;
-    imageBackground: string;
-    fit: string | null;
-    displayBreakpoints: string;
-    fragment: string | null;
-}
+import {
+    QueryFieldType,
+    PictureFieldType,
+    FormFieldType,
+    MessageFieldType
+} from "../types/types";
 
 interface Reducer {
     message: MessageFieldType;

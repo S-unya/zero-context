@@ -1,1 +1,3 @@
-export { GraphQlExplorer } from "./GraphQlExplorer";
+import { GraphQlExplorer } from "./GraphQlExplorer";
+
+export default GraphQlExplorer;

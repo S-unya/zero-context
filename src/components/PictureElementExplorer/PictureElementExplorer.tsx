@@ -1,39 +1,23 @@
 import React from "react";
-import { DisplayImageProps, SourceImageProps } from "../../pages/index";
 
-import { activePreButton, preButton, secondaryPreButton } from "../../theme";
-import { QueryFieldType } from "../GraphQlExplorer/GraphQlExplorer";
-import { FormFieldType } from "../ImageForm/ImageForm";
-
-export enum PictureFieldType {
-    "DISPLAYTYPE" = "displayType",
-    "FIT" = "fit",
-    "SPACER" = "spacer",
-    "SRC" = "src",
-    "SRCSET" = "srcSet",
-    "SIZES" = "sizes"
-}
-
-export interface AlignedImageProps {
-    displayImageBreakpoints: number[];
-    displayImageType: string;
-    fit: string;
-    height: number | undefined;
-    imageBackground: string;
-    quality: number;
-    width: number;
-}
+import {
+    DisplayImageProps,
+    SourceImageProps,
+    PictureFieldType,
+    QueryFieldType,
+    FormFieldType
+} from "../../types/types";
 
 const formatSizes = (width: number): string =>
     `(max-width: ${width}) 100vw, ${width}`;
 
 const formatSrcset = (arr: number[], type: string): string[] => {
     return arr.reduce(
-        (acc, width: number) => [
+        (acc, width) => [
             ...acc,
             `/path/to/images/${width}/image.${type} ${width}w`
         ],
-        []
+        [] as string[]
     );
 };
 
@@ -42,7 +26,7 @@ const calculatePossibleBreakpoints = (
     baseWidth: number,
     width: string | number
 ): number[] => {
-    let lastNumberStr: boolean = false;
+    let lastNumberStr = false;
 
     return arr.reduce((acc, bp: string | number, index: number) => {
         if (((bp as unknown) as number) * 1 < width) {
@@ -79,18 +63,12 @@ const formatSrc = (width: number, type = "jpg"): string =>
 interface Props extends React.HTMLAttributes<HTMLElement> {
     displayImageProps: DisplayImageProps;
     sourceImageProps: SourceImageProps;
-    outgoingFocus: (
-        | PictureFieldType
-        | QueryFieldType
-        | FormFieldType
-        | undefined
-    )[];
-    incomingFocus: (
-        | PictureFieldType
-        | QueryFieldType
-        | FormFieldType
-        | undefined
-    )[];
+    outgoingFocus: Array<
+        PictureFieldType | QueryFieldType | FormFieldType | undefined
+    >;
+    incomingFocus: Array<
+        PictureFieldType | QueryFieldType | FormFieldType | undefined
+    >;
     setCurrentFocus: (field: PictureFieldType) => void;
 }
 
@@ -165,7 +143,7 @@ export const PictureElementExplorer: React.FC<Props> = props => {
 
     const checkFocus = (
         fieldType: PictureFieldType,
-        focusArray: (PictureFieldType | undefined)[]
+        focusArray: Array<PictureFieldType | undefined>
     ): boolean => focusArray.some(val => val === fieldType);
 
     // @todo: put in the <source> elements based on the gatsby query

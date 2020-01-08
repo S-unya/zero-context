@@ -1,14 +1,19 @@
 import React from "react";
-import { SourceImageProps } from "../../pages";
-
-export enum FormFieldType {
-    "SOURCEWIDTH" = "sourceImageWidth",
-    "SOURCEHEIGHT" = "sourceImageHeight",
-    "SOURCETYPE" = "sourceImageType",
-    "SOURCENAME" = "sourceImageName"
-}
+import {
+    SourceImageProps,
+    PictureFieldType,
+    QueryFieldType,
+    FormFieldType
+} from "../../types/types";
 
 interface Props extends React.FormHTMLAttributes<HTMLFormElement> {
+    incomingFocus: Array<
+        PictureFieldType | QueryFieldType | FormFieldType | undefined
+    >;
+    outgoingFocus: Array<
+        PictureFieldType | QueryFieldType | FormFieldType | undefined
+    >;
+    setCurrentFocus: (focus: string) => void;
     sourceImageProps: SourceImageProps;
     updateSourceImageProps: (
         f: (draft: SourceImageProps) => void | SourceImageProps

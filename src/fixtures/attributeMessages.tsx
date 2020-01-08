@@ -1,24 +1,5 @@
 import * as React from "react";
 
-export enum MessageFieldType {
-    // display parameters
-    "MAXWIDTH" = "maxWidth",
-    "MAXHEIGHT" = "maxHeight",
-    "DISPLAYTYPE" = "displayType",
-    "QUALITY" = "quality",
-    "IMGBG" = "imageBackground",
-    "FIT" = "fit",
-    "BRKPNTS" = "displayBreakpoints",
-    "SPACER" = "spacer",
-    // Source image parameters
-    "SOURCEWIDTH" = "sourceImageWidth",
-    "SOURCEHEIGHT" = "sourceImageHeight",
-    "SOURCETYPE" = "sourceImageType",
-    // Element fields
-    "SRC" = "src",
-    "SRCSET" = "srcSet",
-    "SIZES" = "sizes"
-}
 export const messages = {
     // display parameters
     maxWidth: (

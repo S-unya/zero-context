@@ -1,124 +1,31 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import cx from "classnames";
-import {
-    DisplayImageProps,
-    SourceImageProps,
-    emptyDisplayParams
-} from "../../pages";
+import { emptyDisplayParams } from "../../pages";
 import CodeBlock from "../CodeBlock";
 import { parse } from "graphql";
 
+import {
+    DisplayImageProps,
+    SourceImageProps,
+    PictureFieldType,
+    QueryFieldType,
+    FormFieldType
+} from "../../types/types";
+
 import styles from "./GraphQlExplorer.module.css";
 
-interface ParsedPath {
-    /**
-     * The root of the path such as '/' or 'c:\'
-     */
-    root: string;
-    /**
-     * The full directory path such as '/home/user/dir' or 'c:\path\dir'
-     */
-    dir: string;
-    /**
-     * The file name including extension (if any) such as 'index.html'
-     */
-    base: string;
-    /**
-     * The file extension (if any) such as '.html'
-     */
-    ext: string;
-    /**
-     * The file name without extension (if any) such as 'index'
-     */
-    name: string;
-}
-
-export interface FileNode extends ParsedPath {
-    publicURL: string;
-    id: string;
-    children: any[];
-    sourceInstanceName: string;
-    absolutePath: string;
-    relativePath: string;
-    relativeDirectory: string;
-    extension: string;
-    size: number;
-    prettySize: string;
-
-    modifiedTime: string;
-    accessTime: string;
-    changeTime: string;
-    birthTime: string;
-    internal: {
-        contentDigest: string;
-        type: "Directory" | "File";
-        mediaType?: string;
-        description: string;
-    };
-}
-
-export interface FixedObject {
-    width: number;
-    height: number;
-    src: string;
-    srcSet: string;
-    base64?: string;
-    tracedSVG?: string;
-    srcWebp?: string;
-    srcSetWebp?: string;
-    media?: string;
-}
-
-export interface FluidObject {
-    aspectRatio: number;
-    src: string;
-    srcSet: string;
-    sizes: string;
-    base64?: string;
-    tracedSVG?: string;
-    srcWebp?: string;
-    srcSetWebp?: string;
-    media?: string;
-}
-export interface ImageSharp extends Partial<FileNode> {
-    childImageSharp: {
-        fluid?: FluidObject;
-        fixed?: FixedObject;
-    };
-}
-/*
-childImageSharp {
-                fluid(
-                    maxWidth: 1800
-                    srcSetBreakpoints: [400, 550, 800, 1600, 1800]
-                    quality: 75
-                    toFormat: JPG
-                ) {
-                    ...GatsbyImageSharpFluid_withWebp
-                }
-            }*/
-export enum QueryFieldType {
-    // display parameters
-    "MAXWIDTH" = "maxWidth",
-    "MAXHEIGHT" = "maxHeight",
-    "DISPLAYTYPE" = "displayType",
-    "QUALITY" = "quality",
-    "IMGBG" = "imageBackground",
-    "FIT" = "fit",
-    "BRKPNTS" = "displayBreakpoints",
-    "TOFORMAT" = "toFormat",
-    "FRAGMENT" = "fragment"
-}
-// @TODO: add fragments support
-// @TODO: add fit support
-// @TODO: add background support
-// @TODO: add toFormat support
 interface Props extends React.HTMLAttributes<HTMLElement> {
     displayImageProps: DisplayImageProps;
     sourceImageProps: SourceImageProps;
     setDisplayImageProps: (
         value: DisplayImageProps
     ) => void | DisplayImageProps;
+    incomingFocus: Array<
+        PictureFieldType | QueryFieldType | FormFieldType | undefined
+    >;
+    outgoingFocus: Array<
+        PictureFieldType | QueryFieldType | FormFieldType | undefined
+    >;
     setCurrentFocus: (focus: string) => void;
 }
 
@@ -222,8 +129,7 @@ const determineIfIsGqlError = (
 
 const gqlPre = `{
   childImageSharp {`;
-const gqlPost = `  }
-}`;
+const gqlPost = `}`;
 
 // eslint-disable-next-line complexity
 const outputParamsString = (params: DisplayImageProps): string => {
@@ -275,11 +181,10 @@ const outputType = (params: DisplayImageProps): string => {
     return type ? `${type}${typeProps}{` : ``;
 };
 
-const parseParamsIntoGraphQl = (params: DisplayImageProps): string => `${gqlPre}
-    ${outputType(params)}
-        ${params.fragment || ""}
-    ${params.displayType ? "}" : ""}
-${gqlPost}`;
+const parseParamsIntoGraphQl = (params: DisplayImageProps): string =>
+    `${gqlPre}${outputType(params)}${params.fragment || ""}${
+        params.displayType ? "}" : ""
+    }${gqlPost}`;
 
 // @TODO: Actually use the child-image-sharp schema and parse the graphql here
 export const GraphQlExplorer: React.FC<Props> = ({
@@ -328,7 +233,7 @@ export const GraphQlExplorer: React.FC<Props> = ({
             if (/quality:/i.test(param)) {
                 return setFocus(QueryFieldType.QUALITY);
             }
-            return;
+            return undefined;
         },
         [setFocus]
     );
@@ -363,6 +268,10 @@ export const GraphQlExplorer: React.FC<Props> = ({
         [getButtonAction]
     );
 
+    // @TODO: add fragments support
+    // @TODO: add fit support
+    // @TODO: add background support
+    // @TODO: add toFormat support
     const parseParamsIntoInteractive = useCallback(
         // eslint-disable-next-line complexity
         (params: DisplayImageProps): React.ReactFragment => {
@@ -379,7 +288,7 @@ export const GraphQlExplorer: React.FC<Props> = ({
             const fragmentAction = setFocus(QueryFieldType.FRAGMENT);
 
             const graphQLFragment = (
-                <pre>
+                <>
                     {gqlPre}
                     {`
     `}
@@ -399,7 +308,7 @@ export const GraphQlExplorer: React.FC<Props> = ({
     }
 `}
                     {gqlPost}
-                </pre>
+                </>
             );
 
             return graphQLFragment;
@@ -440,11 +349,9 @@ export const GraphQlExplorer: React.FC<Props> = ({
     }, [displayImageProps]);
     // EFFECT:END
 
+    // @TODO: removal of tab to unfocus could make this hard to use... consider help panel?
     return (
         <section className={cx(className, styles.component)} style={style}>
-            <button onClick={updateEditing} className={styles.button}>
-                {editing ? "Save" : "Edit"}
-            </button>
             {editing ? (
                 <CodeBlock
                     live={editing}
@@ -455,7 +362,13 @@ export const GraphQlExplorer: React.FC<Props> = ({
                     {graphql}
                 </CodeBlock>
             ) : (
-                <pre>{parseParamsIntoInteractive(displayImageProps)}</pre>
+                <pre
+                    onClick={updateEditing}
+                    className={styles.codePreview}
+                    tabIndex={-1}
+                >
+                    {parseParamsIntoInteractive(displayImageProps)}
+                </pre>
             )}
         </section>
     );

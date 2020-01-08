@@ -1,1 +1,3 @@
-export { ImageForm } from "./ImageForm";
+import { ImageForm } from "./ImageForm";
+
+export default ImageForm;
