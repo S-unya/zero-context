@@ -8,13 +8,15 @@ import Layout from "../components/Layout";
 import PageHeader from "../components/PageHeader";
 import GraphQlExplorer from "../components/GraphQlExplorer";
 import { messages } from "../fixtures/attributeMessages";
-
 import {
-    QueryFieldType,
+    MessageFieldType,
     PictureFieldType,
     FormFieldType,
-    MessageFieldType
+    QueryFieldType,
+    DisplayImageProps,
+    SourceImageProps
 } from "../types/types";
+import { PictureElementExplorer } from "../components/PictureElementExplorer";
 
 interface Reducer {
     message: MessageFieldType;

@@ -5,7 +5,8 @@ import {
     SourceImageProps,
     PictureFieldType,
     QueryFieldType,
-    FormFieldType
+    FormFieldType,
+    AlignedImageProps
 } from "../../types/types";
 
 const formatSizes = (width: number): string =>
@@ -22,18 +23,24 @@ const formatSrcset = (arr: number[], type: string): string[] => {
 };
 
 const calculatePossibleBreakpoints = (
-    arr: number[],
+    arr: Array<string | number>,
     baseWidth: number,
-    width: string | number
+    width: string | number | null
 ): number[] => {
     let lastNumberStr = false;
 
+    if (!width) {
+        return [] as number[];
+    }
+
     return arr.reduce((acc, bp: string | number, index: number) => {
-        if (((bp as unknown) as number) * 1 < width) {
-            acc.push(bp);
+        const breakPoint: number = ((bp as unknown) as number) * 1;
+
+        if (breakPoint < width) {
+            acc.push(breakPoint);
 
             if (
-                bp < baseWidth &&
+                breakPoint < baseWidth &&
                 index + 1 < arr.length &&
                 arr[index + 1] > baseWidth
             ) {
@@ -44,18 +51,18 @@ const calculatePossibleBreakpoints = (
         }
 
         if (!lastNumberStr) {
-            acc.push(width);
+            acc.push(((width as unknown) as number) * 1);
             lastNumberStr = true;
         }
 
         return acc;
-    }, []);
+    }, [] as number[]);
 };
 
-const defaultBreakPoints = (displayImageBreakPoints): number[] =>
+const defaultBreakPoints = (displayImageBreakPoints: string): string[] =>
     displayImageBreakPoints
         ? displayImageBreakPoints.split(", ")
-        : [800, 1200, 1600]; // double check this when image output works
+        : ["800", "1200", "1600"]; // double check this when image output works
 
 const formatSrc = (width: number, type = "jpg"): string =>
     `/path/to/images/${width}/image.${type}`;
@@ -72,30 +79,35 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
     setCurrentFocus: (field: PictureFieldType) => void;
 }
 
+// eslint-disable-next-line complexity
 const alignDisplayImageProps = (
     displayImageProps: DisplayImageProps,
     sourceImageProps: SourceImageProps
 ): AlignedImageProps => {
-    const imgProps = {} as AlignedImageProps;
+    // @TODO: either use the image-sharp heal method or check this against it
+    const imgProps: AlignedImageProps = ({} as unknown) as AlignedImageProps;
 
+    const defaultWidth = displayImageProps.displayType === "fixed" ? 600 : 800;
     imgProps.width = Math.min(
-        displayImageProps.maxWidth,
-        sourceImageProps.width
+        displayImageProps?.maxWidth || defaultWidth,
+        sourceImageProps?.width || defaultWidth
     );
-    imgProps.height = Math.min(
-        displayImageProps.maxHeight,
-        sourceImageProps.height
-    );
+
+    imgProps.height =
+        displayImageProps.maxHeight && sourceImageProps.height
+            ? Math.min(displayImageProps.maxHeight, sourceImageProps.height)
+            : undefined;
+
     imgProps.displayImageBreakpoints = calculatePossibleBreakpoints(
         defaultBreakPoints(displayImageProps.displayBreakpoints),
-        displayImageProps.maxWidth || 800,
-        sourceImageProps.width
+        displayImageProps?.maxWidth || defaultWidth,
+        sourceImageProps?.width
     );
-    imgProps.displayImageType = displayImageProps.displayType;
-    imgProps.fit = displayImageProps.fit;
+    imgProps.displayImageType = displayImageProps?.displayType || "fixed";
+    imgProps.fit = displayImageProps?.fit || "cover";
     imgProps.imageBackground =
-        displayImageProps.imageBackground || "rgba(0, 0, 0, 0,)";
-    imgProps.quality = displayImageProps.quality || 50;
+        displayImageProps?.imageBackground || "rgba(0, 0, 0, 0,)";
+    imgProps.quality = displayImageProps?.quality || 50;
 
     return imgProps;
 };
