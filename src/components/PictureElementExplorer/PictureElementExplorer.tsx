@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 
 import {
     DisplayImageProps,
@@ -9,10 +9,15 @@ import {
     AlignedImageProps
 } from "../../types/types";
 
+import styles from "./PictureElementExplorer.module.css";
+
 const formatSizes = (width: number): string =>
     `(max-width: ${width}) 100vw, ${width}`;
 
-const formatSrcset = (arr: number[], type: string): string[] => {
+const formatSrcset = (
+    arr: number[],
+    type = "No source image data"
+): string[] => {
     return arr.reduce(
         (acc, width) => [
             ...acc,
@@ -67,17 +72,30 @@ const defaultBreakPoints = (displayImageBreakPoints: string): string[] =>
 const formatSrc = (width: number, type = "jpg"): string =>
     `/path/to/images/${width}/image.${type}`;
 
-interface Props extends React.HTMLAttributes<HTMLElement> {
-    displayImageProps: DisplayImageProps;
-    sourceImageProps: SourceImageProps;
-    outgoingFocus: Array<
-        PictureFieldType | QueryFieldType | FormFieldType | undefined
-    >;
-    incomingFocus: Array<
-        PictureFieldType | QueryFieldType | FormFieldType | undefined
-    >;
-    setCurrentFocus: (field: PictureFieldType) => void;
-}
+const associateQueryToSelection = {
+    // display parameters
+    MAXWIDTH: ["srcSet", "sizes", "width", "spacer"],
+    MAXHEIGHT: ["spacer", "height"],
+    DISPLAYTYPE: ["srcSet", "sizes", "spacer"],
+    QUALITY: [],
+    IMGBG: [],
+    FIT: [],
+    BRKPNTS: ["srcSet", "sizes"],
+    FRAGMENT: ["source", "spacer", "src"],
+    // Source image parameters
+    SOURCEWIDTH: ["width", "srcSet", "sizes", "spacer"],
+    SOURCEHEIGHT: ["height", "spacer"],
+    SOURCETYPE: ["src"],
+    SOURCENAME: ["src"],
+    // Element fields
+    SRC: ["src"],
+    SRCSET: ["srcSet"],
+    SPACER: ["spacer"],
+    SIZES: ["sizes"],
+    SOURCE: ["source"],
+    WIDTH: ["width"],
+    HEIGHT: ["height"]
+};
 
 // eslint-disable-next-line complexity
 const alignDisplayImageProps = (
@@ -112,6 +130,8 @@ const alignDisplayImageProps = (
     return imgProps;
 };
 
+// @TODO: add width and height processing to div
+// @TODO: real source output
 const gatbyImageStrings = {
     wrapStart: `<div className="gatsby-image-wrapper">`,
     spacerDiv: `<div style="width: 100%; padding-bottom: ###"></div>`,
@@ -121,14 +141,28 @@ const gatbyImageStrings = {
     sourcePlaceholder: `<source ... />`
 };
 
+interface Props extends React.HTMLAttributes<HTMLElement> {
+    displayImageProps: DisplayImageProps;
+    sourceImageProps: SourceImageProps;
+    incomingFocus:
+        | PictureFieldType
+        | QueryFieldType
+        | FormFieldType
+        | undefined;
+    setCurrentFocus: (field: PictureFieldType) => void;
+}
+
+// eslint-disable-next-line complexity
 export const PictureElementExplorer: React.FC<Props> = props => {
     const {
         displayImageProps,
         sourceImageProps,
         incomingFocus,
-        outgoingFocus,
         setCurrentFocus
     } = props;
+    const [selected] = useState<Array<string | undefined> | undefined>(
+        incomingFocus ? associateQueryToSelection[incomingFocus] : undefined
+    );
     const alignedProps = alignDisplayImageProps(
         displayImageProps,
         sourceImageProps
@@ -140,51 +174,61 @@ export const PictureElementExplorer: React.FC<Props> = props => {
     );
     const src = formatSrc(alignedProps.width, sourceImageProps.fileType);
 
-    const setSrcsetFocus = (): void => {
-        setCurrentFocus(PictureFieldType.SRCSET);
-    };
-    const setSrcFocus = (): void => {
-        setCurrentFocus(PictureFieldType.SRC);
-    };
-    const setSizesFocus = (): void => {
-        setCurrentFocus(PictureFieldType.SIZES);
-    };
-    const setSpacerFocus = (): void => {
-        setCurrentFocus(PictureFieldType.SPACER);
-    };
+    const setFocus = useCallback(
+        (queryFieldType: PictureFieldType) => () => {
+            setCurrentFocus(queryFieldType);
+        },
+        [setCurrentFocus]
+    );
 
-    const checkFocus = (
-        fieldType: PictureFieldType,
-        focusArray: Array<PictureFieldType | undefined>
-    ): boolean => focusArray.some(val => val === fieldType);
+    const getButtonAction = useCallback(
+        (param: PictureFieldType): (<T>(event: T) => void) | undefined => {
+            return setFocus(param);
+        },
+        [setFocus]
+    );
+
+    const checkFocus = (fieldType: string): boolean | undefined =>
+        selected?.includes(fieldType);
+
+    const aspectRatio =
+        sourceImageProps.width && sourceImageProps.height
+            ? `${100 / (sourceImageProps.width / sourceImageProps.height)}%`
+            : "No source image data";
 
     // @todo: put in the <source> elements based on the gatsby query
     // @todo: put in the lowsource image 64bit or svg
     return (
         <pre>
             {gatbyImageStrings.wrapStart}
-            <button onFocus={setSpacerFocus} onClick={setSpacerFocus}>
-                {gatbyImageStrings.spacerDiv.replace(
-                    "###",
-                    `${100 /
-                        (sourceImageProps.width / sourceImageProps.height)}%`
-                )}
+            <button
+                onFocus={getButtonAction("SPACER")}
+                onClick={getButtonAction("SPACER")}
+                className={
+                    checkFocus("spacer") ? styles.selected : styles.elementTerm
+                }
+            >
+                {gatbyImageStrings.spacerDiv.replace("###", aspectRatio)}
             </button>
             {gatbyImageStrings.pictureStart}
             {gatbyImageStrings.sourcePlaceholder}
             {`<img 
             `}
             <button
-                onFocus={setSrcsetFocus}
-                onClick={setSrcsetFocus}
-                tabIndex={0}
+                onFocus={getButtonAction("SRCSET")}
+                onClick={getButtonAction("SRCSET")}
+                className={
+                    checkFocus("srcset") ? styles.selected : styles.elementTerm
+                }
             >{`srcSet="${srcSet.join(", ")}"`}</button>
             {` 
             `}
             <button
-                onFocus={setSrcFocus}
-                onClick={setSrcFocus}
-                tabIndex={0}
+                onFocus={getButtonAction("SRC")}
+                onClick={getButtonAction("SRC")}
+                className={
+                    checkFocus("src") ? styles.selected : styles.elementTerm
+                }
             >{`src="${src}"`}</button>
             {` 
             `}
@@ -192,9 +236,11 @@ export const PictureElementExplorer: React.FC<Props> = props => {
             {` 
             `}
             <button
-                onFocus={setSizesFocus}
-                onClick={setSizesFocus}
-                tabIndex={0}
+                onFocus={getButtonAction("SIZES")}
+                onClick={getButtonAction("SIZES")}
+                className={
+                    checkFocus("sizes") ? styles.selected : styles.elementTerm
+                }
             >{`sizes="${sizes}"`}</button>
             {` loading="lazy" 
         />
@@ -205,48 +251,3 @@ export const PictureElementExplorer: React.FC<Props> = props => {
     );
 };
 export default PictureElementExplorer;
-
-/*
-fluid(
-                    maxWidth: 1400
-                    srcSetBreakpoints: [720, 1024, 1400]
-                    quality: 75
-                    toFormat: JPG
-                ) {
-                    ...GatsbyImageSharpFluid_withWebp_noBase64
-                }
-
-<div class=" gatsby-image-wrapper" style="position: relative; overflow: hidden;">
-<div style="width: 100%; padding-bottom: 58.5714%;"></div>
-<img src="data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAMABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAIDBP/EABYBAQEBAAAAAAAAAAAAAAAAAAMAAv/aAAwDAQACEAMQAAABzRecgOYX/8QAGxAAAgMAAwAAAAAAAAAAAAAAAQIAERMSIjL/2gAIAQEAAQUCzXLiCfMdjSt2qf/EABgRAAIDAAAAAAAAAAAAAAAAAAABAhIi/9oACAEDAQE/AY6RU//EABYRAAMAAAAAAAAAAAAAAAAAAAEQIf/aAAgBAgEBPwExf//EAB8QAAEDAwUAAAAAAAAAAAAAAAEAESECEEESIjFxgf/aAAgBAQAGPwLURPaAO18um59RpxKpgW//xAAbEAEAAwEAAwAAAAAAAAAAAAABABEhMUFxgf/aAAgBAQABPyE+XgxDLiFtpoDj5TiFXE6r+yNm5//aAAwDAQACAAMAAAAQJz//xAAcEQABAwUAAAAAAAAAAAAAAAABABEhMWHB0fD/2gAIAQMBAT8QNwm/UQgGxpf/xAAWEQEBAQAAAAAAAAAAAAAAAAABABH/2gAIAQIBAT8QGslv/8QAGhABAQADAQEAAAAAAAAAAAAAAREAITFBUf/aAAgBAQABPxAKcs3jHKuS6ZVVB9nuFJeCxF7PMEmhCYa3udxl4CAVJebwmXq6+bc//9k=" alt="" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover; object-position: center center; opacity: 0; transition-delay: 500ms;">
-<picture>
-<source type="image/webp" srcset="/static/88758e0856afc6bf6126e93288d75d01/a213b/header.webp 600w,
-/static/88758e0856afc6bf6126e93288d75d01/240ac/header.webp 800w,
-/static/88758e0856afc6bf6126e93288d75d01/266a9/header.webp 1024w,
-/static/88758e0856afc6bf6126e93288d75d01/d404e/header.webp 1400w" sizes="(max-width: 1400px) 100vw, 1400px">
-<source srcset="/static/88758e0856afc6bf6126e93288d75d01/897d1/header.jpg 600w,
-/static/88758e0856afc6bf6126e93288d75d01/57238/header.jpg 800w,
-/static/88758e0856afc6bf6126e93288d75d01/e376d/header.jpg 1024w,
-/static/88758e0856afc6bf6126e93288d75d01/be4cd/header.jpg 1400w" sizes="(max-width: 1400px) 100vw, 1400px">
-<img sizes="(max-width: 1400px) 100vw, 1400px" srcset="/static/88758e0856afc6bf6126e93288d75d01/897d1/header.jpg 600w,
-/static/88758e0856afc6bf6126e93288d75d01/57238/header.jpg 800w,
-/static/88758e0856afc6bf6126e93288d75d01/e376d/header.jpg 1024w,
-/static/88758e0856afc6bf6126e93288d75d01/be4cd/header.jpg 1400w" src="/static/88758e0856afc6bf6126e93288d75d01/be4cd/header.jpg" alt="" loading="lazy" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover; object-position: center center; opacity: 1; transition: opacity 500ms ease 0s;">
-</picture>
-
-<noscript>
-<picture>
-<source type='image/webp' srcset="/static/88758e0856afc6bf6126e93288d75d01/a213b/header.webp 600w,
-/static/88758e0856afc6bf6126e93288d75d01/240ac/header.webp 800w,
-/static/88758e0856afc6bf6126e93288d75d01/266a9/header.webp 1024w,
-/static/88758e0856afc6bf6126e93288d75d01/d404e/header.webp 1400w" sizes="(max-width: 1400px) 100vw, 1400px" /><source srcset="/static/88758e0856afc6bf6126e93288d75d01/897d1/header.jpg 600w,
-/static/88758e0856afc6bf6126e93288d75d01/57238/header.jpg 800w,
-/static/88758e0856afc6bf6126e93288d75d01/e376d/header.jpg 1024w,
-/static/88758e0856afc6bf6126e93288d75d01/be4cd/header.jpg 1400w" sizes="(max-width: 1400px) 100vw, 1400px" />
-<img loading="lazy" sizes="(max-width: 1400px) 100vw, 1400px" srcset="/static/88758e0856afc6bf6126e93288d75d01/897d1/header.jpg 600w,
-/static/88758e0856afc6bf6126e93288d75d01/57238/header.jpg 800w,
-/static/88758e0856afc6bf6126e93288d75d01/e376d/header.jpg 1024w,
-/static/88758e0856afc6bf6126e93288d75d01/be4cd/header.jpg 1400w" src="/static/88758e0856afc6bf6126e93288d75d01/be4cd/header.jpg" alt="" style="position:absolute;top:0;left:0;opacity:1;width:100%;height:100%;object-fit:cover;object-position:center"/>
-</picture></noscript>
-</div>
-*/

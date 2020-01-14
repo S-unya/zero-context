@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import cx from "classnames";
 import { emptyDisplayParams } from "../../pages";
 import CodeBlock from "../CodeBlock";
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { parse } from "graphql";
 
 import {
@@ -13,21 +14,6 @@ import {
 } from "../../types/types";
 
 import styles from "./GraphQlExplorer.module.css";
-
-interface Props extends React.HTMLAttributes<HTMLElement> {
-    displayImageProps: DisplayImageProps;
-    sourceImageProps: SourceImageProps;
-    setDisplayImageProps: (
-        value: DisplayImageProps
-    ) => void | DisplayImageProps;
-    incomingFocus: Array<
-        PictureFieldType | QueryFieldType | FormFieldType | undefined
-    >;
-    outgoingFocus: Array<
-        PictureFieldType | QueryFieldType | FormFieldType | undefined
-    >;
-    setCurrentFocus: (focus: string) => void;
-}
 
 type GQLTree = {
     next: GQLTree | null;
@@ -65,27 +51,35 @@ const extractParam = (
 // eslint-disable-next-line complexity
 const traverseTo = (
     tok: GQLTree,
-    acc?: DisplayImageProps
+    acc = ({} as unknown) as DisplayImageProps
 ): DisplayImageProps => {
-    let params: DisplayImageProps = { ...acc };
+    let params = ({ ...acc } as unknown) as DisplayImageProps;
 
     switch (tok.kind) {
         case "Name":
-            params = tok.value && extractParam(tok.value, params);
-            params = tok.next && traverseTo(tok.next, params);
+            if (tok.value) {
+                params = extractParam(tok.value, params);
+            }
+            if (tok.next) {
+                params = traverseTo(tok.next, params);
+            }
             break;
         case "...": // fragment
             const next = tok.next;
 
             params.fragment = `...${next!.value}`;
-            params = next && traverseTo(next, params);
+            if (tok.next) {
+                params = traverseTo(tok.next, params);
+            }
 
             break;
         case "<EOF>":
             return params;
         default:
             // params += tok.kind;
-            params = tok.next && traverseTo(tok.next, params);
+            if (tok.next) {
+                params = traverseTo(tok.next, params);
+            }
             break;
     }
 
@@ -97,6 +91,7 @@ const parseGraphQlIntoParams = (
     graphQl: string
 ): DisplayImageProps | GqlError => {
     try {
+        // @todo: it would be really good to parse this against the image-sharp schema
         const ast = parse(graphQl);
         if (!ast || !ast.loc || !ast.loc.startToken) {
             throw new Error("Error processing graphQl");
@@ -108,7 +103,6 @@ const parseGraphQlIntoParams = (
             traverseTo(ast.loc.startToken, {
                 ...emptyDisplayParams
             });
-        console.log({ ast, params });
         return params;
     } catch (err) {
         // @todo use this to add code hints
@@ -129,7 +123,8 @@ const determineIfIsGqlError = (
 
 const gqlPre = `{
   childImageSharp {`;
-const gqlPost = `}`;
+const gqlPost = `}
+}`;
 
 // eslint-disable-next-line complexity
 const outputParamsString = (params: DisplayImageProps): string => {
@@ -186,14 +181,57 @@ const parseParamsIntoGraphQl = (params: DisplayImageProps): string =>
         params.displayType ? "}" : ""
     }${gqlPost}`;
 
+const associateQueryToSelection = {
+    // display parameters
+    MAXWIDTH: ["maxWidth"],
+    MAXHEIGHT: ["maxHeight"],
+    DISPLAYTYPE: ["displayType"],
+    QUALITY: ["quality"],
+    IMGBG: ["imageBackground"],
+    FIT: ["fit"],
+    BRKPNTS: ["displayBreakpoints"],
+    FRAGMENT: ["fragment"],
+    // Source image parameters
+    SOURCEWIDTH: [],
+    SOURCEHEIGHT: [],
+    SOURCETYPE: ["fragment"],
+    SOURCENAME: [],
+    // Element fields
+    SRC: ["maxWidth", "fragment"],
+    SRCSET: ["maxWidth", "displayBreakpoints", "displayType"],
+    SPACER: ["fragment", "maxWidth", "maxHeight", "displayType"],
+    SIZES: ["maxWidth", "displayType", "displayBreakpoints"],
+    SOURCE: ["fragment"],
+    WIDTH: ["maxWidth"],
+    HEIGHT: ["maxHeight"]
+};
+
+interface Props extends React.HTMLAttributes<HTMLElement> {
+    displayImageProps: DisplayImageProps;
+    sourceImageProps: SourceImageProps;
+    setDisplayImageProps: (
+        value: DisplayImageProps
+    ) => void | DisplayImageProps;
+    incomingFocus:
+        | PictureFieldType
+        | QueryFieldType
+        | FormFieldType
+        | undefined;
+    setCurrentFocus: (focus: string) => void;
+}
+
 // @TODO: Actually use the child-image-sharp schema and parse the graphql here
 export const GraphQlExplorer: React.FC<Props> = ({
     style,
     className,
     displayImageProps,
     setDisplayImageProps,
-    setCurrentFocus
+    setCurrentFocus,
+    incomingFocus
 }) => {
+    const [selected] = useState<Array<string | undefined> | undefined>(
+        incomingFocus ? associateQueryToSelection[incomingFocus] : undefined
+    );
     // STATE
     const [editing, setEditing] = useState<boolean>(false);
     const [graphql, setGraphql] = useState<string>(
@@ -216,22 +254,22 @@ export const GraphQlExplorer: React.FC<Props> = ({
         // eslint-disable-next-line complexity
         (param: string): (<T>(event: T) => void) | undefined => {
             if (/fit:/i.test(param)) {
-                return setFocus(QueryFieldType.FIT);
+                return setFocus("FIT");
             }
             if (/width:/i.test(param)) {
-                return setFocus(QueryFieldType.MAXWIDTH);
+                return setFocus("MAXWIDTH");
             }
             if (/height:/i.test(param)) {
-                return setFocus(QueryFieldType.MAXHEIGHT);
+                return setFocus("MAXHEIGHT");
             }
             if (/background:/i.test(param)) {
-                return setFocus(QueryFieldType.IMGBG);
+                return setFocus("IMGBG");
             }
             if (/breakpoint:/i.test(param)) {
-                return setFocus(QueryFieldType.BRKPNTS);
+                return setFocus("BRKPNTS");
             }
             if (/quality:/i.test(param)) {
-                return setFocus(QueryFieldType.QUALITY);
+                return setFocus("QUALITY");
             }
             return undefined;
         },
@@ -252,6 +290,11 @@ export const GraphQlExplorer: React.FC<Props> = ({
                                 key={param}
                                 onFocus={action}
                                 onClick={action}
+                                className={
+                                    selected && selected.includes(param)
+                                        ? styles.selected
+                                        : styles.queryTerm
+                                }
                             >
                                 {param}
                             </button>
@@ -265,7 +308,7 @@ export const GraphQlExplorer: React.FC<Props> = ({
             `
             ];
         },
-        [getButtonAction]
+        [getButtonAction, selected]
     );
 
     // @TODO: add fragments support
@@ -285,14 +328,27 @@ export const GraphQlExplorer: React.FC<Props> = ({
             const fragment = str.match(fragmentPattern);
             const displayType = str.match(displayTypePattern);
 
-            const fragmentAction = setFocus(QueryFieldType.FRAGMENT);
+            const fragmentAction = setFocus("FRAGMENT");
+            const displayTypeAction = setFocus("DISPLAYTYPE");
 
             const graphQLFragment = (
                 <>
                     {gqlPre}
                     {`
     `}
-                    {displayType?.length && <button>{displayType[0]}</button>}
+                    {displayType?.length && (
+                        <button
+                            onFocus={displayTypeAction}
+                            onClick={displayTypeAction}
+                            className={
+                                selected && selected.includes("displayType")
+                                    ? styles.selected
+                                    : styles.queryTerm
+                            }
+                        >
+                            {displayType[0]}
+                        </button>
+                    )}
                     {displayImageParams?.length
                         ? outputTypeParams(displayImageParams)
                         : null}
@@ -300,20 +356,23 @@ export const GraphQlExplorer: React.FC<Props> = ({
                         <button
                             onFocus={fragmentAction}
                             onClick={fragmentAction}
+                            className={
+                                selected && selected.includes("fragment")
+                                    ? styles.selected
+                                    : styles.queryTerm
+                            }
                         >
                             {fragment[0]}
                         </button>
                     )}
-                    {`
-    }
-`}
+                    {``}
                     {gqlPost}
                 </>
             );
 
             return graphQLFragment;
         },
-        [outputTypeParams, setFocus]
+        [outputTypeParams, setFocus, selected]
     );
 
     const updateGraphQl = useCallback(

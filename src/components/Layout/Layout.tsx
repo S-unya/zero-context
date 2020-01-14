@@ -13,4 +13,3 @@ export const Layout: React.FC<React.HTMLAttributes<HTMLElement>> = ({
         </main>
     );
 };
-export default Layout;
