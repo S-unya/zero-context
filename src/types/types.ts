@@ -87,33 +87,29 @@ childImageSharp {
             }*/
 
 // display parameters
-export enum QueryFieldType {
-    "MAXWIDTH" = "maxWidth",
-    "MAXHEIGHT" = "maxHeight",
-    "DISPLAYTYPE" = "displayType",
-    "QUALITY" = "quality",
-    "IMGBG" = "imageBackground",
-    "FIT" = "fit",
-    "BRKPNTS" = "displayBreakpoints",
-    "TOFORMAT" = "toFormat",
-    "FRAGMENT" = "fragment"
-}
+export type QueryFieldType =
+    | "MAXWIDTH"
+    | "MAXHEIGHT"
+    | "DISPLAYTYPE"
+    | "QUALITY"
+    | "IMGBG"
+    | "FIT"
+    | "BRKPNTS"
+    | "FRAGMENT";
 
-export enum PictureFieldType {
-    "DISPLAYTYPE" = "displayType",
-    "FIT" = "fit",
-    "SPACER" = "spacer",
-    "SRC" = "src",
-    "SRCSET" = "srcSet",
-    "SIZES" = "sizes"
-}
+export type PictureFieldType =
+    | "DISPLAYTYPE"
+    | "FIT"
+    | "SPACER"
+    | "SRC"
+    | "SRCSET"
+    | "SIZES";
 
-export enum FormFieldType {
-    "SOURCEWIDTH" = "sourceImageWidth",
-    "SOURCEHEIGHT" = "sourceImageHeight",
-    "SOURCETYPE" = "sourceImageType",
-    "SOURCENAME" = "sourceImageName"
-}
+export type FormFieldType =
+    | "SOURCEWIDTH"
+    | "SOURCEHEIGHT"
+    | "SOURCETYPE"
+    | "SOURCENAME";
 
 export enum MessageFieldType {
     // display parameters
@@ -124,13 +120,14 @@ export enum MessageFieldType {
     "IMGBG" = "imageBackground",
     "FIT" = "fit",
     "BRKPNTS" = "displayBreakpoints",
-    "SPACER" = "spacer",
+    "FRAGMENT" = "fragment",
     // Source image parameters
     "SOURCEWIDTH" = "sourceImageWidth",
     "SOURCEHEIGHT" = "sourceImageHeight",
     "SOURCETYPE" = "sourceImageType",
     // Element fields
     "SRC" = "src",
+    "SPACER" = "spacer",
     "SRCSET" = "srcSet",
     "SIZES" = "sizes"
 }
