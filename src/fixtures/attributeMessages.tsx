@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export const messages = {
+export const Messages = {
     // display parameters
     maxWidth: (
         <>
@@ -155,7 +155,7 @@ export const messages = {
     sourceImageHeight: (
         <>
             <p>
-                In Gatsby, the source image <code>width</code> value is
+                In Gatsby, the source image <code>height</code> value is
                 discovered automatically when generating the image. It isn't
                 used for much unless you add height to your GraphQL query.
             </p>
