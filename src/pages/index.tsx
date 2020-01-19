@@ -78,7 +78,20 @@ const Index: React.FC<Props> = () => {
                     <p>
                         This tool is to help understand the moving parts of the
                         gatsby-image-sharp queries and the gatsby-image output.
+                        It aims to address 2 areas of difficulty when using the
+                        awesome Gatsby image (and image-sharp) libraries:
                     </p>
+                    <ol>
+                        <li>
+                            Writing the GraphQL query to get the image you want
+                        </li>
+                        <li>
+                            Understanding which parts of the query have which
+                            results; especially in regards to the number of
+                            images that one might inadvertantly end up
+                            processing when we build.
+                        </li>
+                    </ol>
                     <p>
                         It is still a work in progress and any useful addition
                         suggestions are welcome
