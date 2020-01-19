@@ -24,7 +24,9 @@ interface Props extends React.FormHTMLAttributes<HTMLFormElement> {
 // @TODO: add fragments support
 export const ImageForm: React.FC<Props> = ({
     sourceImageProps,
-    updateSourceImageProps
+    updateSourceImageProps,
+    displayImageProps,
+    updateDisplayImageProps
 }) => {
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
@@ -78,6 +80,71 @@ export const ImageForm: React.FC<Props> = ({
         [updateSourceImageProps]
     );
 
+    const outPutImageTypeFields = () => {
+        if (!displayImageProps.displayType) {
+            return null;
+        }
+
+        const baseProperties = (
+            <>
+                <div className="input-wrap">
+                    <label htmlFor="image-width">Display width</label>{" "}
+                    <input
+                        type="number"
+                        value={displayImageProps.maxWidth}
+                        onChange={setDisplayImageWidth}
+                        placeholder="800"
+                    />
+                </div>
+                <div className="input-wrap">
+                    <label htmlFor="image-height">Display height</label>{" "}
+                    <input
+                        type="number"
+                        value={displayImageProps.maxHeight}
+                        onChange={setDisplayImageHeight}
+                    />
+                </div>
+                <div className="input-wrap">
+                    <label htmlFor="image-quality">
+                        Image compression quality
+                    </label>{" "}
+                    <input
+                        type="number"
+                        value={displayImageProps.quality}
+                        onChange={setDisplayImageQuality}
+                        max="100"
+                        min="0"
+                        placeholder="50"
+                    />
+                </div>
+            </>
+        );
+
+        const fluidProperties = (
+            <>
+                <div className="input-wrap">
+                    <label htmlFor="image-breakpoints">
+                        Display image sizes (comma separated)
+                    </label>{" "}
+                    <input
+                        type="text"
+                        value={displayImageProps.displayBreakpoints || ""}
+                        onChange={setDisplayImageBreakpoints}
+                        placeholder="800"
+                    />
+                </div>
+            </>
+        );
+
+        return (
+            <>
+                {displayImageProps.displayType === "fixed"
+                    ? baseProperties
+                    : [baseProperties, fluidProperties]}
+            </>
+        );
+    };
+
     return (
         <form>
             <fieldset>
@@ -110,6 +177,40 @@ export const ImageForm: React.FC<Props> = ({
                     <dd>{sourceImageProps.fileType}</dd>
                 </dl>
             </fieldset>
+            <fieldset>
+                <legend>How will the image display?</legend>
+                <p>
+                    These options are about how you want your image to display,
+                    there is more help available for each field.
+                </p>
+                <div className="input-wrap">
+                    <label htmlFor="image-type-fixed">
+                        Fixed size (with appropriate images for hi-res screens):
+                    </label>{" "}
+                    <input
+                        type="radio"
+                        id="image-type-fixed"
+                        name="image-type"
+                        value="fixed"
+                        checked={displayImageProps.displayType === "fixed"}
+                        onChange={setImageDisplayType}
+                    />
+                    <label htmlFor="image-type-fluid">
+                        Fluid size (adapts to the width of the screen):
+                    </label>{" "}
+                    <input
+                        type="radio"
+                        id="image-type-fluid"
+                        name="image-type"
+                        value="fluid"
+                        checked={displayImageProps.displayType === "fluid"}
+                        onChange={setImageDisplayType}
+                    />
+                    <div className="help">Some help here</div>
+                </div>
+                {outPutImageTypeFields()}
+            </fieldset>
+
             <canvas ref={canvasRef} />
         </form>
     );
