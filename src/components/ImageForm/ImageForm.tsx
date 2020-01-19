@@ -7,13 +7,14 @@ import {
 } from "../../types/types";
 
 interface Props extends React.FormHTMLAttributes<HTMLFormElement> {
-    incomingFocus: Array<
-        PictureFieldType | QueryFieldType | FormFieldType | undefined
-    >;
-    outgoingFocus: Array<
-        PictureFieldType | QueryFieldType | FormFieldType | undefined
-    >;
-    setCurrentFocus: (focus: string) => void;
+    incomingFocus:
+        | PictureFieldType
+        | QueryFieldType
+        | FormFieldType
+        | undefined;
+    setCurrentFocus: (
+        f: PictureFieldType | QueryFieldType | FormFieldType | undefined
+    ) => void;
     sourceImageProps: SourceImageProps;
     updateSourceImageProps: (
         f: (draft: SourceImageProps) => void | SourceImageProps

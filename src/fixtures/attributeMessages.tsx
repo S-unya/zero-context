@@ -1,6 +1,7 @@
 import * as React from "react";
+import { KeyedByFields } from "../types/types";
 
-export const Messages = {
+export const Messages: KeyedByFields<JSX.Element> = {
     // display parameters
     maxWidth: (
         <>

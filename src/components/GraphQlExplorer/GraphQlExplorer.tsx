@@ -217,7 +217,9 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
         | QueryFieldType
         | FormFieldType
         | undefined;
-    setCurrentFocus: (focus: string) => void;
+    setCurrentFocus: (
+        f: PictureFieldType | QueryFieldType | FormFieldType | undefined
+    ) => void;
 }
 
 // @TODO: Actually use the child-image-sharp schema and parse the graphql here

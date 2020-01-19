@@ -6,7 +6,8 @@ import {
     PictureFieldType,
     QueryFieldType,
     FormFieldType,
-    AlignedImageProps
+    AlignedImageProps,
+    KeyedByFields
 } from "../../types/types";
 
 import styles from "./PictureElementExplorer.module.css";
@@ -72,29 +73,29 @@ const defaultBreakPoints = (displayImageBreakPoints: string): string[] =>
 const formatSrc = (width: number, type = "jpg"): string =>
     `/path/to/images/${width}/image.${type}`;
 
-const associateQueryToSelection = {
+const associateQueryToSelection: KeyedByFields<Array<string | undefined>> = {
     // display parameters
-    MAXWIDTH: ["srcSet", "sizes", "width", "spacer"],
-    MAXHEIGHT: ["spacer", "height"],
-    DISPLAYTYPE: ["srcSet", "sizes", "spacer"],
-    QUALITY: [],
-    IMGBG: [],
-    FIT: [],
-    BRKPNTS: ["srcSet", "sizes"],
-    FRAGMENT: ["source", "spacer", "src"],
+    maxWidth: ["srcSet", "sizes", "width", "spacer"],
+    maxHeight: ["spacer", "height"],
+    displayType: ["srcSet", "sizes", "spacer"],
+    quality: [],
+    imageBackground: [],
+    fit: [],
+    displayBreakpoints: ["srcSet", "sizes"],
+    fragment: ["source", "spacer", "src"],
     // Source image parameters
-    SOURCEWIDTH: ["width", "srcSet", "sizes", "spacer"],
-    SOURCEHEIGHT: ["height", "spacer"],
-    SOURCETYPE: ["src"],
-    SOURCENAME: ["src"],
+    sourceImageWidth: ["width", "srcSet", "sizes", "spacer"],
+    sourceImageHeight: ["height", "spacer"],
+    sourceImageType: ["src"],
+    sourceImageName: ["src"],
     // Element fields
-    SRC: ["src"],
-    SRCSET: ["srcSet"],
-    SPACER: ["spacer"],
-    SIZES: ["sizes"],
-    SOURCE: ["source"],
-    WIDTH: ["width"],
-    HEIGHT: ["height"]
+    src: ["src"],
+    srcSet: ["srcSet"],
+    spacer: ["spacer"],
+    sizes: ["sizes"],
+    source: ["source"],
+    width: ["width"],
+    height: ["height"]
 };
 
 // eslint-disable-next-line complexity
@@ -149,7 +150,9 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
         | QueryFieldType
         | FormFieldType
         | undefined;
-    setCurrentFocus: (field: PictureFieldType) => void;
+    setCurrentFocus: (
+        f: PictureFieldType | QueryFieldType | FormFieldType | undefined
+    ) => void;
 }
 
 // eslint-disable-next-line complexity
@@ -202,8 +205,8 @@ export const PictureElementExplorer: React.FC<Props> = props => {
         <pre>
             {gatbyImageStrings.wrapStart}
             <button
-                onFocus={getButtonAction("SPACER")}
-                onClick={getButtonAction("SPACER")}
+                onFocus={getButtonAction("spacer")}
+                onClick={getButtonAction("spacer")}
                 className={
                     checkFocus("spacer") ? styles.selected : styles.elementTerm
                 }
@@ -215,8 +218,8 @@ export const PictureElementExplorer: React.FC<Props> = props => {
             {`<img 
             `}
             <button
-                onFocus={getButtonAction("SRCSET")}
-                onClick={getButtonAction("SRCSET")}
+                onFocus={getButtonAction("srcSet")}
+                onClick={getButtonAction("srcSet")}
                 className={
                     checkFocus("srcset") ? styles.selected : styles.elementTerm
                 }
@@ -224,8 +227,8 @@ export const PictureElementExplorer: React.FC<Props> = props => {
             {` 
             `}
             <button
-                onFocus={getButtonAction("SRC")}
-                onClick={getButtonAction("SRC")}
+                onFocus={getButtonAction("src")}
+                onClick={getButtonAction("src")}
                 className={
                     checkFocus("src") ? styles.selected : styles.elementTerm
                 }
@@ -236,8 +239,8 @@ export const PictureElementExplorer: React.FC<Props> = props => {
             {` 
             `}
             <button
-                onFocus={getButtonAction("SIZES")}
-                onClick={getButtonAction("SIZES")}
+                onFocus={getButtonAction("sizes")}
+                onClick={getButtonAction("sizes")}
                 className={
                     checkFocus("sizes") ? styles.selected : styles.elementTerm
                 }

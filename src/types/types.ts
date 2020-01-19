@@ -88,66 +88,52 @@ childImageSharp {
 
 // display parameters
 export type QueryFieldType =
-    | "MAXWIDTH"
-    | "MAXHEIGHT"
-    | "DISPLAYTYPE"
-    | "QUALITY"
-    | "IMGBG"
-    | "FIT"
-    | "BRKPNTS"
-    | "FRAGMENT";
+    | "maxWidth"
+    | "maxHeight"
+    | "displayType"
+    | "quality"
+    | "imageBackground"
+    | "fit"
+    | "displayBreakpoints"
+    | "fragment";
 
 export type PictureFieldType =
-    | "DISPLAYTYPE"
-    | "FIT"
-    | "SPACER"
-    | "SRC"
-    | "SRCSET"
-    | "SIZES";
+    | "displayType"
+    | "fit"
+    | "spacer"
+    | "src"
+    | "srcSet"
+    | "sizes"
+    | "source"
+    | "width"
+    | "height";
 
 export type FormFieldType =
-    | "SOURCEWIDTH"
-    | "SOURCEHEIGHT"
-    | "SOURCETYPE"
-    | "SOURCENAME";
-
-export enum MessageFieldType {
-    // display parameters
-    "MAXWIDTH" = "maxWidth",
-    "MAXHEIGHT" = "maxHeight",
-    "DISPLAYTYPE" = "displayType",
-    "QUALITY" = "quality",
-    "IMGBG" = "imageBackground",
-    "FIT" = "fit",
-    "BRKPNTS" = "displayBreakpoints",
-    "FRAGMENT" = "fragment",
-    // Source image parameters
-    "SOURCEWIDTH" = "sourceImageWidth",
-    "SOURCEHEIGHT" = "sourceImageHeight",
-    "SOURCETYPE" = "sourceImageType",
-    // Element fields
-    "SRC" = "src",
-    "SPACER" = "spacer",
-    "SRCSET" = "srcSet",
-    "SIZES" = "sizes"
-}
+    | "sourceImageWidth"
+    | "sourceImageHeight"
+    | "sourceImageType"
+    | "sourceImageName";
 
 export interface SourceImageProps {
-    width: number | null;
-    height: number | null;
-    fileType: string | null;
-    name: string | null;
+    width: number | undefined;
+    height: number | undefined;
+    fileType: string | undefined;
+    name: string | undefined;
 }
 
+export type KeyedByFields<T> = {
+    [P in PictureFieldType | QueryFieldType | FormFieldType]: T;
+};
+
 export interface DisplayImageProps {
-    maxWidth: number | null;
-    maxHeight: number | null;
-    displayType: "fluid" | "fixed" | null;
+    maxWidth: number | undefined;
+    maxHeight: number | undefined;
+    displayType: "fluid" | "fixed" | undefined;
     quality: number;
     imageBackground: string;
-    fit: string | null;
+    fit: string | undefined;
     displayBreakpoints: string;
-    fragment: string | null;
+    fragment: string | undefined;
 }
 
 export interface AlignedImageProps {

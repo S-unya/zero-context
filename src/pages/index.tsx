@@ -1,5 +1,5 @@
-import React, { useCallback } from "react";
-import { useImmer, useImmerReducer } from "use-immer";
+import React, { useCallback, useState } from "react";
+import { useImmer } from "use-immer";
 import { useStaticQuery, graphql } from "gatsby";
 import Image from "gatsby-image";
 
@@ -9,7 +9,6 @@ import PageHeader from "../components/PageHeader";
 import GraphQlExplorer from "../components/GraphQlExplorer";
 import { Messages } from "../fixtures/AttributeMessages";
 import {
-    MessageFieldType,
     PictureFieldType,
     FormFieldType,
     QueryFieldType,
@@ -17,16 +16,6 @@ import {
     SourceImageProps
 } from "../types/types";
 import { PictureElementExplorer } from "../components/PictureElementExplorer";
-
-interface Reducer {
-    message: MessageFieldType;
-    outgoingFocus: Array<
-        PictureFieldType | FormFieldType | QueryFieldType | undefined
-    >;
-    incomingFocus: Array<
-        PictureFieldType | FormFieldType | QueryFieldType | undefined
-    >;
-}
 
 export const emptyDisplayParams = ({} as unknown) as DisplayImageProps;
 
@@ -50,7 +39,9 @@ const Index: React.FC<Props> = () => {
         }
     `);
     const img = imageData.allFile.nodes[0].childImageSharp;
-    const [selected, setSelected] = useImmer<>(undefined);
+    const [selected, setSelected] = useState<
+        PictureFieldType | QueryFieldType | FormFieldType | undefined
+    >(undefined);
     const [sourceImageProps, updateSourceImageProps] = useImmer<
         SourceImageProps
     >({
@@ -63,10 +54,6 @@ const Index: React.FC<Props> = () => {
     const [displayImageProps, updateDisplayImageProps] = useImmer<
         DisplayImageProps
     >(emptyDisplayParams);
-    const [
-        infoMessage,
-        setInfoMessage
-    ] = React.useState<null | React.ReactFragment>(null);
 
     const setDisplayImageProps = useCallback(
         (props: DisplayImageProps) => {
@@ -83,12 +70,6 @@ const Index: React.FC<Props> = () => {
         },
         [updateDisplayImageProps]
     );
-
-    React.useEffect(() => {
-        const msg = Messages[state.message];
-
-        setInfoMessage(msg);
-    }, [state, setInfoMessage, img]);
 
     return (
         <Layout>
@@ -107,6 +88,8 @@ const Index: React.FC<Props> = () => {
             <ImageForm
                 sourceImageProps={sourceImageProps}
                 updateSourceImageProps={updateSourceImageProps}
+                incomingFocus={selected}
+                setCurrentFocus={setSelected}
             />
             <GraphQlExplorer
                 displayImageProps={displayImageProps}
@@ -122,7 +105,7 @@ const Index: React.FC<Props> = () => {
                 setCurrentFocus={setSelected}
             />
             <div aria-atomic="true" aria-live="assertive">
-                {infoMessage}
+                Message {selected}: {selected && Messages[selected]}
             </div>
             {img && img.fixed ? (
                 <Image fixed={img.fixed} />
