@@ -3,7 +3,8 @@ import {
     SourceImageProps,
     PictureFieldType,
     QueryFieldType,
-    FormFieldType
+    FormFieldType,
+    DisplayImageProps
 } from "../../types/types";
 
 interface Props extends React.FormHTMLAttributes<HTMLFormElement> {
@@ -16,9 +17,11 @@ interface Props extends React.FormHTMLAttributes<HTMLFormElement> {
         f: PictureFieldType | QueryFieldType | FormFieldType | undefined
     ) => void;
     sourceImageProps: SourceImageProps;
+    displayImageProps: DisplayImageProps;
     updateSourceImageProps: (
         f: (draft: SourceImageProps) => void | SourceImageProps
     ) => void;
+    updateDisplayImageProps: (draft: DisplayImageProps) => void;
 }
 
 // @TODO: add fragments support
@@ -44,8 +47,8 @@ export const ImageForm: React.FC<Props> = ({
                         const imageProps: SourceImageProps = {
                             name: file.name,
                             fileType: file.type.replace("image/", ""),
-                            width: null,
-                            height: null
+                            width: undefined,
+                            height: undefined
                         };
                         const fileReader = new FileReader();
 
