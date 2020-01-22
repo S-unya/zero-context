@@ -45,10 +45,10 @@ const Index: React.FC<Props> = () => {
     const [sourceImageProps, updateSourceImageProps] = useImmer<
         SourceImageProps
     >({
-        width: null,
-        height: null,
-        fileType: null,
-        name: null
+        width: undefined,
+        height: undefined,
+        fileType: undefined,
+        name: undefined
     } as SourceImageProps);
 
     const [displayImageProps, updateDisplayImageProps] = useImmer<
@@ -100,7 +100,9 @@ const Index: React.FC<Props> = () => {
             </PageHeader>
             <ImageForm
                 sourceImageProps={sourceImageProps}
+                displayImageProps={displayImageProps}
                 updateSourceImageProps={updateSourceImageProps}
+                updateDisplayImageProps={setDisplayImageProps}
                 incomingFocus={selected}
                 setCurrentFocus={setSelected}
             />
