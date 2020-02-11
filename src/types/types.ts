@@ -129,10 +129,10 @@ export interface DisplayImageProps {
     maxWidth: number | undefined;
     maxHeight: number | undefined;
     displayType: "fluid" | "fixed" | undefined;
-    quality: number;
-    imageBackground: string;
+    quality: number | undefined;
+    imageBackground: string | undefined;
     fit: string | undefined;
-    displayBreakpoints: string;
+    displayBreakpoints: string | undefined;
     fragment: string | undefined;
 }
 

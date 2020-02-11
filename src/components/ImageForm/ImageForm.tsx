@@ -32,6 +32,70 @@ export const ImageForm: React.FC<Props> = ({
     updateDisplayImageProps
 }) => {
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
+    const setDisplayImageWidth = React.useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            const targetValue = event.target.value;
+
+            const copy = { ...displayImageProps };
+            copy.maxWidth = targetValue ? parseInt(targetValue, 10) : undefined;
+
+            updateDisplayImageProps(copy);
+        },
+        [displayImageProps, updateDisplayImageProps]
+    );
+    const setDisplayImageHeight = React.useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            const targetValue = event.target.value;
+
+            const copy = { ...displayImageProps };
+            copy.maxHeight = targetValue
+                ? parseInt(targetValue, 10)
+                : undefined;
+
+            updateDisplayImageProps(copy);
+        },
+        [displayImageProps, updateDisplayImageProps]
+    );
+    const setDisplayImageQuality = React.useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            const targetValue = event.target.value;
+
+            const copy = { ...displayImageProps };
+            copy.quality = targetValue ? parseInt(targetValue, 10) : undefined;
+
+            updateDisplayImageProps(copy);
+        },
+        [displayImageProps, updateDisplayImageProps]
+    );
+    const setDisplayImageBreakpoints = React.useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            const targetValue = event.target.value;
+
+            const copy = { ...displayImageProps };
+            copy.displayBreakpoints = targetValue;
+
+            updateDisplayImageProps(copy);
+        },
+        [displayImageProps, updateDisplayImageProps]
+    );
+    const setImageDisplayType = React.useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            const targetValue = event.target.value;
+
+            if (
+                targetValue === "fixed" ||
+                targetValue === "fluid" ||
+                !targetValue
+            ) {
+                const copy = { ...displayImageProps };
+                copy.displayType =
+                    (targetValue as "fixed" | "fluid") || undefined;
+
+                updateDisplayImageProps(copy);
+            }
+        },
+        [displayImageProps, updateDisplayImageProps]
+    );
 
     const setImage = React.useCallback(
         async (event: React.ChangeEvent<HTMLInputElement>) => {
