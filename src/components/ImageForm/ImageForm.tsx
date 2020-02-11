@@ -31,6 +31,10 @@ export const ImageForm: React.FC<Props> = ({
     displayImageProps,
     updateDisplayImageProps
 }) => {
+    const displayType = displayImageProps.displayType
+        ? displayImageProps.displayType
+        : "fixed";
+    const [expanded, setExpanded] = React.useState<boolean>(false);
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
     const setDisplayImageWidth = React.useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,10 +152,6 @@ export const ImageForm: React.FC<Props> = ({
     );
 
     const outPutImageTypeFields = () => {
-        if (!displayImageProps.displayType) {
-            return null;
-        }
-
         const baseProperties = (
             <>
                 <div className="input-wrap">
@@ -205,12 +205,16 @@ export const ImageForm: React.FC<Props> = ({
 
         return (
             <>
-                {displayImageProps.displayType === "fixed"
+                {displayType === "fixed"
                     ? baseProperties
                     : [baseProperties, fluidProperties]}
             </>
         );
     };
+
+    const toggleExpanded = React.useCallback(() => {
+        setExpanded(!expanded);
+    }, [setExpanded, expanded]);
 
     return (
         <form>
@@ -244,40 +248,49 @@ export const ImageForm: React.FC<Props> = ({
                     <dd>{sourceImageProps.fileType}</dd>
                 </dl>
             </fieldset>
-            <fieldset>
-                <legend>How will the image display?</legend>
-                <p>
-                    These options are about how you want your image to display,
-                    there is more help available for each field.
-                </p>
-                <div className="input-wrap">
-                    <label htmlFor="image-type-fixed">
-                        Fixed size (with appropriate images for hi-res screens):
-                    </label>{" "}
-                    <input
-                        type="radio"
-                        id="image-type-fixed"
-                        name="image-type"
-                        value="fixed"
-                        checked={displayImageProps.displayType === "fixed"}
-                        onChange={setImageDisplayType}
-                    />
-                    <label htmlFor="image-type-fluid">
-                        Fluid size (adapts to the width of the screen):
-                    </label>{" "}
-                    <input
-                        type="radio"
-                        id="image-type-fluid"
-                        name="image-type"
-                        value="fluid"
-                        checked={displayImageProps.displayType === "fluid"}
-                        onChange={setImageDisplayType}
-                    />
-                    <div className="help">Some help here</div>
-                </div>
-                {outPutImageTypeFields()}
-            </fieldset>
-
+            <div>
+                <button
+                    aria-haspopup={true}
+                    aria-controls="displayImageFields"
+                    onClick={toggleExpanded}
+                >
+                    Answer questions to create the query?
+                </button>
+                <fieldset id="displayImageFields" aria-expanded={expanded}>
+                    <legend role="button">How the image will display</legend>
+                    <p>
+                        These options are about how you want your image to
+                        display, there is more help available for each field.
+                    </p>
+                    <div className="input-wrap">
+                        <label htmlFor="image-type-fixed">
+                            Fixed size (with appropriate images for hi-res
+                            screens):
+                        </label>{" "}
+                        <input
+                            type="radio"
+                            id="image-type-fixed"
+                            name="image-type"
+                            value="fixed"
+                            checked={displayType === "fixed"}
+                            onChange={setImageDisplayType}
+                        />
+                        <label htmlFor="image-type-fluid">
+                            Fluid size (adapts to the width of the screen):
+                        </label>{" "}
+                        <input
+                            type="radio"
+                            id="image-type-fluid"
+                            name="image-type"
+                            value="fluid"
+                            checked={displayType === "fluid"}
+                            onChange={setImageDisplayType}
+                        />
+                        <div className="help">Some help here</div>
+                    </div>
+                    {outPutImageTypeFields()}
+                </fieldset>
+            </div>
             <canvas ref={canvasRef} />
         </form>
     );
