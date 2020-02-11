@@ -87,7 +87,7 @@ const Index: React.FC<Props> = () => {
                         </li>
                         <li>
                             Understanding which parts of the query have which
-                            results; especially in regards to the number of
+                            results; especially in regard to the number of
                             images that one might inadvertantly end up
                             processing when we build.
                         </li>
