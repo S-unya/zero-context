@@ -1,0 +1,29 @@
+.component {
+}
+
+.fieldSet {
+  position: relative;
+  border: 0 none;
+  margin: 0 0 2rem;
+  padding: 0;
+  transition: all 0.7s ease;
+  opacity: 1;
+  overflow: hidden;
+}
+
+.fieldSet[aria-expanded="false"] {
+  opacity: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.legend {
+  font-size: 2rem;
+  margin: 0 0 1.25em;
+}
+
+.canvas {
+  position: absolute;
+  height: 0;
+  width: 0;
+}

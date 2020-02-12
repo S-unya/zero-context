@@ -7,6 +7,8 @@ import {
     DisplayImageProps
 } from "../../types/types";
 
+import styles from "./ImageForm.module.css";
+
 interface Props extends React.FormHTMLAttributes<HTMLFormElement> {
     incomingFocus:
         | PictureFieldType
@@ -212,31 +214,33 @@ export const ImageForm: React.FC<Props> = ({
         );
     };
 
-    const toggleExpanded = React.useCallback(() => {
-        setExpanded(!expanded);
-    }, [setExpanded, expanded]);
+    const toggleExpanded = React.useCallback(
+        (event: React.MouseEvent) => {
+            event.preventDefault();
+            setExpanded(!expanded);
+        },
+        [setExpanded, expanded]
+    );
 
     return (
         <form>
-            <fieldset>
-                <legend>Your image</legend>
+            <fieldset className={styles.fieldSet}>
+                <legend className={styles.legend}>The original image</legend>
                 <p>
-                    This is used to calculate information about your image that
-                    would normally be done by Gatsby's infrastructure. No need
-                    to worry, it will not leave your computer.
+                    This is used to calculate information about the source image
+                    needed to calculate some of the sizes. This is done entirely
+                    on your computer.
                 </p>
                 <div className="input-wrap">
-                    <label htmlFor="source-image">
-                        Your hi-res source image:
-                    </label>{" "}
+                    <label htmlFor="source-image">Hi-res source image:</label>{" "}
                     <input
                         type="file"
                         id="source-image"
                         onChange={setImage}
                         accept="image/png, image/jpg, image/webp"
-                    />{" "}
+                    />
                 </div>
-                <h3>About your image</h3>
+                <h3>Image information</h3>
                 <dl>
                     <dt>Name:</dt>
                     <dd>{sourceImageProps.name}</dd>
@@ -256,42 +260,54 @@ export const ImageForm: React.FC<Props> = ({
                 >
                     Answer questions to create the query?
                 </button>
-                <fieldset id="displayImageFields" aria-expanded={expanded}>
-                    <legend role="button">How the image will display</legend>
-                    <p>
-                        These options are about how you want your image to
-                        display, there is more help available for each field.
-                    </p>
-                    <div className="input-wrap">
-                        <label htmlFor="image-type-fixed">
-                            Fixed size (with appropriate images for hi-res
-                            screens):
-                        </label>{" "}
-                        <input
-                            type="radio"
-                            id="image-type-fixed"
-                            name="image-type"
-                            value="fixed"
-                            checked={displayType === "fixed"}
-                            onChange={setImageDisplayType}
-                        />
-                        <label htmlFor="image-type-fluid">
-                            Fluid size (adapts to the width of the screen):
-                        </label>{" "}
-                        <input
-                            type="radio"
-                            id="image-type-fluid"
-                            name="image-type"
-                            value="fluid"
-                            checked={displayType === "fluid"}
-                            onChange={setImageDisplayType}
-                        />
-                        <div className="help">Some help here</div>
-                    </div>
-                    {outPutImageTypeFields()}
+                <fieldset
+                    id="displayImageFields"
+                    aria-expanded={expanded}
+                    className={styles.fieldSet}
+                >
+                    <legend className={styles.legend}>
+                        How the image will display
+                    </legend>
+                    {expanded ? (
+                        <>
+                            <p>
+                                These options are about how you want your image
+                                to display, there is more help available for
+                                each field.
+                            </p>
+                            <div className="input-wrap">
+                                <label htmlFor="image-type-fixed">
+                                    Fixed size (with appropriate images for
+                                    hi-res screens):
+                                </label>{" "}
+                                <input
+                                    type="radio"
+                                    id="image-type-fixed"
+                                    name="image-type"
+                                    value="fixed"
+                                    checked={displayType === "fixed"}
+                                    onChange={setImageDisplayType}
+                                />
+                                <label htmlFor="image-type-fluid">
+                                    Fluid size (adapts to the width of the
+                                    screen):
+                                </label>{" "}
+                                <input
+                                    type="radio"
+                                    id="image-type-fluid"
+                                    name="image-type"
+                                    value="fluid"
+                                    checked={displayType === "fluid"}
+                                    onChange={setImageDisplayType}
+                                />
+                                <div className="help">Some help here</div>
+                            </div>
+                            {outPutImageTypeFields()}
+                        </>
+                    ) : null}
                 </fieldset>
             </div>
-            <canvas ref={canvasRef} />
+            <canvas ref={canvasRef} className={styles.canvas} />
         </form>
     );
 };

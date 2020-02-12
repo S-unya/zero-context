@@ -106,6 +106,9 @@ const Index: React.FC<Props> = () => {
                 incomingFocus={selected}
                 setCurrentFocus={setSelected}
             />
+            <div aria-atomic="true" aria-live="assertive">
+                Message {selected}: {selected && Messages[selected]}
+            </div>
             <GraphQlExplorer
                 displayImageProps={displayImageProps}
                 sourceImageProps={sourceImageProps}
@@ -119,9 +122,7 @@ const Index: React.FC<Props> = () => {
                 incomingFocus={selected}
                 setCurrentFocus={setSelected}
             />
-            <div aria-atomic="true" aria-live="assertive">
-                Message {selected}: {selected && Messages[selected]}
-            </div>
+
             {img && img.fixed ? (
                 <Image fixed={img.fixed} />
             ) : img && img.fluid ? (
