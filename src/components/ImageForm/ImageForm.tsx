@@ -1,4 +1,5 @@
 import React from "react";
+import cx from "classnames";
 import {
     SourceImageProps,
     PictureFieldType,
@@ -223,13 +224,12 @@ export const ImageForm: React.FC<Props> = ({
     );
 
     return (
-        <form>
+        <form className={cx("section", styles.component)}>
             <fieldset className={styles.fieldSet}>
                 <legend className={styles.legend}>The original image</legend>
                 <p>
-                    This is used to calculate information about the source image
-                    needed to calculate some of the sizes. This is done entirely
-                    on your computer.
+                    This is necessary to calculate the sizes of the source
+                    image. This is done entirely on your computer.
                 </p>
                 <div className="input-wrap">
                     <label htmlFor="source-image">Hi-res source image:</label>{" "}
@@ -257,19 +257,21 @@ export const ImageForm: React.FC<Props> = ({
                     aria-haspopup={true}
                     aria-controls="displayImageFields"
                     onClick={toggleExpanded}
+                    className={styles.displayButton}
                 >
-                    Answer questions to create the query?
+                    Automatically create GraphQl?
                 </button>
                 <fieldset
                     id="displayImageFields"
                     aria-expanded={expanded}
+                    aria-hidden={!expanded}
                     className={styles.fieldSet}
                 >
-                    <legend className={styles.legend}>
-                        How the image will display
-                    </legend>
                     {expanded ? (
                         <>
+                            <legend className={styles.legend}>
+                                How the image will display
+                            </legend>
                             <p>
                                 These options are about how you want your image
                                 to display, there is more help available for

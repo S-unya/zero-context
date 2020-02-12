@@ -1,3 +1,15 @@
+:root {
+  /* spacing */
+  --s-1: 16px;
+  --s-2: calc(2 * 16px);
+
+  /* color */
+  --c-white: #fff;
+  --c-text: #333;
+  --c-highlight: #4f98f1;
+  --c-highlight-dark: #022755;
+}
+
 html,
 body {
   padding: 0;
@@ -37,4 +49,14 @@ h3 {
 h4 {
   font-size: 1.15rem;
   font-weight: 200;
+}
+
+/* should go elsewhere */
+.cssCapitalise::first-letter {
+  text-transform: uppercase;
+}
+
+.section {
+  padding: var(--s-2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }

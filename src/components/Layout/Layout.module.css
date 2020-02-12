@@ -1,17 +1,17 @@
 .component {
-    display: grid;
-    grid-template-columns:
-        [full-start] minmax(32px, 1fr) [content-start] minmax(0, 1400px)
-        [content-end] minmax(32px, 1fr) [full-end];
-    grid-auto-rows: auto;
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(32px, 1fr) [content-start] minmax(0, 1400px)
+    [content-end] minmax(32px, 1fr) [full-end];
+  grid-auto-rows: auto;
 }
 
 .component > * {
-    grid-area: content;
+  grid-area: content;
 }
 
 .row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-auto-rows: max-content;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-auto-rows: max-content;
 }

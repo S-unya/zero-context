@@ -1,4 +1,5 @@
 .component {
+  background-color: #fce5e3;
 }
 
 .fieldSet {
@@ -15,6 +16,7 @@
   opacity: 0;
   height: 0;
   pointer-events: none;
+  margin: 0;
 }
 
 .legend {
@@ -26,4 +28,14 @@
   position: absolute;
   height: 0;
   width: 0;
+}
+
+.displayButton {
+  font-size: 1.5rem;
+  padding: var(--s-1);
+  cursor: pointer;
+  color: var(--c-highlight-dark);
+  border: 3px solid currentColor;
+  background: var(--c-highlight);
+  margin: 0 auto;
 }

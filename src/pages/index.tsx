@@ -106,8 +106,16 @@ const Index: React.FC<Props> = () => {
                 incomingFocus={selected}
                 setCurrentFocus={setSelected}
             />
-            <div aria-atomic="true" aria-live="assertive">
-                Message {selected}: {selected && Messages[selected]}
+            <div aria-atomic="true" aria-live="polite" className="section">
+                <header>
+                    <h2>Information</h2>
+                    <p>
+                        Select elements from any of the areas to find out about
+                        them.
+                    </p>
+                    <h3 className="cssCapitalise">{selected}</h3>
+                </header>{" "}
+                {selected && Messages[selected]}
             </div>
             <GraphQlExplorer
                 displayImageProps={displayImageProps}
