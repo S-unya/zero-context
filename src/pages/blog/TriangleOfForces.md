@@ -1,51 +1,58 @@
 # CSS from Good to Ugly to Good again
 
-This article expresses an **opinion** on how to use CSS-the-good-bits in harmony with CSS-in-JS for a pain-free and flexible styling solution.
+This talk expresses an **opinion** and some (potentially biased) observations on how to use CSS-the-good-bits in harmony with CSS-in-JS for a pain-free and flexible styling solution.
 
-At its most essential, the mental model I have used to evaluate all these pros and cons is about recognising boundaries and the consequences of crossing those boundaries. The suggestion is that we always pay some cost when we cross a boundary. For example, even if the boundary is just climbing a fence from one field to another, there is an exertion cost in climbing the fence, but in reality boundary changes are more like changing from one kind of environment to a different one; land to sea, earth to space, CSS to JS...
+This is part one (mostly the thesis except for the end), [part 2 is some practical bits and how they extend the re-use of components](/TriangleOfForces-part2.md)
 
-While it is not necessarily pertinent, it is worth knowing that most of the decisions I make on a day to day basis are based around working with relatively large code bases and multiple teams working together with a wide range of experience. It may not be immediately obvious, but these are boundaries too.
+I am using a "mental model" as a framework to make these observations, but due toe the format I can't cover all possible permutations and considerations. This means that there will be choices made to illustrate my point... and it is here that bias will probably creep in. Nevertheless, the hope is that, by the end of the articles, you will be armed with the same mental model and can make your own choices! Also, the paradigm itself is of my own devising, so it might itself overlook whole orders of consideration... in the end this is just a conversation that I hope will enliven thought.
 
-This is part one (mostly the thesis), part 2 is some practical bits
+At its most essential, the mental model I have made emphasizes recognizing boundaries and the consequent consequences of crossing those boundaries.
+
+1. The simple observation is that we always pay some cost when we cross a boundary. For example, even if we are crossing between 2 identical fields, we either have to climb a fence (there is a cost in exertion and speed), or if someone has put a gate in the fence, the cost to us is less (we still are slowed and cannot choose where to cross) but the bulk of the cost is abstracted by the fence builder (a gate is more complex and costs more). In reality boundary changes are seldom between like and like but from one kind of environment to a another; land to sea, earth to space, CSS to JS...
+2. The second observation is that some boundaries cost more to cross than others.
+3. The third is that some boundaries are crossed because we need to - due to central values or requirements - and some because we never really considered it. For example, most of the decisions I make on a day to day basis are based around working with relatively large code bases and multiple teams working together with a wide range of experience. It may not be immediately obvious, but these are boundaries too, and these boundaries need to be as low as possible. So I can't just make arbitrary decisions that raise them.
+4. The final observation is that some boundaries are good!
 
 ## Context
 
-Before I start, I need to provide a bit of **opinionated** context by outlining what is good about CSS, what is hard about CSS and what has been done before to make working with CSS easier. At the same time as pointing out the boundaries.
+Most of this article is examining historical and modern attempts to "tame" CSS using this boundary mental model. First we'll outline what is good about CSS, what is hard about CSS.
 
-I'd like to say upfront that I'm **not** trying to give an exhaustive insight into approaches to CSS (though I do need to reference some of this), rather I want to get to the thesis and express a way of working that I think provides the best of all worlds.
+## Guess what? I really like CSS :astonished:
 
-## Guess what? CSS rocks :astonished:
-
-It really does.
+I really do. It has so many good points.
 
 1. It isn't render blocking
-2. It has GPU accelerated animation
+2. It provides the absolute simplest way to GPU accelerate any graphics. Ever.
 3. It handles errors and unknown syntax gracefully
-4. It is declarative, simple and easy to understand (caveats)
-5. It is an elegant, efficient and powerful styling language (compare with, e.g. styling something in canvas)
-6. It separates the concerns of style from structural markup (caveats!)
-7. It gzips really nicely
-8. It caches really nicely
+4. It is declarative, simple and easy to understand (caveats). This makes using it a low barrier (boundary)
+   .5. It is an elegant, efficient and powerful styling language (compare with, e.g. styling something in canvas)
+5. It separates the concerns of style from structural markup (caveats!)
+6. It gzips really nicely
+7. It caches really nicely
 
 ...but
 
 ## ~~Large~~ Unplanned CSS can be UGLY! :japanese_ogre:
 
-...and wasteful ...and confusing
+And wasteful. And confusing.
 
-There are plenty of people willing to wail upon CSS, so I don't need to bring up war stories about 10000 line css files; 5 types of button and trying to work out what to call them... etc :helicopter: :helicopter: :helicopter: :boom: :palm_tree: :boom: :palm_tree:
+There are plenty of people willing to wail upon CSS. I remember when CSS was introduced; the initial party-like euphoria of having a way to separate style from markup (Separation Of Concerns! Boundary) and more granular style control... Pretty soon we all woke up to the hangover of giant CSS files and 10 part selectors. We started to notice that far from SOC, our CSS was actually mirroring the structure of our HTML, intimately coupled to it. Where had the separation of concerns gone? Where was the simplicity? What had the world come to?
 
-I remember the initial party-like euphoria of having a way to separate style from markup (Separation Of Concerns! Boundary.), pretty soon we all woke up to the hangover of giant CSS files and 10 part selectors. We started to notice that far from SOC, our CSS was mirroring the structure of our HTML, and intimately coupled to it. Where has the separation of concerns gone? Where was the simplicity? What had the world come to?
+We forgot about all that new control we had, we started to cry out in disappointment, but if we look closely, largely speaking the hard bits of CSS arise from the following 3 things (in descending order of impact):
 
-Largely speaking the hard bits of CSS arise from the following in descending order of impact:
+1. All style declarations are in the same scope - a global scope - there is no boundary
+2. Browsers don't always play by the same rules - though, this is barely a consideration these days! Get orf me lawn!
+3. Sometimes, the nuances of specificity can throw up some unexpected results. Or even just remembering the specificities of different selectors :thinking_face:...
 
-1. All style declarations are in the same scope - a global scope
-2. Browsers don't always play by the same rules - though, compared to the days of CSS1, this is barely a consideration.
-3. Sometimes, the nuances of specificity can throw up some unexpected results e.g. remembering the specificities of the different selectors... :scream_cat:
+3 things, that's it.
 
-3 things, that's it. The first is the kicker though. Of the other 2, the second is still a thing across all the different devices and OSes, but there is tooling like PostCSS that eases this greatly. The third is actually very easy to avoid.
+This first point is both a part of the simplicity of CSS and the foot-gun by which we can make our lives hard. It describes that CSS is largely a no boundary language, which makes it easy to use but also makes it easy to create a mess because there is no inherent organizing factor. And it is this that all subsequent CSS innovations have attempted to tame.
 
-This first point is both a part of the simplicity of CSS and the footgun by which we can make our lives hell. It describes that CSS is largely a no boundary language, which makes it easy to use but also makes it easy to create a mess because there is no inherent organising factor.
+The second is can be tricky across all the different devices and OSes, but there is tooling like PostCSS that eases this greatly.
+
+The third is actually very easy to avoid.
+
+## The Taming of the void
 
 There have been many attempts to apply order to the chaos introduced by this global scope over the years, these can roughly be split into 2 camps:
 
@@ -54,47 +61,50 @@ There have been many attempts to apply order to the chaos introduced by this glo
 
 ### Frameworks
 
-Like bootstrap, tailwind, Atomic CSS etc are quite a bit more than just CSS, but we'll just talk about their approach to CSS:
+Frameworks like bootstrap, tailwind, Atomic CSS (to name a few notables) are quite a bit more than just CSS, but we're only interested in their approach to CSS:
 
-- They take the stance that if you are just applying their class names, consequently your CSS will be ordered and relatively small (if you are working on a large project).
-- Generally, they work on the principle that you have as much access to the HTML as the CSS, and that there is no separation of concerns between the two.
-- The declarative nature of CSS is moved to the HTML (pro and con), which is great for fast prototyping.
-- They embrace the global nature of CSS, by providing one well thought out, structured way of applying CSS.
+- They take the stance that if you are just applying their class names, consequently your CSS will be ordered and relatively small (caveats).
+- They embrace the global nature of CSS, by providing one well thought out, structured way of applying CSS (basically a convention).
+- The declarative nature of CSS is moved to the HTML - embracing that people were not separating the concerns of markup and styling, which is great for fast prototyping (pro and con).
+- Generally, they work on the principle that you have as much access to the HTML as the CSS.
 - The generally work on the principle of 1 class to apply 1 style. Some also have some style patterns (a la OOCSS).
-- They also effectively solve the age old problem of knowing what to naming.
-- They are seriously battle tested.
-- By providing the one way to add CSS, they further simplify the cascade/specificity, which makes the styles easier to reason about.
+- They also effectively solve the age old problem of naming.
+- They are seriously battle tested (serious pro, addressing point 2 above).
+- By providing the one way to add CSS, they further mostly effectively abstract the complexity away from the developer, which makes the styles easier to reason about (point 3 above).
 - They can leverage tooling by limiting options
 
-The way I think about this is that the frameworks create boundaries for CSS and control all the areas that the boudaries are crossed. This means that can solve the problems of working with CSS, but, interestingly, by adding boundaries they also introduce **new** problems. A couple of the harder to categories problems that arise are.
+In the mental model, frameworks create a new structure for CSS to add some boundaries where there were none. This means that can solve the hard parts of working with CSS, but, interestingly, by adding boundaries they also introduce **new** problems. A couple of examples are:
 
-- Complexity: they can be an entire syntax unto themselves - `<div class="Bgc(#0280ae.5) H(90px) D(ib)--sm W(25%)--sm"></div>` is a relatively average example from the Atomic CSS framework, which is fairly equatable to other frameworks' syntaces. This is because, due its flexible nature CSS, has a huge API, so frameworks either need to be equally large, or they have to change the task we are doing.
-- For me, perhaps the most problematic thing with frameworks, albeit rather nuanced - and I understand that this is both opinion and not limited to frameworks - is that they can engender a mental model where HTML and CSS are equally important; that it is okay to write HTML to fit the needs of the CSS classes that are needed.
+- Complexity: while they are simplifying the parts of CSS we use, CSS is huge and flexible, so they either have to be equally large and flexible or be much reduced. Consequently they can be an entire syntax unto themselves - e.g. `<div class="Bgc(#0280ae.5) H(90px) D(ib)--sm W(25%)--sm"></div>` (an example from the Atomic CSS framework website).
+- Unclear boundaries: For me, perhaps the most problematic thing with frameworks, albeit rather nuanced - and I understand that this is both opinion and not limited to frameworks - is that they can engender a mental model where HTML and CSS are equally important; that it is okay to write HTML to fit the needs of the CSS classes that are needed.
 
-It is probably worth noting I'm a believer in semantic and accessible HTML as a base line requirement. It is possible that I take this a little too seriously, but for me it is a requirement or a hard boundary. That said, we can see that frameworks successfully achieve the ordering of the CSS environment, nevertheless there are also reasons enough to make me want to search for another option...
+We can see that frameworks successfully achieve the ordering of the CSS environment, nevertheless there are also reasons enough to make me want to search for another option... It is probably worth noting I'm a believer in semantic and accessible HTML as a base line requirement, for me it is a hard boundary.
 
 ### Conventions
 
-Conventions apply a mental framework more than a code framework and they can vary in their scope. They all represent at its most essential, an organising principle that overlays boundaries on CSS. BEM for example is a way of marking boundaries through naming, while OOCSS outlines an entire philosophy of structure... and yes, it can get pretty abstract. In reality most frameworks I've seen use and formalise one or more convention (or CSS organising principle) into tooling or code structure.
+The other option, Conventions, are a mental organizing framework that you apply to your code - kind of like a Do It Yourself Framework. They can vary in their scope but they all represent at their most essential, an organizing principle that overlays boundaries on CSS. BEM for example is a way of marking boundaries through naming, while OOCSS outlines an entire philosophy of structure... and yes, it can get pretty abstract. Indeed, at their heart all Frameworks use and formalize one or more of these Conventions into tooling and code structure.
 
-Over time various conventions arose and I think that I've tried most of them in one project or another. Eventually I even started introducing my own conventions. This search led me to ITCSS; arguably the convention that most closely and fully leverages all of CSS while providing mechanisms to avoid the pitfalls. It is quite easy to grasp, and promotes reuse and HTML primacy. What I liked about it is the way it had a place for all of CSS without trying to change it.
+Over time various Conventions arose and I think that I've tried most of them in one project or another. Eventually I even started introducing my own conventions. This search led me to ITCSS; arguably the Convention that **most closely and fully provides for leveraging all of CSS** while providing mechanisms to avoid the pitfalls. It is quite easy to grasp, and promotes reuse and HTML primacy. What I liked about it is the way it had a place for all of CSS without trying to change it.
 
-## What is IT(CSS)?
+## So what is IT(CSS)?
 
 [ITCSS](https://www.xfive.co/blog/itcss-scalable-maintainable-css-architecture/) "stands for Inverted Triangle CSS and it helps you to organize your project CSS files in such a way that you can better deal with (not always easy-to-deal with) CSS specifics like global namespace, cascade and selectors specificity." - much of the following description is also lifted from (https://www.xfive.co/blog/itcss-scalable-maintainable-css-architecture/).
 
-One of the key principles of ITCSS is that it separates your CSS codebase to several sections (called layers), which take the form of the inverted triangle, where the most general types of styles form the top (widest part) of the inverted triangle and the most specific (and therefore, explicit) styles are at the pointy end.
-
-What the layers are is a little academic once you understand the principle, but the ones recommended in ITCSS are, ordered from most general to most specific:
+One of the key principles of ITCSS is that it separates a CSS codebase to several sections (called layers. What the layers are is a little academic once you understand the principle, but the ones recommended in ITCSS are, ordered from most general (wide, top of the inverted triangle) to most specific (sharp, bottom of the triangle):
 
 1. **Settings or Tokens** – may be used with preprocessors (like sass variables) and contain font, colors definitions, etc.
-2. **Tools** – globally used mixins and functions.
+2. **Tools** – globally used mix-ins and functions. Really only appropriate for preprocessors, frameworks, etc that have these concepts
+
    **It’s important not to output any CSS in the first 2 layers.**
+
 3. **Generic** – reset and/or normalize styles, box-sizing definition, etc. This is the first layer which generates actual CSS.
-4. **Elements** – styling for bare HTML elements (like H1, A, etc.). These come with default styling from the browser so we can redefine them here. **This is the last layer where we will select a bare HTML element**
+4. **Elements** – styling for bare HTML elements (like H1, A, etc.). These come with default styling from the browser so we can redefine them here.
+
+**This is the last layer where we will select a bare HTML element**
+
 5. **Objects** – class-based selectors which define **undecorated design patterns**, for example media object known from OOCSS
 6. **Components** – specific UI components. This is where the majority of our work takes place and our UI components are often composed of Objects and Components
-7. **Utilities** – utilities and helper classes with ability to **override anything which goes before in the triangle**, eg. hide helper class
+7. **Utilities** – utilities and helper classes with ability to **override anything which goes before in the triangle**, eg. a hide helper class
 
 My teams and I have used a reduced version of this very successfully for a few years. We have adjusted it and learned from using it. We've even managed some projects across multiple branding changes - one of the arguments for Separation of Concerns that is often rejected as not a real life scenario.
 
@@ -124,6 +134,9 @@ Unfortunately it isn't all good news! Just as with the previous attempts to miti
 - Buy-in; once you start with one CSS-in-JS lib, it is hard to switch because of new syntax
 - More to learn; greater impact of mistakes. CSS is very forgiving of mistakes so errors in CSS files have low impact, but an error in a JS file can cause the application to error.
 - Treating components in isolation can also lead to the need to override the styles in the components
+
+This whole discussion is nicely summed up by on twitter by @sanketsahu:
+![Tweet by @sanketsahu:](https://pbs.twimg.com/media/EUNYTRaU0AEObaG?format=jpg&name=large)
 
 ### Stepping back a bit
 

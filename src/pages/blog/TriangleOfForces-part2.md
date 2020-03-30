@@ -47,8 +47,8 @@ export const ContentCard = ({
           <img alt={imageAlt} src={imageSrc} className={styles.image} />
         </figure>
         <div className={styles.contentWrap}>
-          <p className={styles.taxonomy}>{taxonomy}</p>
           <header className={styles.header}>
+            <p className={styles.taxonomy}>{taxonomy}</p>
             <h3>{heading}</h3>
           </header>
           <p className={styles.info}>
@@ -137,7 +137,13 @@ This results in:
 
 ![CardContent](/static/assets/TOF/card-content.png)
 
-Ignoring the fine details, this includes the specifics of the layout and spacing and the bottom border on each content card, along with placeholder fonts... We are happily implementing this in the lists when we get get the rest of the designs for the card:
+Ignoring the fine details, this includes the specifics of the layout and spacing and the bottom border on each content card, along with placeholder fonts...
+
+## Making cards reusable by understanding their boundaries
+
+### The school of hard knocks
+
+We are happily implementing these cards in the lists when we get get the rest of the designs for the card:
 
 ![CardContent](/static/assets/TOF/card-content-variants.png)
 
@@ -147,7 +153,7 @@ Spend a little time considering what you might do.
 
 The most common thing would be to start adding styles or JS logic to cater for all of these situations. To illustrate this, let's look at the simplest scenario, the small screen layout.
 
-First, what does it curretnly do?
+First, how does it currently adapt in size?
 
 <img src="/static/assets/TOF/card-content-unchanged-small.png" alt="Card Content in a small context" width="224px" />
 
@@ -181,9 +187,11 @@ Which results in...
 
 <img src="/static/assets/TOF/card-content-changed-small.png" alt="Adjusted Card Content in a small context" width="224px" />
 
-Not quite. How are we going to take that margin off the left of the content and put spacing around the image? Maybe we do need a media query? But then how are we going to get those other layouts similar to this but on larger screens?
+Not quite. How are we going to take that margin off the left of the content and put spacing around the image? Maybe we do need a media query after all? But then how are we going to get those other layouts similar to this but on larger screens?
 
-Hopefully I have illustrated the kind of panic that can be induced by this type of dilemma. Hopefully I have also shown that just adding more code to cover all the options will just become messy quickly.
+### Learning a lesson in boundaries
+
+Hopefully I have illustrated the kind of panic that can be induced by this type of dilemma. Hopefully I have also shown that just piling on more code to cover all the options will just become messy quickly.
 
 This is an exemplary situation for the usefulness of drawing boundaries. If we know where the boundaries are, we know where responsibility lies and we know how to shape our code.
 
@@ -200,14 +208,61 @@ Let's list out the first 2
 1. "Normal" - as they appear in our first designs - this is how the card "naturally flows.
 2. "Vertical" - as they appear in contrained space, whether due to screen width or display context
 3. "Hero" - as per the first item in the "Dynamic grid" - this gives precendence to the image, but the flow is quite similar to the "Normal"... and one expects from these designs that the behaviour is the same as "Normal" on smaller screens.
+4. Vertical list
+5. Horizontal list
+6. Hero list
+
+Notice that there are 2 distinct types of layout context, the layout of the card's elements and the way the cards are layed out?
 
 #### UI Elements
 
-We have already done this work, when we tried to make our first example.
+We have already done this work, when we made our first example though we may not have been conscious of it. This is a good time to also consider conceptual, design, hierarchical and semantic boundaries that abound (sorry) in this part of an application. Each of these boundaries serves a function, such as accessibility, look and feel, etc. Sometimes these boundaries are at odds with each other, such as when a design shows a tiny heading to a page, or where there is a conceptual boundary that is not semantic, whereas some boundaries such as hierarchy and semantics cooperate to the point of being symbiotic. It is good to be clear about **which of these is most important to your use case** - in my opinion it is invariably semantics and hierarchy for the value they add.
 
-1.
+1.  The wrapping element - an `<article>` makes a good, semantic option
+2.  A link - an `<a>` anchor element is the semantic tag for hyperlinking
+3.  An image - we chose to semantically wrap the image in a `<figure>`, which gives us a new, conceptual boundary:
+4.  An area concerned with media
+5.  To which we could add another concept, an area concerned with textual content; in our case a `<div>`
+6.  Taxonomy - we chose a simple, semantic text element, `<p>`
+7.  Article heading - the heading hierarchy in HTML is well defined and important for screen reader users, who can use them to navigate the page. It is very hard to make a re-usable component that has a defined heading in, but we had a stab at guessing the hierarchy with `<h3>`
+8.  In all the designs, there is a hierarchical boundary between the heading plus taxonomy and the meta text below - in HTML there is the structural element `<header>` for this.
+9.  The meta information - this is one of the areas of the design that changes the most. Earlier we chose to use a `<p>` to identify this area, but actually, as the text doesn't really form a coherent sentence or paragraph, it would probably be better to just use a semantically neutral `<div>`
+10. Variously we ahve a published date (`<time>`), an author (`<span>`) and a location (`<address>`)
 
-Well the first thing to do is step away from the keyboard and stop adding even more styles to the fray!
+As an aside [schema.org](https://schema.org/Article) has some further data that we can add to this to make it more consumable by search engines...
+
+Now that we have clear boundaries, 10 UI and 6 layout contexts, it is easier to see why piling on more code jsut gets messy!
+
+### Assigning responsibility
+
+Once we are clear of the boundaries, it is time to examine the responsibilites and how they relate. As there are so many combinations here, we'll have to limit this a bit to some exemplary ones so that the concepts can be extrapolated.
+
+#### Dealing out the cards :spades: :hearts: :diamonds: :clubs:
+
+Let's look at the layout boundaries first. We have apparently 3 ways that cards can relate to each other in a layout; vertical lists, horizontal lists and hero lists (which is like a horizontal list with a twist). Each of these layouts starts off as a vertical list.
+
+Now is it the Card's responisbility to know to layout vertically or horizontally, or is it the component that is outputting the cards? _I think that it is not hard to see that the card cannot layout other cards, so it makes sense for the parent to take responsibility for laying out the cards_.
+
+Hopefully there are those among you immediately asking "what about spacing"? Many people would likely put a margin right and bottom on the cards and then do whatever they needed to do to then swallow that margin for the ends of rows, etc... Once we have done this, however, we end up with a card that can't be used in each of our other layout contexts because they will have different whitespace needs. In fact, when we consider this problem from the point of view of the boundary, _it is hard to to see why the cards should be responsible for this when we already know that the parent is responsible for layout_, of which this is an integral part... and once we move this spacing to our layout context, the cards can be used as is in all our layout contexts!
+
+So we can extrapolate 2 rules for one of our types of layout context:
+
+1. The layout context is responsible for the laying out of its content
+2. The white space in the layout context is part of that responsibility
+
+Luckily, CSS grid and flex are amazing for giving us this layout control from the parent (flex to a slightly lesser degree because of the lack of fixed spacing).
+
+### Them's the cards :diamonds:
+
+Now let us look at the layouts of the cards themselves; to understand the layout, we also need to look at the UI elements and the content that sits in them. 3 sets of boundaries...
+
+It is probably intuitive to understand that a component is responsible for its own styles. indeed that is the entire premise of CSS-in-JS! So it makes sense that the component lays itself out... or does it? Looking closely at the design, we can see that the taxonomy content changes quite a lot, we can see that sometimes there is a "locked" status and we can see that sometimes the cards are arbitrarily horizontally aligned and some times vertically - I'm thinking of the "hero" card.
+
+We can understand something about the responsibilities here if we examine the flow of information - what "knows" what? In the case of the taxonomy content, the schema of data that is being displayed is different and where this schema is understood is the component that fetches and formats the data...
+
+In the case of the locked status, again this is data passed
+
+In the case of the "hero" component, it would seem like the wrapping componet is treating the first element in the data as different. This means that the wrapping component understands something about the data that is opaque to the card.
 
 ```js
 // ContentCard.jsx
