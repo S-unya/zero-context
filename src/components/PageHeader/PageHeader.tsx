@@ -2,19 +2,17 @@ import * as React from "react";
 import cx from "classnames";
 
 import styles from "./PageHeader.module.css";
+import { Link } from "gatsby";
 
-interface Props extends React.HTMLAttributes<HTMLElement> {
-    heading: string;
-}
-
-export const PageHeader: React.FC<Props> = ({
-    heading,
+export const PageHeader: React.FC<React.HTMLAttributes<HTMLElement>> = ({
     children,
     className,
-    style
+    ...rest
 }) => (
-    <header className={cx(className, styles.component)} style={style}>
-        <h1>{heading}</h1>
+    <header className={cx(className, styles.component)} {...rest}>
+        <Link to="/" className={styles.logo}>
+            Zero Context
+        </Link>
         {children}
     </header>
 );
