@@ -1,0 +1,70 @@
+:root {
+  /* spacing */
+  --s-1: 16px;
+  --s-2: calc(2 * 16px);
+
+  /* color */
+  --c-white: #fff;
+  --c-body: #131313;
+  --c-light-blue: #8ee7f6;
+  --c-mid-dark: #022755;
+  --c-dark-blue: #000a45;
+
+  /* typography */
+  --t-base: 18;
+  --t-h1: calc(2.5 * var(--t-base) * 1rem);
+  --t-h1: calc(2.5 * var(--t-base) * 1rem);
+  --t-h1: calc(2.5 * var(--t-base) * 1rem);
+  --t-h1: calc(2.5 * var(--t-base) * 1rem);
+  --t-body: calc(1 * var(--t-base) * 1rem);
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  max-width: 100vw;
+  height: 100vh;
+  font-family: "Noto Sans SC", sans-serif;
+  font-size: var(--t-body);
+  color: var(--c-body);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin-top: 0;
+  margin-bottom: 1.25em;
+  line-height: 1.25em;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 200;
+}
+
+h1 {
+  font-size: var(--t-h1);
+}
+h2 {
+  font-size: var(--t-h2);
+}
+h3 {
+  font-size: var(--t-h3);
+}
+h4 {
+  font-size: var(--t-h4);
+}
+
+.section {
+  padding: var(--s-2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
