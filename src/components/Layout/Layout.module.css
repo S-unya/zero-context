@@ -1,8 +1,5 @@
 .component {
-  display: grid;
-  grid-template-columns:
-    [full-start] minmax(32px, 1fr) [content-start] minmax(0, 1400px)
-    [content-end] minmax(32px, 1fr) [full-end];
+  composes: gridBase from "../../style/utils.module.css";
   grid-auto-rows: auto;
 }
 

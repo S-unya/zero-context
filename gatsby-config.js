@@ -27,11 +27,11 @@ module.exports = {
         {
             resolve: `gatsby-plugin-manifest`,
             options: {
-                name: `Gatsby Image Visualiser`,
-                short_name: `imagevisualiser`,
+                name: `Zero context`,
+                short_name: `zerocontext`,
                 start_url: `/`,
-                background_color: `#051c48`,
-                theme_color: `#051c48`,
+                background_color: `#000a45`,
+                theme_color: `#000a45`,
                 display: `minimal-ui`
                 // icon: `src/images/logo-512x512.png`, // This path is relative to the root of the site.
             }
@@ -41,7 +41,7 @@ module.exports = {
     ],
     // Customize your site metadata:
     siteMetadata: {
-        title: `Gatsby Image Visualiser`,
+        title: `Zero context`,
         author: `S'unya DIckman`,
         description: `A simple visualiser to help understand the Gatsby image inputs`,
         social: [

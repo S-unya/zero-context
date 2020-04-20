@@ -26,6 +26,8 @@
         "immer": "^5.0.0",
         "react": "^16.11.0",
         "react-dom": "^16.11.0",
+        "typeface-montserrat": "^0.0.75",
+        "typeface-noto-sans": "^0.0.72",
         "use-immer": "^0.3.5"
     },
     "devDependencies": {
