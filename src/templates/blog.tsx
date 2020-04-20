@@ -11,6 +11,8 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
     data: BlogData & FileNode;
 }
 export const BlogTemplate: React.FC<Props> = ({ className, data, ...rest }) => {
+    console.log({ data });
+
     return (
         <>
             <PageHeader>

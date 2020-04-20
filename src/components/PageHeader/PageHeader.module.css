@@ -1,9 +1,31 @@
 .component {
-  grid-row: 1/2;
-  grid-column: 1/-1;
-  transform: rotate(-9deg);
+  composes: gridBase from "../../style/utils.module.css";
+  transform: rotate(-8.8deg);
+  height: var(--s-page-header);
+  background-color: var(--c-brand-alt);
+  overflow: hidden;
+  position: relative;
+  margin: calc(var(--s-page-header) / -3.2) -50px calc(var(--s-page-header) /
+        3.2);
+  position: sticky;
+  backface-visibility: hidden;
 }
 
 .component > * {
-  transform: rotate(9deg);
+  transform: rotate(8.8deg);
+}
+
+.logo {
+  display: block;
+  grid-column: content;
+  align-self: baseline;
+  font-size: 9rem;
+  color: var(--c-white);
+  font-family: var(--t-family-alt);
+  font-weight: 700;
+  white-space: nowrap;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: always;
+  -webkit-font-smoothing: antialiased;
+  align-self: flex-end;
 }
