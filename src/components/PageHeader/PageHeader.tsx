@@ -1,15 +1,21 @@
 import * as React from "react";
 import cx from "classnames";
-
-import styles from "./PageHeader.module.css";
 import { Link } from "gatsby";
+import { ImageSharp } from "../../types/data";
+import Img from "gatsby-image";
+import styles from "./PageHeader.module.css";
 
-export const PageHeader: React.FC<React.HTMLAttributes<HTMLElement>> = ({
+interface Props extends React.HTMLAttributes<HTMLElement> {
+    backgroundImage: ImageSharp;
+}
+export const PageHeader: React.FC<Props> = ({
     children,
+    backgroundImage,
     className,
     ...rest
 }) => (
     <header className={cx(className, styles.component)} {...rest}>
+        <Img {...backgroundImage} className={styles.backgroundImage} />
         <Link to="/" className={styles.logo}>
             Zero Context
         </Link>

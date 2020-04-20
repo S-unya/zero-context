@@ -1,7 +1,17 @@
-// eslint-disable-next-line no-undef, import/no-commonjs
+/* eslint-disable import/no-commonjs */
+/* eslint-disable-next-line no-undef */
 module.exports = {
     plugins: [
         `gatsby-plugin-typescript`,
+        {
+            resolve: `gatsby-plugin-postcss`,
+            options: {
+                postCssPlugins: [
+                    require(`postcss-preset-env`)({ stage: 0 }),
+                    require("postcss-easing-gradients")
+                ]
+            }
+        },
         // SEO for react
         `gatsby-plugin-react-helmet`,
         // Expose `/content` to graphQL layer

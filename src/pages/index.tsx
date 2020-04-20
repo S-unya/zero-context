@@ -3,10 +3,15 @@ import Layout from "../components/Layout";
 import PageHeader from "../components/PageHeader";
 import { graphql, Link } from "gatsby";
 
-const Index: React.FC<React.HTMLAttributes<HTMLElement>> = ({ data }) => {
+interface Props extends React.HTMLAttributes<HTMLElement> {
+    data: any;
+}
+
+const Index: React.FC<Props> = ({ data }) => {
+    console.log(data);
     return (
         <>
-            <PageHeader />
+            <PageHeader backgroundImage={data.file.childImageSharp} />
             <Layout>
                 {data.allMarkdownRemark.edges.map(({ node }) => (
                     <div key={node.id}>
@@ -39,6 +44,14 @@ export const query = graphql`
                         slug
                     }
                     excerpt
+                }
+            }
+        }
+        file(relativePath: { eq: "headers/forest-grave.png" }) {
+            relativePath
+            childImageSharp {
+                fluid(srcSetBreakpoints: [1500, 1024, 720], toFormat: JPG) {
+                    ...GatsbyImageSharpFluid_withWebp_tracedSVG
                 }
             }
         }
