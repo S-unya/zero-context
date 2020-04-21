@@ -1,16 +1,18 @@
 .component {
-  transform: rotate(-8.8deg);
+  --cmp-rotation: 5deg;
+  transform: rotate(calc(var(--cmp-rotation) * -1));
   height: calc(var(--s-page-header) * 0.5);
   background-color: var(--c-brand-alt);
   overflow: hidden;
   position: relative;
-  margin: calc(var(--s-page-header) / -6) calc(var(--s-page-header) / -8)
-    calc(var(--s-page-header) / 6);
-  backface-visibility: hidden;
-  background-clip: content-box;
   display: flex;
   justify-content: space-around;
   align-items: flex-end;
+  margin: -5vw -2% 6vw;
+  /* the following 3 rules are to smooth the edge of the header */
+  padding: 1px;
+  backface-visibility: hidden;
+  background-clip: content-box;
 }
 
 .component::after {
@@ -28,7 +30,7 @@
 }
 
 .component > * {
-  transform: rotate(8.8deg);
+  transform: rotate(var(--cmp-rotation));
 }
 
 .logo {
@@ -43,6 +45,7 @@
   -moz-osx-font-smoothing: grayscale;
   font-smooth: always;
   -webkit-font-smoothing: antialiased;
+  margin-bottom: -0.5vw;
 }
 
 .logo::after {
@@ -51,7 +54,7 @@
 
 .backgroundImage {
   position: absolute !important; /* override gatsby-image style */
-  top: 25%;
-  left: 2%;
-  width: 100vw;
+  top: 17%;
+  left: 0%;
+  width: 100%;
 }
