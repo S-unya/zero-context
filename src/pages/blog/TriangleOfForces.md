@@ -1,7 +1,7 @@
 ---
 title: CSS from Good to Ugly to Good again
 date: 2020-03-20
-headerImage: /assets/headers/forest-grave.png
+headerImage: ../../assets/headers/forest-grave.png
 ---
 
 This talk expresses an **opinion** and some (potentially biased) observations on how to use CSS-the-good-bits in harmony with CSS-in-JS for a pain-free and flexible styling solution.

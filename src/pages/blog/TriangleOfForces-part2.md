@@ -1,6 +1,7 @@
 ---
 title: Creating re-usable Components by standing on the shoulders of giants
 date: 2020-04-08
+headerImage: ../../assets/headers/highlands.jpg
 ---
 
 This is conceptually a part 2 to [Triangle of Forces](/TriangleOfForces), which looks at a conceptually coherent way of using CSS and CSS-in-JS.

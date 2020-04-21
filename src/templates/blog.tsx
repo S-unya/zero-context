@@ -1,27 +1,22 @@
 import React from "react";
 import cx from "classnames";
-import { graphql, useStaticQuery } from "gatsby";
-import Img from "gatsby-image";
+import { graphql } from "gatsby";
 import Layout from "../components/Layout";
 import BlogPage from "../components/BlogPage";
-import { BlogData, FileNode } from "../types/data";
+import { BlogData } from "../types/data";
 import PageHeader from "../components/PageHeader";
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
-    data: BlogData & FileNode;
+    data: BlogData;
 }
 export const BlogTemplate: React.FC<Props> = ({ className, data, ...rest }) => {
-    console.log({ data });
-
     return (
-        <>
-            <PageHeader>
-                <Img fluid={data.file.childImageSharp.fluid} />;
-            </PageHeader>
+        <div>
+            <PageHeader backgroundImage={data.frontmatter.headerImage} />
             <Layout className={cx(className)}>
                 <BlogPage data={data} />
             </Layout>
-        </>
+        </div>
     );
 };
 
@@ -32,17 +27,19 @@ export const query = graphql`
             frontmatter {
                 title
                 date
-                headerImage
+                headerImage {
+                    childImageSharp {
+                        fluid(
+                            srcSetBreakpoints: [1500, 1024, 720]
+                            toFormat: JPG
+                        ) {
+                            ...GatsbyImageSharpFluid_withWebp_tracedSVG
+                        }
+                    }
+                }
             }
             timeToRead
             tableOfContents
-        }
-        file(relativePath: { eq: "/assets/headers/forest-grave.png" }) {
-            childImageSharp {
-                fluid(srcSetBreakpoints: [1500, 1024, 720], toFormat: JPG) {
-                    ...GatsbyImageSharpFluid_withWebp_tracedSVG
-                }
-            }
         }
     }
 `;

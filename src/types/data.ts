@@ -74,7 +74,7 @@ export interface BlogData {
     frontmatter: {
         title: string;
         date: string;
-        headerImage: string;
+        headerImage: ImageSharp;
     };
     timeToRead: string;
     tableOfContents: string;

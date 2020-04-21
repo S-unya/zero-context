@@ -8,7 +8,13 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
     data: BlogData;
 }
 
-export const BlogPage: React.FC<Props> = ({ children, className }) => {
+export const BlogPage: React.FC<Props> = ({
+    children,
+    className,
+    data,
+    ...rest
+}) => {
+    console.log({ data });
     // STATE
     // STATE:END
 
