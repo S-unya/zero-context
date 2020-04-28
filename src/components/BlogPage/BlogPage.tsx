@@ -2,10 +2,10 @@ import * as React from "react";
 import cx from "classnames";
 
 import styles from "./BlogPage.module.css";
-import { BlogData } from "../../types/data";
+import { BlogData, MarkdownRemark } from "../../types/data";
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
-    data: BlogData;
+    data: MarkdownRemark<BlogData>;
 }
 
 export const BlogPage: React.FC<Props> = ({
@@ -24,6 +24,24 @@ export const BlogPage: React.FC<Props> = ({
     // EFFECT
     // EFFECT:END
 
-    return <div className={cx(className, styles.component)}>{children}</div>;
+    return (
+        <article className={cx(className, styles.component)}>
+            <header>
+                <h1>{data.markdownRemark.frontmatter.title}</h1>
+                <p>
+                    Aproximate reading time:{" "}
+                    <span>{data.markdownRemark.timeToRead} minutes</span>
+                </p>
+            </header>
+            <div
+                dangerouslySetInnerHTML={{
+                    __html: data.markdownRemark.tableOfContents
+                }}
+            ></div>
+            <div
+                dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }}
+            ></div>
+        </article>
+    );
 };
 export default BlogPage;

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import cx from "classnames";
-import { emptyDisplayParams } from "../../pages";
+import { emptyDisplayParams } from "../../pages/interest/gatsbyImageVisualiser";
 import CodeBlock from "../CodeBlock";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { parse } from "graphql";

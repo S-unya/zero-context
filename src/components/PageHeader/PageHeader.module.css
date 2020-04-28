@@ -1,6 +1,7 @@
 .component {
-  --cmp-rotation: 5deg;
-  transform: rotate(calc(var(--cmp-rotation) * -1));
+  --cmp-rotation: 6deg;
+  transform: skewY(calc(var(--cmp-rotation) * -1));
+  transform-origin: top left;
   height: calc(var(--s-page-header) * 0.5);
   background-color: var(--c-brand-alt);
   overflow: hidden;
@@ -8,7 +9,6 @@
   display: flex;
   justify-content: space-around;
   align-items: flex-end;
-  margin: -5vw -2% 6vw;
   /* the following 3 rules are to smooth the edge of the header */
   padding: 1px;
   backface-visibility: hidden;
@@ -30,7 +30,7 @@
 }
 
 .component > * {
-  transform: rotate(var(--cmp-rotation));
+  transform: skewY(var(--cmp-rotation));
 }
 
 .logo {

@@ -15,7 +15,10 @@ export const PageHeader: React.FC<Props> = ({
     ...rest
 }) => (
     <header className={cx(className, styles.component)} {...rest}>
-        <Img {...backgroundImage} className={styles.backgroundImage} />
+        <Img
+            {...backgroundImage.childImageSharp}
+            className={styles.backgroundImage}
+        />
         <Link to="/" className={styles.logo}>
             Zero Context
         </Link>

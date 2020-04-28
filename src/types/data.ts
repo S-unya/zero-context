@@ -69,6 +69,10 @@ export interface Edge<T> {
     node: T;
 }
 
+export interface MarkdownRemark<T> {
+    markdownRemark: T;
+}
+
 export interface BlogData {
     html: string;
     frontmatter: {

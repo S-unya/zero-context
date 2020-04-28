@@ -3,16 +3,19 @@ import cx from "classnames";
 import { graphql } from "gatsby";
 import Layout from "../components/Layout";
 import BlogPage from "../components/BlogPage";
-import { BlogData } from "../types/data";
+import { BlogData, MarkdownRemark } from "../types/data";
 import PageHeader from "../components/PageHeader";
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
-    data: BlogData;
+    data: MarkdownRemark<BlogData>;
 }
 export const BlogTemplate: React.FC<Props> = ({ className, data, ...rest }) => {
+    console.log(data.markdownRemark.frontmatter.headerImage);
     return (
         <div>
-            <PageHeader backgroundImage={data.frontmatter.headerImage} />
+            <PageHeader
+                backgroundImage={data.markdownRemark.frontmatter.headerImage}
+            />
             <Layout className={cx(className)}>
                 <BlogPage data={data} />
             </Layout>
@@ -43,3 +46,5 @@ export const query = graphql`
         }
     }
 `;
+
+export default BlogTemplate;
