@@ -25,7 +25,7 @@ export const BlogPage: React.FC<Props> = ({
     // EFFECT:END
 
     return (
-        <article className={cx(className, styles.component)}>
+        <section className={cx(className, styles.component)}>
             <header>
                 <h1>{data.markdownRemark.frontmatter.title}</h1>
                 <p>
@@ -41,7 +41,7 @@ export const BlogPage: React.FC<Props> = ({
             <div
                 dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }}
             ></div>
-        </article>
+        </section>
     );
 };
 export default BlogPage;
