@@ -6,7 +6,7 @@ import Img from "gatsby-image";
 import styles from "./PageHeader.module.css";
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
-    backgroundImage: ImageSharp;
+    backgroundImage?: ImageSharp;
 }
 export const PageHeader: React.FC<Props> = ({
     children,
@@ -15,10 +15,12 @@ export const PageHeader: React.FC<Props> = ({
     ...rest
 }) => (
     <header className={cx(className, styles.component)} {...rest}>
-        <Img
-            {...backgroundImage.childImageSharp}
-            className={styles.backgroundImage}
-        />
+        {backgroundImage && (
+            <Img
+                {...backgroundImage.childImageSharp}
+                className={styles.backgroundImage}
+            />
+        )}
         <Link to="/" className={styles.logo}>
             Zero Context
         </Link>

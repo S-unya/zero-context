@@ -12,7 +12,7 @@ export const Layout: React.FC<React.HTMLAttributes<HTMLElement>> = ({
 }) => {
     return (
         <main className={cx(className, styles.component)}>
-            <article className={styles.row}>{children}</article>
+            <article>{children}</article>
         </main>
     );
 };

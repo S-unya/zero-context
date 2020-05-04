@@ -4,35 +4,11 @@
   "eslint.validate": [
     "javascript",
     "javascriptreact",
-    { "language": "typescript", "autoFix": true },
-    { "language": "typescriptreact", "autoFix": true }
+    "typescript",
+    "typescriptreact"
   ],
-  "[javascript]": {
-    "editor.formatOnSave": false
-  },
-  "[javascriptreact]": {
-    "editor.formatOnSave": false
-  },
-  "[typescript]": {
-    "editor.formatOnSave": false
-  },
-  "[typescriptreact]": {
-    "editor.formatOnSave": false
-  },
   "eslint.lintTask.enable": true,
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "typescript.tsdk": "node_modules/typescript/lib",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
-  },
-  "spellright.language": [
-    "en"
-  ],
-  "spellright.documentTypes": [
-    "markdown",
-    "latex",
-    "plaintext"
-  ]
+  }
 }

@@ -11,7 +11,7 @@ const Index: React.FC<Props> = ({ data }) => {
     console.log(data);
     return (
         <>
-            <PageHeader backgroundImage={data.file.childImageSharp} />
+            <PageHeader />
             <Layout>
                 {data.allMarkdownRemark.edges.map(({ node }) => (
                     <div key={node.id}>
@@ -48,12 +48,7 @@ export const query = graphql`
             }
         }
         file(relativePath: { eq: "headers/forest-grave.png" }) {
-            relativePath
-            childImageSharp {
-                fluid(srcSetBreakpoints: [1500, 1024, 720], toFormat: JPG) {
-                    ...GatsbyImageSharpFluid_withWebp_tracedSVG
-                }
-            }
+            publicURL
         }
     }
 `;
