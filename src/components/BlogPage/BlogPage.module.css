@@ -1,2 +1,9 @@
 .component {
 }
+.readingTime {
+  /* font-size: var(--t-info); */
+  font-weight: 200;
+}
+.info {
+  margin-bottom: 0.5em;
+}

@@ -14,30 +14,35 @@ export const BlogPage: React.FC<Props> = ({
     data,
     ...rest
 }) => {
-    console.log({ data });
-    // STATE
-    // STATE:END
-
-    // CALLBACKS
-    // CALLBACKS:END
-
-    // EFFECT
-    // EFFECT:END
-
+    const dateOptions = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    };
+    const date = new Date(
+        data.markdownRemark.frontmatter.date
+    ).toLocaleDateString("ig", dateOptions);
     return (
-        <section className={cx(className, styles.component)}>
+        <section className={cx(className, styles.component)} {...rest}>
             <header>
                 <h1>{data.markdownRemark.frontmatter.title}</h1>
-                <p>
-                    Aproximate reading time:{" "}
-                    <span>{data.markdownRemark.timeToRead} minutes</span>
+                <p className={styles.info}>
+                    First published on{" "}
+                    <time dateTime={data.markdownRemark.frontmatter.date}>
+                        {date}
+                    </time>
+                </p>
+                <p className={styles.readingTime}>
+                    Reading time ~
+                    <span>{data.markdownRemark.timeToRead} minutes</span>.
                 </p>
             </header>
-            <div
+            {/* <div
                 dangerouslySetInnerHTML={{
                     __html: data.markdownRemark.tableOfContents
                 }}
-            ></div>
+            ></div> */}
             <div
                 dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }}
             ></div>

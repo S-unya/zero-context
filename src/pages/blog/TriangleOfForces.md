@@ -1,27 +1,29 @@
 ---
 title: CSS from Good to Ugly to Good again
 date: 2020-03-20
-headerImage: ../../assets/headers/forest-grave.png
+headerImage: ../../assets/headers/wild-grasses.png
 ---
 
-This talk expresses an **opinion** and some (potentially biased) observations on how to use CSS-the-good-bits in harmony with CSS-in-JS for a pain-free and flexible styling solution.
+This is an **opinion** and some (biased) observations that suggest a way to use _CSS-the-good-bits_ in blissful harmony with CSS-in-JS for a reasonable and flexible styling solution.
 
-This is part one (mostly the thesis except for the end), [part 2 is some practical bits and how they extend the re-use of components](/TriangleOfForces-part2.md)
+This is part one (mostly the thesis except for the end), [part 2 is some practical bits and how these ideas enhance the re-use of components](/TriangleOfForces-part2.md)
 
-I am using a "mental model" as a framework to make these observations, but I can't cover all possible permutations and considerations. This means that there will be choices made to illustrate my point... and it is here that bias will probably creep in. Nevertheless, the hope is that, by the end of the articles, you will be armed with the same mental model and can make your own choices! Also, the paradigm itself is of my own devising, so it might itself overlook whole orders of consideration... in the end this is just a conversation that I hope will enliven thought.
+I am using a "mental model" as the basis of these observations, at its most essential, it is recognizing boundaries and recognizing the consequent consequences of crossing them. I can't cover all possible permutations and considerations the model implies. This means that there will be choices made to illustrate my point... and it is here that bias will probably creep in. Nevertheless, the hope is that by explaining the model you will be armed with the same paradigms and can make your own choices! Also, the mental model itself is of my own devising, so it might itself overlook whole orders of consideration... in the end this is just a bunch of observations and suggestions.
 
-At its most essential, the mental model I have made emphasizes recognizing boundaries and the consequent consequences of crossing those boundaries.
+## The mental model
 
-1. The simple observation is that we always pay some cost when we cross a boundary. For example, even if we are crossing between 2 identical fields, we either have to climb a fence (there is a cost in exertion and speed), or if someone has put a gate in the fence, the cost to us is less (we still are slowed and cannot choose where to cross) but the bulk of the cost is abstracted by the fence builder (a gate is more complex and costs more). In reality boundary changes are seldom between like and like but from one kind of environment to a another; land to sea, earth to space, CSS to JS...
-2. The second observation is that some boundaries cost more to cross than others.
-3. The third is that some boundaries are crossed because we need to - due to central values or requirements - and some because we never really considered it. For example, most of the decisions I make on a day to day basis are based around working with relatively large code bases and multiple teams working together with a wide range of experience. It may not be immediately obvious, but these are boundaries too, and these boundaries need to be as low as possible. So I can't just make arbitrary decisions that raise them.
-4. The final observation is that some boundaries are good!
+The mental model is constructed of 4 general observations from which I've extrapolated some meanings.
+
+1. **The first and most important is the simple observation that we always pay some cost when we cross a boundary**. For example, even if we are crossing between 2 identical fields, we either have to climb a fence (there is a cost in exertion and speed), or if someone has put a gate in the fence, the cost to us is less (though we **are** slowed and cannot choose where to cross) but the bulk of the cost is abstracted by the fence builder (a gate is more complex and costs more). In reality boundary changes are seldom between like and like but from one kind of environment to a another; land to sea, earth to space, CSS to JS...
+2. **The second observation is that some boundaries cost more to cross than others**.
+3. **The third is that some boundaries are crossed or avoided for good reasons** and some because... reasons. For example, most of the decisions I make on a day to day basis are due to working with relatively large code bases and multiple teams working together with a wide range of experience. It may not be immediately obvious, but these are boundaries, and these boundaries need to be as low as possible. So I can't just make arbitrary decisions that raise them.
+4. **The final observation is that some boundaries are good**! Too many boundaries are invariably bad.
 
 ## Context
 
 Most of this article is examining historical and modern attempts to "tame" CSS using this boundary mental model. First we'll outline what is good about CSS, what is hard about CSS.
 
-## Guess what? I really like CSS :astonished:
+## Guess what? I really like CSS 😲
 
 I really do. It has so many good points.
 
@@ -36,7 +38,7 @@ I really do. It has so many good points.
 
 ...but
 
-## ~~Large~~ Unplanned CSS can be UGLY! :japanese_ogre:
+## ~~Large~~ Unplanned CSS can be UGLY! 👹
 
 And wasteful. And confusing.
 
@@ -46,7 +48,7 @@ We forgot about all that new control we had, we started to cry out in disappoint
 
 1. All style declarations are in the same scope - a global scope - there is no boundary
 2. Browsers don't always play by the same rules - though, this is barely a consideration these days! Get orf me lawn!
-3. Sometimes, the nuances of specificity can throw up some unexpected results. Or even just remembering the specificities of different selectors :thinking_face:...
+3. Sometimes, the nuances of specificity can throw up some unexpected results. Or even just remembering the specificities of different selectors 🤔...
 
 3 things, that's it.
 
@@ -116,7 +118,7 @@ This is not an advert for ITCSS though it might seem it :P, rather the aim is to
 
 Nevertheless, both the type of application we make and the tooling to make it are changing; there are new ways of writing CSS and new ways of constructing web apps, amongst other things.
 
-## CSS-in-JS, a new kind of foot gun :footprints: :gun:
+## CSS-in-JS, a new kind of foot gun 🦶🔫
 
 "CSS-in-JS" is a catch all term to describe a number of approaches to, what I think of as a natural evolution of CSS that was driven by tooling, pre/post processing and the move towards "componentizing" UI such as React and Custom Components. The different CSS-in-JS libraries deal with this new way of creating content for the web in their own ways, but they all try to solve the one big issue - name-spacing styles to a specific "atom" of UI so as to entirely obviate global scope and style clashes. To give an idea of how popular the idea is, [here is what the ecosystem looked like a couple of years back](https://github.com/MicheleBertoli/css-in-js). These days there are some clear favourites, but the picture is still as broad.
 
@@ -154,7 +156,7 @@ The most successful maintain the philosophical consistency and boundaries of eac
 
 Well, having stepped back and evaluated the pain points, it seems some of the issues with CSS-in-JS can be mitigated just with tooling, or making a different choice.
 
-### Which flavour? :ice_cream:
+### Which flavour? 🍦
 
 For example, the choice of CSS-in-JS approach. Although it isn't particularly popular in React, I tend to favour [CSS modules](https://github.com/css-modules/css-modules). I do this consciously because:
 
@@ -165,7 +167,7 @@ Other CSS-in-JS options provide other benefits, but by itself this one choice re
 
 CSS modules also allow "composition" of styles (from the same file and from other files). There are potential issues with composing styles from other components because it breaks the boundaries of isolation/encapsulation... so we need to be considered in using this powerful feature... more on this later, but one can see that there are also options here to reduce duplication.
 
-### Pre-rendering :potable_water:
+### Pre-rendering 🚰
 
 Another choice I favour for the purpose of improving performance and delivering the right CSS to a page in a cacheable way is to Server Side Render as much as possible; I choose [Gatsby](https://www.gatsbyjs.com/) for all the amazing benefits that it provides, but there are other options like Zeit's awesome [nextjs](https://nextjs.org/), that will take all the pain out of this process to the point that I will do this instead of using CreateReactApp to bootstrap React projects.
 
@@ -329,7 +331,7 @@ On the face of it ToF is a split in the styles of an application or website, whe
 
 The 5 ITCSS layers I highlight above as "Styles that always have to be set" tend to become almost static across projects once they have been setup for one project, except for the settings layer, which changes the values that all the other styles use - the brighter the colour in the illustration, the more changeable the layer across projects. Largely speaking I consider all but 2 of these 5 layers to be optional, they are marked with blue. I treat these styles as plain old CSS; they are output as normal CSS files and imported in such a way that they can be loaded as CSS and cached as CSS.
 
-#### Settings/Design Tokens
+### Settings/Design Tokens
 
 The Settings layer from ITCSS is a bit like the theme object in
 Styled-Components, except that it is written in CSS and (ideally) remains
@@ -364,7 +366,7 @@ variable names and the inherent problem of having a long list of things that
 need to be remembered. I tend to use sass variables as "static", local variables
 and custom properties/CSS variables as dynamic, global variables.
 
-#### Generic & Elements
+### Generic & Elements
 
 Modern day browsers are much more consistent than they used to be, so reset
 stylesheets are less "necessary", but there is still the need for a place to put
@@ -391,7 +393,7 @@ elements, e.g.
 
 Lastly a quick word about Utility classes.
 
-#### Utilities (optional)
+### Utilities (optional)
 
 These are useful classes that one uses a lot, such as `.screenReaderOnly`.
 Ideally there are not too many of these because, by their nature they need to be
@@ -401,7 +403,7 @@ encapsulation is being deliberately broken here, but that is not necessary. One
 could use an entire CSS utility library here if one wanted, but we need to be
 wary of creating complexity where it isn't needed.
 
-#### What that looks like
+### What that looks like
 
 "Settings" and "Elements" layers/files might have something like this - the
 actual structuring or naming might differ - but over time you will find that the

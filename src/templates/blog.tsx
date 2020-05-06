@@ -36,7 +36,7 @@ export const query = graphql`
                             srcSetBreakpoints: [1500, 1024, 720]
                             toFormat: JPG
                         ) {
-                            ...GatsbyImageSharpFluid_withWebp_tracedSVG
+                            ...GatsbyImageSharpFluid_withWebp
                         }
                     }
                 }

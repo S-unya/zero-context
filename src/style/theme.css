@@ -25,6 +25,7 @@
   --t-h3: calc(1.5rem);
   --t-h4: calc(1.1rem);
   --t-body: calc(var(--t-base) * 1px);
+  --t-info: 0.8rem;
   --t-family-main: "Noto Sans SC", sans-serif;
   --t-family-alt: "Montserrat", sans-serif;
 }
@@ -44,6 +45,10 @@ body {
   box-sizing: border-box;
 }
 
+#___gatsby {
+  overflow-x: hidden;
+}
+
 h1,
 h2,
 h3,
@@ -58,7 +63,7 @@ h3,
 h4 {
   font-family: var(--t-family-alt);
   font-weight: 200;
-  margin-bottom: 1em;
+  margin: 1em 0 0.33em;
 }
 
 h1 {
