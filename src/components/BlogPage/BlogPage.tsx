@@ -22,10 +22,10 @@ export const BlogPage: React.FC<Props> = ({
     };
     const date = new Date(
         data.markdownRemark.frontmatter.date
-    ).toLocaleDateString("ig", dateOptions);
+    ).toLocaleDateString("en-gb", dateOptions);
     return (
         <section className={cx(className, styles.component)} {...rest}>
-            <header>
+            <header className={styles.header}>
                 <h1>{data.markdownRemark.frontmatter.title}</h1>
                 <p className={styles.info}>
                     First published on{" "}
@@ -44,6 +44,7 @@ export const BlogPage: React.FC<Props> = ({
                 }}
             ></div> */}
             <div
+                className={styles.content}
                 dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }}
             ></div>
         </section>
