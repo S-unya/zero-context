@@ -1,7 +1,9 @@
 :root {
   /* spacing */
-  --s-1: 16px;
-  --s-2: calc(2 * 16px);
+  --s-1: 8px;
+  --s-2: calc(2 * var(--s-1));
+  --s-3: calc(3 * var(--s-1));
+  --s-4: calc(4 * var(--s-1));
   --s-page-header: 40vw;
 
   /* color */
@@ -63,7 +65,7 @@ h3,
 h4 {
   font-family: var(--t-family-alt);
   font-weight: 200;
-  margin: 1em 0 0.33em;
+  margin: 1.6em 0 var(--s-3);
 }
 
 h1 {
@@ -100,7 +102,7 @@ a::after {
   opacity: 0.5;
   z-index: -1;
   background-color: var(--c-link-active);
-  transition: height 0.7s ease 0s;
+  transition: height 0.5s ease 0s;
 
   @media (prefers-reduced-motion: reduce) {
     transition: none;

@@ -162,10 +162,9 @@ With these 2 choices, the only costs of using CSS-in-JS are the related costs of
 
 ## ITCSS it again
 
-I'm returning to ITCSS for its success in this area given that it is one of the few options that don't create new problems, let's
-examine how we might use its lessons.
+I'm returning to ITCSS for its success in this area; given that it is one of the few options that don't create new problems, I hope to learn its lessons.
 
-I've observed from experience that the 7 "layers" or types of CSS in ITCSS fall fairly
+I've observed over time that the 7 "layers" or types of CSS in ITCSS fall fairly
 neatly into 2 groups - the styles that one always has to write for every project
 (like layouts, themes, etc), and the styles that are specific to implementation
 (what is actually on the page). I've modified this diagram to reflect these:
@@ -174,10 +173,10 @@ neatly into 2 groups - the styles that one always has to write for every project
 
 Styles that always have to be set (in blue and white):
 
-1. **Settings or Tokens** – may be used with preprocessors (like sass variables) and contain font, colors definitions, etc.
-2. **Tools** – globally used mix-ins and functions. Really only appropriate for preprocessors, frameworks, etc that have these concepts
-3. **Generic** – reset and/or normalize styles, box-sizing definition, etc. This is the first layer which generates actual CSS.
-4. **Elements** – styling for bare HTML elements (like H1, A, etc.). These come with default styling from the browser so we can redefine them here.
+1. **Settings or Tokens** – may be used with preprocessors (like sass variables) and contain font, colors definitions, etc but not styles.
+2. **Tools** – globally used mix-ins and functions. **Really only appropriate for preprocessors, frameworks, etc that have these concepts**
+3. **Generic** – reset and/or normalize styles, etc. This is the first layer which generates actual styles.
+4. **Elements** – styling for bare HTML tags (H1, A, etc.).
 5. **Utilities** – utilities and helper classes with ability to **override anything which goes before in the triangle**, eg. a hide helper class
 
 Implementation specific (in red):
@@ -185,34 +184,23 @@ Implementation specific (in red):
 6. **Objects** – class-based selectors which define **undecorated design patterns**, for example media object known from OOCSS
 7. **Components** – specific UI components. This is where the majority of our work takes place and our UI components are often composed of Objects and Components
 
-Of all the style types considered useful by ITCSS, it is really only these last
-2, implementation specific sets of styles that comfortably live in the isolated
-UI Component world (the names are a bit of a give away). We can easily write
-isolated styles for our components using CSS-in-JS...You'd almost imagine it was
-created for it!
+Of all the style types considered useful by ITCSS, it is only the
+2 red layers, that are typically the main focus of CSS-in-JS solutions. Though this is changing, vis [theme ui](https://theme-ui.com/).
 
-On the other hand, how does CSS-in-JS cover these other types of styling - the
-kind that we need for all apps? Of all ITCSS's layers the ones that are
-essential are "Settings" & "Elements" (and maybe utilities), the rest are mostly
-for making development easier, so we need to find a way of providing for them
-with CSS-in-JS
+So, how do we cater for the more general styles that experience tells us most applications need?
 
 ## Theming
 
-Some CSS-in-JS approaches have the concept of "themes". Theming is a way of
-providing a set of shared styles that can be used throughout an application.
-Let's look at 2 ways of providing a theme; one CSS-in-JS solution and one based
-on the observations above and then work out the boundaries in each so that
-we can evaluate them.
+Some CSS-in-JS approaches have the concept of "themes". Themes are a set of shared styles that can be used throughout an application. So like the "Settings" layer in the figure above. Let's evaluate at 2 ways of providing a theme through the filter of boundaries; one CSS-in-JS solution and one adapted from the observations above.
 
 ### CSS-in-JS themes
 
 Theming as solved by
-[styled-components](https://styled-components.com/docs/advanced#theming) looks
-like this (in reality the theme would most likely be in its own file):
+[styled-components](https://styled-components.com/docs/advanced#theming) looks something
+like this (though likely 2 files):
 
 ```js
-// Define our button, but with the use of props.theme this time
+// Define our button, but with the use of props.theme
 const Button = styled.button`
   font-size: 1em;
   margin: 1em;
@@ -224,7 +212,7 @@ const Button = styled.button`
   border: 2px solid ${(props) => props.theme.main};
 `;
 
-// Define what props.theme will look like
+// Define the theme
 const theme = {
   main: "mediumseagreen",
 };
@@ -241,52 +229,49 @@ render(
 
 Immediately you can see the value in the Styled-Components' approach: CSS syntax
 in Components; awesomely, you can apply different themes by wrapping in
-different `ThemeProvider`s; the themes are nice and controlled... Great, it
-looks like a good option. Let's draw some boundaries to get some clarity:
+different `ThemeProvider`s; the themes are nice and declarative... and more. So what are boundaries and what do they tell us?
 
-1. (Putting this first though it depends on your team) There is a possible
-   boundary between JS devs and CSS devs
+1. There is a possible boundary between JS devs and CSS devs (it may depend on your team)
 2. There is the JS/CSS language boundary
 3. The JSX `<button>` and HTML `<button>` boundary (handled by React)
 4. There is the `Button = styled.button`/JSX `<button>` boundary. Handled by
    Style-Components, this is a JSX `<button>` wrapped up with some styles and it
    has a controlled interface (way to cross the boundary) to receive some props
    for some values
-5. There is the theme, which is a JS Object (that has a boundary around it).
+5. There is the theme, which is a JS Object (has a boundary around it).
 6. There is the portable, global boundary (`<ThemeProvider>` context) that
    passes the theme to anything within it.
-7. There are the boundaries around each of the files in which these things live
-   (they would be most useful in their own module) which is handled by either JS
+7. There are the boundaries around each of the files in which these things live which is handled by either JS
    or tooling.
 8. HTML/CSS/JS because JS is creating the CSS in this case.
-9. We haven't even looked at Media Queries
+9. We haven't even looked at Media Queries (but we do below)
 
-First boundary is a skillset/team boundary. To a CSS dev, the majority of that
-example is a mass of unknown with a bit of recognizable stuff in it, whereas to
+At first glance these don't seem like real boundaries, so it is worth taking the time to reason through a couple. For example, the first boundary is a skillset/team boundary. This doesn't make sense unless you look at the files from the perspective of understanding and cognitive load. To a CSS dev, the majority of that
+example is a mass of unknown with a bit of recognizable stuff in it. Whereas to
 a React dev, the syntax is relatively obvious... except perhaps the template
 string boundary around the CSS. The team boundary is quite big and potentially
 costly, both in training and in possible mistakes (because JS isn't as forgiving
 as CSS).
 
-The second boundary, JS/CSS language is represented by that (initially) odd
+Another example from point 2; JS/CSS language is represented by that (initially) odd
 template string tagged on the end of `styled.button`. The styled-components
 solution for this boundary is quite nice because it is possible to quickly
 encapsulate components/JSX with styles AND one can use CSS like syntax instead
-of JS Object notation, but there is still a context switch.
+of JS Object notation. Nevertheless there is still a context switch...
 
-While the team boundary is costly in one set of more obvious ways, the initial
-cost with this solution (for a React dev) seems to be just a small effort to
-understand some odd syntax... on closer inspection we can see that each time we
-write CSS and use the theme or write the theme we are doing multiple language
+While the team boundary is costly in one set of tangible ways, the initial
+cost this context switch (for a React dev) seems to be just a small effort to
+understand some odd syntax. On closer inspection we can see that each time we
+write CSS and use the theme, or add to the theme we are doing multiple language
 switches. For example, while the CSS in the template string uses CSS syntax, the
-theme is JS object notation. So there is a cognitive switch within lines of code
+theme is JS object notation. So there is a cognitive switch within single lines of code
 where one is writing CSS, then switching to JS to insert a theme style and then
 back to CSS and then back to React... This is like changing lanes on the
 Motorway, initially it is scary, then it seems easy, but that belies the fact
-that most accidents happen during the change.
+that most accidents happen during the lane change.
 
-It is worth talking briefly about points 3, 4 and 8 because these are
-representative of a type of costs of crossing boundaries that are moved by
+Finally, it is worth talking briefly about points 3, 4 and 8 because these are
+representative of the type of costs of crossing boundaries that are moved, but not paid, by
 tooling/libraries. React makes it very easy to write HTML style markup and
 Componentize code, VDOM, etc. Tons of value, but the cost is a minimum bundle
 size (minified and gzipped) of > 30K. To put this into context
@@ -299,34 +284,31 @@ If you then add the extra
 [size of Styled-Components](https://github.com/styled-components/styled-components/issues/748)
 and the CSS that it has to turn into CSS...
 
-The nice developer cost is transferred to the user... even worse, it gets almost
-exponentially more costly as the device capability goes down. And, rather
-depressingly, this only addresses 1 of the 3 types of styling that we need to
-provide and the irony is that **it would be easier and "better" to do in plain old CSS**.
+The cost is transferred from the developer to the user... and that is only for the Settings layer. The irony is that **it would be easier and less costly to do in plain old CSS**.
 
-It is this last point that led me to this simple thesis: we can leverage CSS for the things CSS does well and CSS-in-JS for the things it does well while protecting the fundamental philosophies and boundaries of each of those parts. Basically a set of boundaries drawn around those 2 types of style. I rather pompously call it the "Triangle of Forces", which talks about 3 forces in balance, because it is heavily inspired by ITCSS's layers, it uses CSS-in-JS and it proposes some new conventions for using CSS-in-JS.
+This last point that led me to this simple thesis: leverage CSS for what CSS does well and CSS-in-JS for what it does well while protecting the fundamental philosophies and boundaries of each. Basically use the existing boundaries around those 2 types of style. I rather pompously call it the "Triangle of Forces", which represents 3 forces in balance, because it is heavily inspired by ITCSS's layers, it uses CSS-in-JS and it proposes some new conventions for using CSS-in-JS.
 
-## Enter the Triangle of forces
+## Enter the Triangle of forces 🔻
 
-On the face of it ToF is a split in the styles of an application or website, where there are some styles that are relatively static and get used across projects and some that are specific to implementation.
+On the face of it ToF is a split in the styles of an application or website, where there are some styles that are relatively static and get used across projects and some that are specific to implementation. In the figure above, the stronger the colour the more changeable the layer, especially across projects.
 
-The 5 ITCSS layers I highlight above as "Styles that always have to be set" tend to become almost static across projects once they have been setup for one project, except for the settings layer, which changes the values that all the other styles use - the brighter the colour in the illustration, the more changeable the layer across projects. Largely speaking I consider all but 2 of these 5 layers to be optional, they are marked with blue. I treat these styles as plain old CSS; they are output as normal CSS files and imported in such a way that they can be loaded as CSS and cached as CSS.
+The 5 ITCSS layers I highlight above as "Styles that always have to be set" tend to become almost static across projects once they have been setup for one project, except for the settings layer, which changes the values that all the other styles use. Largely speaking I consider all but 2 of these 5 layers to be optional, they are marked with blue. I treat these styles as plain old CSS; they are output as normal CSS files and imported in such a way that they can be loaded as CSS and cached as CSS.
 
 ### Settings/Design Tokens
 
-The Settings layer from ITCSS is a bit like the theme object in
-Styled-Components, except that it is written in CSS and (ideally) remains
-accessible to all elements in our app... This is a structured list of CSS variables (custom
-properties). This is the only place that this type of CSS variable is declared
-in your application to prevent clashes. I use CSS variables because they are
-globally available, accessible and context dependent so that they can respond to
-e.g. media queries. What you choose for these will possibly vary. I have found
-that once set up these settle down to a consistent set and only the values
-change between projects.
+The Settings layer is like the theme object in
+Styled-Components except that it is written in CSS and is therefore global - there are no ThemeProviders, no imports, no boundaries and no costs... This is safe because we are not declaring styles. This is the only place that this type of CSS variable is declared
+in your application - a boundary by convention.
+
+This is comprised of a structured list of CSS variables (custom
+properties). CSS variables are perfect for this use case because they are
+scoped, accessible to JS if necessary and respond to context e.g. media queries. I have found
+that once set up the actual variables settle down to a consistent set that will be used in all your projects and only the values
+change.
 
 I recommend using a couple of conventions:
 
-1. Set up some variable prefixes that identify what the token sets, e.g.
+1. Set up some variable prefixes that identify what the setting sets, e.g.
    `--t-body`; `--c-brand1`; `--s-3`; or you could be more explicit to avoid the
    issues of obtuse syntaxes, e.g. `--text-body`, `--color-brand1`,
    `--space-3x`.
@@ -336,22 +318,19 @@ I recommend using a couple of conventions:
    `--c-brand1: var(--bright-red);`.
 3. Organize your tokens logically - e.g. put colours together, put types
    together, etc
-4. Have a token/setting for every the theme part you need to set, e.g. it makes
-   sense to set a body text colour setting, but you might forget to make a body
-   background colour setting; or some elements, like buttons will have multiple
+4. Have a token/setting for every theme part you need to set, e.g. some elements, like buttons will have multiple
    settings (border, background, etc) and then have hover, focus, etc states for
    each of those multiple settings too.
 
 These conventions are to address the potential pitfalls of having opaque
 variable names and the inherent problem of having a long list of things that
-need to be remembered. I tend to use sass variables as "static", local variables
-and custom properties/CSS variables as dynamic, global variables.
+need to be remembered.
 
 ### Generic & Elements
 
 Modern day browsers are much more consistent than they used to be, so reset
 stylesheets are less "necessary", but there is still the need for a place to put
-them. I tend to merge my Generic and Element layers for efficiency. This along
+them. I tend to merge my Generic and Element layers for simplicity. This along
 with the "settings" layer are the key areas where we can leverage CSS with a
 light touch, without breaking the principles of the approach and simultaneously
 overcome the limitations of CSS-in-JS.
@@ -380,16 +359,12 @@ These are useful classes that one uses a lot, such as `.screenReaderOnly`.
 Ideally there are not too many of these because, by their nature they need to be
 rule breakers; they need to override other styles. I tend to make this a CSS
 module file and `composes` these classes into my components because the
-encapsulation is being deliberately broken here, but that is not necessary. One
-could use an entire CSS utility library here if one wanted, but we need to be
-wary of creating complexity where it isn't needed.
+assumption is that my application follows these conventions, but it is not necessary to do so. One
+could even use an entire CSS utility library here if one wanted... best not though eh?
 
 ### What that looks like
 
-"Settings" and "Elements" layers/files might have something like this - the
-actual structuring or naming might differ - but over time you will find that the
-content will stop changing and it will just be the values of the variables in
-"Settings" that change.
+"Settings" and "Elements" files might look something like this:
 
 ```scss
 // setting.scss - this could as well be a css file
@@ -449,8 +424,8 @@ content will stop changing and it will just be the values of the variables in
 // ...etc
 ```
 
-You would use these theme members initially in the "Elements" CSS file to construct a general theme that sets up consistent regular rules, but you
-can also use the Settings variables in your Components.
+You would use these theme members initially in the "Elements" CSS file to construct a general theme that sets up consistent regular rules, and you
+would also use them in your Components.
 
 ```css
 /* elements.css 
@@ -488,13 +463,13 @@ render(
 ```
 
 Notice the `:root {}` pseudo-class, it matches the `<html>` element, so all
-variables declared in there are scoped to the html tag and its descendants.
+variables declared in there are scoped to the html tag and its descendants - i.e. globally.
 
 Whether the above looks like a good solution or not, let's examine it by
 outlining the boundaries:
 
 1. There is the possible JS/CSS team member boundary as above
-2. The `:root {}` - this encapsulates the boundary between CSS and HTML.
+2. The `:root {}` - global scope.
 3. The files, there are 3 files; 2 CSS and 1 JS.
 4. The CSS/JS boundary, unlike above, these are kept separate
 5. As above, there is the JSX `<button>`/HTML `<button>` boundary
@@ -507,8 +482,7 @@ point 5, which is the cost of running React). That said, we still have a
 
 So the costs of the TOF solution are much lower. This is not a reflection on the
 excellent Styled-Components library, but rather an indication of the complexity
-of the problem. Styled-Components still solves the main issue of global scope
-very successfully, whereas the CSS example rather "controls" it, but it is
+of the problem. Styled-Components solves the main issue of global scope, whereas the CSS solution rather "controls" it. Nevertheless it is
 clearly a much simpler solution. Notably we don't have a cost for team members and CSS errors remain css errors, not application bugs.
 
 The question is only whether the costs and complexity are worth the the
@@ -531,8 +505,8 @@ themes for different boundaries in your application.
   --spacing: 0 var(--s-1);
 }
 
-/* now any child of myCompnent has access to those variables */
-.myComponent p {
+/* now any child of myCompnent can use those theme variables */
+.childOfMyComponent {
   color: var(--color);
   background: var(--background);
   margin: var(spacing);
@@ -547,12 +521,11 @@ combined with Componentized UI.
 ## Summary
 
 There have been many ways of approaching styling on the web and I think it is
-fair to say that they have all had at least one or two good points and often
+fair to say that they all have their good points and often
 just as many bad points. This is as true of modern CSS-in-JS approaches as of
-the dinosaurs of the CSS world. In my opinion, the best ones work with CSS,
+the dinosaurs of the CSS world. In my estimation, the best solutions work with CSS,
 rather than cut across - we can come up with solutions that are better than just
-gritting our teeth and trying to hammer a screw in with some pliers. The solution presented here is heavily inspired by ITCSS, which does this very well and has defined "place" for
-CSS-in-JS styles. Nevertheless it is not the only working solution; the important thing is that we understand the boundaries that our decision impose upon us and the costs that we will pay for them.
+gritting our teeth and trying to hammer a screw in with some pliers. The solution presented here is not the only working solution; the important thing is that we understand the boundaries that our decision impose upon us and the costs that we will pay for them.
 
 ## Further reading
 
