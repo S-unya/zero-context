@@ -8,7 +8,7 @@ import styles from "./Layout.module.css";
 
 export const Layout: React.FC<React.HTMLAttributes<HTMLElement>> = ({
     children,
-    className
+    className,
 }) => {
     return (
         <main className={cx(className, styles.component)}>

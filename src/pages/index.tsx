@@ -2,6 +2,7 @@ import React from "react";
 import Layout from "../components/Layout";
 import PageHeader from "../components/PageHeader";
 import { graphql, Link } from "gatsby";
+import PageFooter from "../components/PageFooter";
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
     data: any;
@@ -25,6 +26,7 @@ const Index: React.FC<Props> = ({ data }) => {
                     </div>
                 ))}
             </Layout>
+            <PageFooter />
         </>
     );
 };

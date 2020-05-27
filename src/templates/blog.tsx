@@ -5,6 +5,7 @@ import Layout from "../components/Layout";
 import BlogPage from "../components/BlogPage";
 import { BlogData, MarkdownRemark } from "../types/data";
 import PageHeader from "../components/PageHeader";
+import PageFooter from "../components/PageFooter";
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
     data: MarkdownRemark<BlogData>;
@@ -19,6 +20,7 @@ export const BlogTemplate: React.FC<Props> = ({ className, data, ...rest }) => {
             <Layout className={cx(className)}>
                 <BlogPage data={data} />
             </Layout>
+            <PageFooter />
         </div>
     );
 };

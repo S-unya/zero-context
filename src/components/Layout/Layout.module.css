@@ -1,14 +1,15 @@
 .component {
-  composes: gridBase from "../../style/utils.module.css";
-  grid-auto-rows: auto;
+    composes: gridBase from "../../style/utils.module.css";
+    grid-auto-rows: auto;
+    padding-bottom: 80px;
 }
 
 .component > * {
-  grid-area: content;
+    grid-area: content;
 }
 
 .row {
-  display: grid;
-  grid-template-columns: 50% 50%;
-  grid-auto-rows: max-content;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-auto-rows: max-content;
 }

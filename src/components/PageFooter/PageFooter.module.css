@@ -1,0 +1,24 @@
+.component {
+    position: fixed;
+    z-index: 1;
+    bottom: 0;
+    --cmp-rotation: 1.2deg;
+    transform: skewY(var(--cmp-rotation));
+    transform-origin: top left;
+    background-color: var(--c-brand-alt);
+    overflow: hidden;
+    width: 100%;
+    composes: gridBase from "../../style/utils.module.css";
+    grid-auto-rows: auto;
+    padding: var(--s-3) 0;
+    color: var(--c-white);
+}
+
+.component > * {
+    grid-area: content;
+    transform: skewY(calc(var(--cmp-rotation) * -1));
+}
+
+.author {
+    font-size: var(--t-small);
+}
