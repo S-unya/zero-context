@@ -1,11 +1,14 @@
-.component {
+.baseComponent {
     --cmp-rotation: 6deg;
+    position: fixed;
+    left: -2px;
+    top: -2px;
+    width: calc(100% + 4px);
+    z-index: 1;
     transform: skewY(calc(var(--cmp-rotation) * -1));
     transform-origin: top left;
-    height: calc(var(--s-page-header) * 0.5);
     background-color: var(--c-brand-alt);
     overflow: hidden;
-    position: relative;
     display: flex;
     justify-content: space-around;
     align-items: flex-end;
@@ -13,9 +16,12 @@
     padding: 1px;
     backface-visibility: hidden;
     background-clip: content-box;
+    @media (prefers-reduced-motion: no-preference) {
+        transition: height 0.7s ease;
+    }
 }
 
-.component::after {
+.baseComponent::after {
     content: "";
     position: absolute;
     width: 100%;
@@ -29,15 +35,25 @@
     );
 }
 
-.component > * {
+.baseComponent > * {
     transform: skewY(var(--cmp-rotation));
 }
 
-.logo {
+.component {
+    composes: baseComponent;
+    height: calc(var(--s-page-header) * 0.5);
+}
+
+.stuck {
+    composes: baseComponent;
+    --cmp-rotation: 3deg;
+    height: calc(var(--s-page-header) * 0.1);
+}
+
+.baseLogo {
     position: relative;
     z-index: 1;
     display: block;
-    font-size: 11vw;
     color: var(--c-white);
     font-family: var(--t-family-alt);
     font-weight: 200;
@@ -45,11 +61,29 @@
     -moz-osx-font-smoothing: grayscale;
     font-smooth: always;
     -webkit-font-smoothing: antialiased;
+
+    @media (prefers-reduced-motion: no-preference) {
+        transition: font-size 0.7s ease;
+    }
+}
+
+/* turn off hover */
+.baseLogo::after {
+    display: none;
+}
+
+.logo {
+    composes: baseLogo;
+    font-size: 11vw;
     margin-bottom: -3vw;
 }
 
-.logo::after {
-    display: none;
+.stuckLogo {
+    composes: baseLogo;
+    font-size: 5vw;
+    transform: skewY(var(--cmp-rotation)) translate(-123%, 49%);
+    clip-path: circle(25px at 132px 66px);
+    text-shadow: var(--c-white) 0 0 6px;
 }
 
 .backgroundImage {

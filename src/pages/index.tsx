@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import PageHeader from "../components/PageHeader";
 import { graphql, Link } from "gatsby";
 import PageFooter from "../components/PageFooter";
+import ScrollWrapper from "../components/ScrollWrapper";
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
     data: any;
@@ -11,7 +12,7 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
 const Index: React.FC<Props> = ({ data }) => {
     console.log(data);
     return (
-        <>
+        <ScrollWrapper>
             <PageHeader />
             <Layout>
                 {data.allMarkdownRemark.edges.map(({ node }) => (
@@ -27,7 +28,7 @@ const Index: React.FC<Props> = ({ data }) => {
                 ))}
             </Layout>
             <PageFooter />
-        </>
+        </ScrollWrapper>
     );
 };
 

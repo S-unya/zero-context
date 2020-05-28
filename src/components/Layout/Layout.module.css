@@ -2,6 +2,7 @@
     composes: gridBase from "../../style/utils.module.css";
     grid-auto-rows: auto;
     padding-bottom: 80px;
+    padding-top: calc(var(--s-page-header) * 0.3);
 }
 
 .component > * {

@@ -1,6 +1,6 @@
 ---
 title: An introduction to GraphQl
-date: 2020-05-04
+date: 2020-05-24
 headerImage: ../../assets/headers/tree-lines.png
 ---
 
