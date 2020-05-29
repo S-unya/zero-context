@@ -12,11 +12,13 @@ export const ScrollingProvider: React.FC<React.HTMLAttributes<HTMLElement>> = (
         }
 
         const scrollCheck = () => {
-            const max = 14;
+            const max = 20;
             const scrollY = window.scrollY;
 
             if (scrollY < max) {
                 setScroll(scrollY);
+            } else {
+                setScroll(max);
             }
         };
 
