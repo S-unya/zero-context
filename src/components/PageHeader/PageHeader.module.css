@@ -4,6 +4,7 @@
     left: -2px;
     top: -2px;
     width: calc(100% + 4px);
+    min-height: 50px;
     z-index: 1;
     transform: skewY(calc(var(--cmp-rotation) * -1));
     transform-origin: top left;
@@ -80,9 +81,9 @@
 
 .stuckLogo {
     composes: baseLogo;
-    font-size: 5vw;
+    font-size: calc(3vw + 1.5rem);
     transform: skewY(var(--cmp-rotation)) translate(-123%, 49%);
-    clip-path: circle(25px at 132px 66px);
+    clip-path: circle(10% at 31.2% 56%);
     text-shadow: var(--c-white) 0 0 6px;
 }
 
