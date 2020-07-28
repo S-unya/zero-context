@@ -6,7 +6,7 @@ headerImage: ../../assets/headers/tree-lines.png
 
 This is an outline of the general shape of the "pieces" of GraphQL. It will touch on the benefits, but the main aim is to provide an overview of how the various pieces work together and where they will be coding in that jigsaw.
 
-## What is it?
+## What is it
 
 GraphQL is a specification for a "query Language" designed to query (and mutate) "graphs" of data... coff. Unpacking that...
 
@@ -147,9 +147,17 @@ type Tree implements Person {
 }
 
 type Jellyfish implements Person {
-    favouriteFood: [String]
+    symbiotes: [Person!]
 }
 ```
+
+With the above code, we can shortcut adding all the fields in the `Person` interface to our type declaration by telling the Schema that the type `implements Person`; anything that we do add to the type declaration is additional to the fields in `Person` - e.g. the `Human` type also has a `eyeColour` field.
+
+## Describing data summary
+
+The Schema language gives us a powerful way to both describe data and to describe the relationships in the data. This was an overview of the most commonly useful parts of the language, but it was by no means exhaustive.
+
+As an interesting exercise to embed some of these concepts, you could try making some types for the people and characters of the Lord of the Rings universe, or the Marvel
 
 -   Tools for introspection
 -   Mechanism for describing graphs
