@@ -159,8 +159,4 @@ The Schema language gives us a powerful way to both describe data and to describ
 
 As an interesting exercise to embed some of these concepts, you could try making some types for the people and characters of the Lord of the Rings universe, or the Marvel
 
--   Tools for introspection
--   Mechanism for describing graphs
--   Mechanism for querying those graphs
-
-interesting thing about GraphQL is that it doesn't care what or where the original data comes from, just that it fulfills the promise of your API's schema by the time it is processed by the GraphQL implementation.
+Next up, GraphQl schema [Part 2] - describing what you can do with the data.
