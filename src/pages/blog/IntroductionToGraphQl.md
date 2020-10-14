@@ -1,9 +1,10 @@
 ---
-title: An introduction to GraphQL
+title: An introduction to the GraphQL puzzle
 date: 2020-05-24
 headerImage: ../../assets/headers/tree-lines.png
 ---
 
+This workshop will cover the puzzle pieces of the GraphQL architecture; introducing each part and where it fits in the greater puzzle. This is necessary because GraphQL is not a single thing or a single piece of technology; rather it spans the full stack and can be implemented in many different ways
 This is an outline of the general shape of the "pieces" of GraphQL. It will touch on the benefits, but the main aim is to provide an overview of how the various pieces work together and where they will be coding in that jigsaw.
 
 ## What is it
@@ -24,7 +25,8 @@ First up Schema.
 
 ## Schema
 
-The GraphQL Schema language is designed to describe data. It only has a few very simple data types - called Scalar types.
+The Schema in a GraphQL API is designed to be an "expressive shared language" between all parts of your stack and as such,
+the GraphQL Schema language has been specifically designed to expressively describe data - specifically, graphs of data. It has a really small but flexible syntax, with only a few very simple data types - called Scalar types.
 
 1. **Int**: A signed 32‐bit integer, e.g. `10`, `1000`, `26`, etc
 2. **Float**: A signed double-precision floating-point value, e.g. `3.14159`
@@ -32,7 +34,12 @@ The GraphQL Schema language is designed to describe data. It only has a few very
 4. **Boolean**: true or false.
 5. **ID**: The ID scalar type represents a unique identifier. It is similar to an string, but intended to be unique.
 
-These combined with 2 main structural types, **list** and **object** allow us to describe most structures of data. For the few situations where these are insufficient (e.g. Dates), it is usually possible to declare custom data types. There are some other scalar types that we will cover below, but these ones do the bulk of the work.
+and 2 main structural types:
+
+1. **list** and
+1. **object**
+
+Combined, these allow us to describe most structures of data. For the few situations where these are insufficient (e.g. Dates), it is usually possible to declare custom data types. There _are_ some other scalars and structural types (some of which we'll cover below) but these ones do the bulk of the work.
 
 To see what this looks like, let's make a `Person` in GraphQL schema.
 
@@ -75,7 +82,9 @@ type Person {
     address: [Address]
 }
 
+scalar AddressUnit
 type Address {
+    id: ID!
     unitNameOrNumber: AddressUnit
     streetName: String
     city: String
@@ -84,22 +93,21 @@ type Address {
     country: Country
 }
 
-union AddressUnit = Int | String
-
 type Neighbourhood {
     id: ID!
     name: String
-    boundaries: GeoShape!
-}
-
-type LatLong {
-    lat: Float
-    long: Float
+    boundary: GeoShape!
 }
 
 type GeoShape {
     id: ID!
     points: [LatLong!]!
+}
+
+type LatLong {
+    id: ID!
+    lat: Float!
+    long: Float!
 }
 
 enum Country {
@@ -111,7 +119,7 @@ enum Country {
 
 There are a few of interesting things to note in these new descriptions of our data relationships. We have a described some complex relationships and also introduced a couple of new types.
 
-The first new type allows a field to be one of multiple other types, as in the `Address` type's `unitNameOrNumber` field, the `AddressUnit` is a `union` type (a single type made up of multiple other types). `union AddressUnit = Int | String` declares that we expect either a number or a string for the values passed to the `unitNameOrNumber` field. We could add any number of scalar types or custom types to a "union type". As we will see in the Queries section, this is particularly powerful if you want to return different data depending on what returns in the `Query`.
+The first new type is the `Address` type's `unitNameOrNumber` field; the `AddressUnit` is a new `scalar` because it needs to be either a `String` or an `Int`. GraphQL doesn't [currently support scalar union types](https://github.com/facebook/graphql/issues/215), but with custom scalars, essentially it is up to the implementation how this is validated.
 
 Another way to allow different values for a field, but limit it to a limited set of values is to use the `enum` (enumeration) type, like the `Country` enum type. Enums allow you to:
 
@@ -126,13 +134,13 @@ That is pretty much it for describing data shapes and relationships; there is on
 
 Interfaces are a way of describing the shape of something without describing the thing itself - like describing a car by saying "it has 4 wheels, an engine, no more than 6 seats and some windows', we can make look at a Tesla and agree that fits that description, and a Ferrari fits that description but we haven't described the actual, "concrete" cars themselves.
 
-Interfaces are called "abstract" because they are not used directly, rather we use them to make sure that "concrete" types fit the description, or interface described. When this happens, we say that the concrete type "implements" the interface. As an example, let's say that we have a number of different peoples of our lands. Let's convert our `Person` type into an `interface` and make some more specific people.
+Interfaces are called "abstract" because they are not used directly, rather we use them to make sure that "concrete" types fit the description, or interface described like a contract. When this happens, we say that the concrete type "implements" the interface. As an example, let's say that we have a number of different peoples of our lands. Let's convert our `Person` type into an `interface` and make some more specific people.
 
 ```gql
 interface Person {
     id: ID!
-    name: String
     age: Int
+    name: String
     hobbies: [String]
     friends: [Person]
     address: [Address]
@@ -140,18 +148,38 @@ interface Person {
 
 type Human implements Person {
     eyeColour: String
+    friends: [Person]
+    id: ID!
+    age: Int
+    name: String
+    hobbies: [String]
+    address: [Address]
 }
 
 type Tree implements Person {
     evergreen: Boolean
+    id: ID!
+    age: Int
+    name: String
+    hobbies: [String]
+    friends: [Person]
+    address: [Address]
 }
 
 type Jellyfish implements Person {
     symbiotes: [Person!]
+    id: ID!
+    age: Int
+    name: String
+    hobbies: [String]
+    friends: [Person]
+    address: [Address]
 }
 ```
 
-With the above code, we can shortcut adding all the fields in the `Person` interface to our type declaration by telling the Schema that the type `implements Person`; anything that we do add to the type declaration is additional to the fields in `Person` - e.g. the `Human` type also has a `eyeColour` field.
+With the above code, we can ensure all the fields in the `Person` interface are in our "concrete" type's declaration by telling the Schema that the type `implements Person`; anything that we do add to the type declaration is additional to the fields in `Person` - e.g. the `Human` type also has a `eyeColour` field.
+
+There are other benefits to using `interfaces` that we'll cover in Part 2.
 
 ## Describing data summary
 
