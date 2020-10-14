@@ -10,12 +10,16 @@ This is an **opinion** and some (biased) observations that suggest a way to use 
 
 At its most essential it is recognizing boundaries and recognizing the consequences of crossing them. I'm aware that much of what I have to say here is likely to contradict mainstream opinion, and worse, it is likely to have bias just by the nature of opinion. Nevertheless, the hope is that by explaining the model you will be armed with the same paradigms and can make your own choices! In the end it is all grist to the mill.
 
-The mental model is based on 4 general observations:
+The mental model is based on this one observation:
 
-1. **The first and most important is that there is always a consequence/cost of crossing a boundary**. For example, if we cross between 2 fields while out walking, we either have to climb a fence, or use a gate or style in the fence. In both cases there are costs; to climb the fence we expend more effort and are slowed; to use a gate, first we loose the choice of where to cross, but the real cost is abstracted away to the fence builder (a gate is more complex and costs more). In reality boundary changes are seldom between like and like but from one kind of environment to a another; land to sea, earth to space, CSS to JS...
-2. **The second is that some boundaries cost more to cross than others**.
-3. **The third is that some boundaries are crossed (or avoided) for good reasons** and some without reason.
-4. **The final observation is that some boundaries are good**! Too many boundaries are invariably bad, but too few can be as well.
+1. **There is always a consequence/cost of crossing a boundary, so we should always have a reason to cross them**. Like diving into a lake - things get wet, you can't see or hear as well, etc, but you can swim!
+
+Once we pause to think about this, there are other things that we can say about this process, like:
+
+1. **Some boundaries cost more to cross than others**. Like moving between rooms where you live vs moving between rooms in, e.g. a prison.
+2. **Some boundaries might appear the same, but are considerably different** as with the above example
+3. **Some boundaries are crossed (or avoided) for good reasons** and some without reason.
+4. **Some boundaries are good**! Too many boundaries are invariably bad, but too few can be as well.
 
 ## Context
 
@@ -31,6 +35,7 @@ First I'd like to outline what is good about CSS, what is hard about CSS.
 6. It separates the concerns of style from structural markup (caveats!)
 7. It gzips really nicely
 8. It caches really nicely
+9. It is really, really easy to make animations
 
 ...but
 
@@ -38,7 +43,7 @@ First I'd like to outline what is good about CSS, what is hard about CSS.
 
 And wasteful. And confusing.
 
-There are plenty of people willing to wail upon CSS, so I don't need to, but I remember when CSS was introduced; the initial party-like euphoria of having a way to separate style from markup (Separation of Concerns, good boundaries) and more granular style control... Pretty soon we all woke up to the hangover of giant CSS files and 10 part selectors. We started to notice that far from SoC, our CSS was actually mirroring the structure of our HTML. We lost sight of all those good points and flexibility and cried about all our headaches.
+There is plenty said about the shortfalls of CSS, but I remember when CSS was introduced; the initial party-like euphoria of having a way to separate style from markup (Separation of Concerns, good boundaries) and more granular style control. Of course soon we woke up to the hangover of giant CSS files and 10 part selectors. Far from Separation of Concerns, our CSS was actually mirroring the structure of our HTML. We lost sight of all those good points and flexibility and life was all about headaches.
 
 Nevertheless if we look closely, largely speaking all our problems - the hard bits of CSS - arise from the following 3 things (in descending order of impact):
 
