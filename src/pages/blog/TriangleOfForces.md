@@ -4,11 +4,11 @@ date: 2020-03-20
 headerImage: ../../assets/headers/wild-grasses.png
 ---
 
-This is an **opinion** and some (biased) observations that suggest a way to use _CSS-the-good-bits_ in blissful harmony with CSS-in-JS for a reasonable and flexible styling solution. Most of this article looks at historical and modern attempts to "tame" CSS using a mental model to support the practical bit at the end and [part 2](/TriangleOfForces-part2.md), which is more in depth on how these ideas enhance the re-use of components
+This is an **opinion** and some (biased) observations that suggest a way to use _CSS-the-good-bits_ in blissful harmony with CSS-in-JS for a reasonable and flexible styling solution. Most of this article looks at historical and modern attempts to "tame" CSS using a mental model to support the reasoning behind the practical bit at the end and [part 2](/TriangleOfForces-part2.md), which is more in depth on how these ideas enhance the re-use of components
 
 ## The mental model
 
-At its most essential it is recognizing boundaries and recognizing the consequences of crossing them. I'm aware that much of what I have to say here is likely to contradict mainstream opinion, and worse, it is likely to have bias just by the nature of opinion. Nevertheless, the hope is that by explaining the model you will be armed with the same paradigms and can make your own choices! In the end it is be grist to the mill.
+At its most essential it is recognizing boundaries and recognizing the consequences of crossing them. I'm aware that much of what I have to say here is likely to contradict mainstream opinion, and worse, it is likely to have bias just by the nature of opinion. Nevertheless, the hope is that by explaining the model you will be armed with the same paradigms and can make your own choices! In the end it is all grist to the mill.
 
 The mental model is based on 4 general observations:
 
@@ -63,19 +63,19 @@ I think it is fair to say that most subsequent innovations in CSS have been atte
 
 Frameworks like bootstrap, tailwind, Atomic CSS, etc are quite a bit more than just CSS, but we're only interested in their approach to CSS. Typically they all:
 
-- Take the stance that if you are just applying their class names and conventions, your CSS will be ordered and relatively small (caveats).
-- Embrace the global nature of CSS, by providing one well thought out, structured way of applying CSS (basically a convention).
-- Move the declarative nature of CSS to the HTML - accepting that people were not separating the concerns of markup and styling (pro and con).
-- Work on the principle that you have as much access to the HTML as the CSS.
-- Effectively solve the age old problem of naming.
-- Are seriously battle tested (addressing point 2 of the CSS hard bits).
-- Can abstract away some complexity by providing one approved way to apply CSS. This can make styles easier to reason about (point 3 above).
-- Can leverage tooling by limiting options
+-   Take the stance that if you are just applying their class names and conventions, your CSS will be ordered and relatively small (caveats).
+-   Embrace the global nature of CSS, by providing one well thought out, structured way of applying CSS (basically a convention).
+-   Move the declarative nature of CSS to the HTML - accepting that people were not separating the concerns of markup and styling (pro and con).
+-   Work on the principle that you have as much access to the HTML as the CSS.
+-   Effectively solve the age old problem of naming.
+-   Are seriously battle tested (addressing point 2 of the CSS hard bits).
+-   Can abstract away some complexity by providing one approved way to apply CSS. This can make styles easier to reason about (point 3 above).
+-   Can leverage tooling by limiting options
 
 **Using the mental model**: frameworks create consistent boundaries and to CSS. This means they can solve the hard parts of working with CSS, but interestingly, by adding boundaries they also introduce the costs of crossing boundaries. A couple of examples are:
 
-- Complexity: while they clarify how we should use CSS, CSS is huge and flexible; so they either have to be equally large and flexible or be much reduced. Consequently complexity arises usually in one of 2 ways. Either they become complex themselves - e.g. their syntax becomes opaque, `<div class="Bgc(#0280ae.5) H(90px) D(ib)--sm W(25%)--sm"></div>` (an example from the Atomic CSS framework website). Alternatively they are too limited and mean that we also write CSS outside of their framework, which adds another boundary and complexity.
-- Unclear boundaries: ironically their clear rules can obscure other boundaries within their context - for me the most problematic thing with frameworks, albeit rather nuanced, is that they can engender a mental model where HTML and CSS are equally important; that it is okay to write HTML to fit the needs of the CSS classes that are needed rather than the need of the content. I understand that this is both opinion and not limited to frameworks; it is just something I see most often in codebases where these frameworks have been used.
+-   Complexity: while they clarify how we should use CSS, CSS is huge and flexible; so they either have to be equally large and flexible or be much reduced. Consequently complexity arises usually in one of 2 ways. Either they become complex themselves - e.g. their syntax becomes opaque, `<div class="Bgc(#0280ae.5) H(90px) D(ib)--sm W(25%)--sm"></div>` (an example from the Atomic CSS framework website). Alternatively they are too limited and mean that we also write CSS outside of their framework, which adds another boundary and complexity.
+-   Unclear boundaries: ironically their clear rules can obscure other boundaries within their context - for me the most problematic thing with frameworks, albeit rather nuanced, is that they can engender a mental model where HTML and CSS are equally important; that it is okay to write HTML to fit the needs of the CSS classes that are needed rather than the need of the content. I understand that this is both opinion and not limited to frameworks; it is just something I see most often in codebases where these frameworks have been used.
 
 #### Summary
 
@@ -89,7 +89,7 @@ The other option, Conventions, are kind of like a "Do It Yourself Framework". Th
 
 Frameworks use and formalize one or more of these Conventions into tooling and code structure, while you may choose instead to do that work yourself.
 
-## So what is IT(CSS)?
+## So what is IT(CSS)
 
 Over time various Conventions arose and I think that I've tried most of them in one project or another. Eventually I even started introducing my own conventions. This search led me to ITCSS; arguably the Convention that most successfully harmonizes with CSS usage; it has a place for all of CSS without trying to change it, while providing mechanisms to avoid the pitfalls. It is quite easy to grasp, and promotes reuse and Separation of Concerns between presentation and content.
 
@@ -111,22 +111,22 @@ Nevertheless, both the type of application we make and the tooling to make them 
 
 Some CSS purists would say that this is no different to name-spacing in BEM or one of the other Convention based approaches, but there are important differences:
 
-- We get real modules in CSS
-- Files are optimized for tooling
-- We get dynamic and conditional styles
-- We get an explicit relationship between "components" and their styles, which means no more "append only" stylesheets.
+-   We get real modules in CSS
+-   Files are optimized for tooling
+-   We get dynamic and conditional styles
+-   We get an explicit relationship between "components" and their styles, which means no more "append only" stylesheets.
 
 To put it another way, we get an explicit boundaries (modules) and a way to tie them to UI components so that styles across an application cannot clash.
 
 Unfortunately it isn't all good news! Just as with previous attempts to "solve" CSS, this approach includes some sacrifices and some new costs with these new boundaries:
 
-- Loss of non-blocking, cacheable styles if JS is generating the CSS (or double loading CSS with Critical CSS)
-- A great deal of duplication because all components exist in their own boundaries (caveats)
-- On the fly CSS generation can be SLOW, especially in low end devices
-- New syntaxes to learn for CSS devs (boundaries)
-- Buy-in; once you start with one CSS-in-JS lib, it is hard to switch because of new syntax (boundaries) or mixing Components in component libraries.
-- Greater impact of mistakes. CSS is very forgiving of mistakes so errors in CSS files have low impact, but an error in a JS file can cause the application to error.
-- Ironically, treating components in isolation can lead to the need to override styles in Components (boundaries) - more on this in [part] 2](/TriangleOfForces-part2.md)
+-   Loss of non-blocking, cacheable styles if JS is generating the CSS (or double loading CSS with Critical CSS)
+-   A great deal of duplication because all components exist in their own boundaries (caveats)
+-   On the fly CSS generation can be SLOW, especially in low end devices
+-   New syntaxes to learn for CSS devs (boundaries)
+-   Buy-in; once you start with one CSS-in-JS lib, it is hard to switch because of new syntax (boundaries) or mixing Components in component libraries.
+-   Greater impact of mistakes. CSS is very forgiving of mistakes so errors in CSS files have low impact, but an error in a JS file can cause the application to error.
+-   Ironically, treating components in isolation can lead to the need to override styles in Components (boundaries) - more on this in [part] 2](/TriangleOfForces-part2.md)
 
 This whole discussion is nicely summed up by on twitter by @sanketsahu:
 ![Tweet by @sanketsahu:](/assets/blog/tof/sanketsahu.jpg)
@@ -202,28 +202,28 @@ like this (though likely 2 files):
 ```js
 // Define our button, but with the use of props.theme
 const Button = styled.button`
-  font-size: 1em;
-  margin: 1em;
-  padding: 0.25em 1em;
-  border-radius: 3px;
+    font-size: 1em;
+    margin: 1em;
+    padding: 0.25em 1em;
+    border-radius: 3px;
 
-  /* Color the border and text with theme.main */
-  color: ${(props) => props.theme.main};
-  border: 2px solid ${(props) => props.theme.main};
+    /* Color the border and text with theme.main */
+    color: ${(props) => props.theme.main};
+    border: 2px solid ${(props) => props.theme.main};
 `;
 
 // Define the theme
 const theme = {
-  main: "mediumseagreen",
+    main: "mediumseagreen",
 };
 
 render(
-  <div>
-    <Button>Normal</Button>
-    <ThemeProvider theme={theme}>
-      <Button>Themed</Button>
-    </ThemeProvider>
-  </div>
+    <div>
+        <Button>Normal</Button>
+        <ThemeProvider theme={theme}>
+            <Button>Themed</Button>
+        </ThemeProvider>
+    </div>
 );
 ```
 
@@ -369,57 +369,57 @@ could even use an entire CSS utility library here if one wanted... best not thou
 ```scss
 // setting.scss - this could as well be a css file
 :root {
-  /***** Primary Palette *****/
-  --c-m-blue: #2b70b9;
-  --c-d-blue: #{$cobalt}; // using sass variables as "static"
-  --c-black: #{$black};
-  --c-white: #ffffff;
-  --c-orange: #ffbd4a;
-  // ...etc
+    /***** Primary Palette *****/
+    --c-m-blue: #2b70b9;
+    --c-d-blue: #{$cobalt}; // using sass variables as "static"
+    --c-black: #{$black};
+    --c-white: #ffffff;
+    --c-orange: #ffbd4a;
+    // ...etc
 
-  /***** Grayscale Palette *****/
-  --c-gray-100: #f5f5f5;
-  --c-gray-200: #eaeaea;
-  // ...etc
+    /***** Grayscale Palette *****/
+    --c-gray-100: #f5f5f5;
+    --c-gray-200: #eaeaea;
+    // ...etc
 
-  /***** Usage Semantics *****/
-  --c-focus-ring: var(--c-orange);
-  // Body
-  --c-body-bg: var(--c-white);
-  --c-body: var(--c-black);
-  --c-main-bg: var(--c-gray-100);
-  // Button
-  --c-button: var(--c-white-pure);
-  --c-button-bg: var(--c-m-blue);
-  --c-button-border: var(--c-white-pure);
-  --c-button-active: var(--c-m-blue);
-  --c-button-bg-active: var(--c-white);
-  --c-button-border-active: var(--c-m-blue);
-  // ...etc
+    /***** Usage Semantics *****/
+    --c-focus-ring: var(--c-orange);
+    // Body
+    --c-body-bg: var(--c-white);
+    --c-body: var(--c-black);
+    --c-main-bg: var(--c-gray-100);
+    // Button
+    --c-button: var(--c-white-pure);
+    --c-button-bg: var(--c-m-blue);
+    --c-button-border: var(--c-white-pure);
+    --c-button-active: var(--c-m-blue);
+    --c-button-bg-active: var(--c-white);
+    --c-button-border-active: var(--c-m-blue);
+    // ...etc
 
-  // Link
-  // ...etc
+    // Link
+    // ...etc
 
-  /****** TEXT *******/
-  --t-base: 16;
-  --t-sm: calc(
-    14rem / var(--t-base)
-  ); // this is the type of thing that you might use a Utility function for in sass
-  --t-m: calc(16rem / var(--t-base));
-  --t-l: calc(18rem / var(--t-base));
-  // ...etc
+    /****** TEXT *******/
+    --t-base: 16;
+    --t-sm: calc(
+        14rem / var(--t-base)
+    ); // this is the type of thing that you might use a Utility function for in sass
+    --t-m: calc(16rem / var(--t-base));
+    --t-l: calc(18rem / var(--t-base));
+    // ...etc
 
-  --t-body: var(--t-med);
-  // ...etc
+    --t-body: var(--t-med);
+    // ...etc
 }
 
 // css variables can be modified by context like media queries
 @media (min-width: $bp-s) {
-  :root {
-    --t-sm: calc(16rem / var(--t-base));
-    --t-m: calc(18rem / var(--t-base));
-    --t-l: calc(20rem / var(--t-base));
-  }
+    :root {
+        --t-sm: calc(16rem / var(--t-base));
+        --t-m: calc(18rem / var(--t-base));
+        --t-l: calc(20rem / var(--t-base));
+    }
 }
 // ...etc
 ```
@@ -428,37 +428,37 @@ You would use these theme members initially in the "Elements" CSS file to constr
 would also use them in your Components.
 
 ```css
-/* elements.css 
+/* elements.css
  You could equally use SCSS, I'm swapping to show it is possible to do in both
 */
 body {
-  background-color: var(--c-body-bg);
-  /* This is sufficient to set all text (assuming a reset stylesheet is set) */
-  color: var(--c-body);
+    background-color: var(--c-body-bg);
+    /* This is sufficient to set all text (assuming a reset stylesheet is set) */
+    color: var(--c-body);
 }
 
 /* This will style all buttons which you may or may not wish */
 button {
-  border-color: var(--c-button-border);
-  background-color: var(--c-button-bg);
-  border-width: 2px;
-  border-style: solid;
-  color: var(--c-button);
+    border-color: var(--c-button-border);
+    background-color: var(--c-button-bg);
+    border-width: 2px;
+    border-style: solid;
+    color: var(--c-button);
 }
 
 button:focus,
 button:hover {
-  border-color: var(--c-button-border-active);
-  background-color: var(--c-button-bg-active);
-  color: var(--c-button-active);
+    border-color: var(--c-button-border-active);
+    background-color: var(--c-button-bg-active);
+    color: var(--c-button-active);
 }
 ```
 
 ```js
 render(
-  <div>
-    <button>Themed</button>
-  </div>
+    <div>
+        <button>Themed</button>
+    </div>
 );
 ```
 
@@ -500,16 +500,16 @@ themes for different boundaries in your application.
 
 ```css
 .myComponent {
-  --color: green;
-  --background: black;
-  --spacing: 0 var(--s-1);
+    --color: green;
+    --background: black;
+    --spacing: 0 var(--s-1);
 }
 
 /* now any child of myCompnent can use those theme variables */
 .childOfMyComponent {
-  color: var(--color);
-  background: var(--background);
-  margin: var(spacing);
+    color: var(--color);
+    background: var(--background);
+    margin: var(spacing);
 }
 ```
 
@@ -529,13 +529,13 @@ gritting our teeth and trying to hammer a screw in with some pliers. The solutio
 
 ## Further reading
 
-https://www.xfive.co/blog/itcss-scalable-maintainable-css-architecture/
-https://medium.com/dailyjs/what-is-actually-css-in-js-f2f529a2757
-https://gist.github.com/threepointone/731b0c47e78d8350ae4e105c1a83867d
-https://medium.com/free-code-camp/the-tradeoffs-of-css-in-js-bee5cf926fdb
-https://mxb.dev/blog/the-css-mindset/ https://mxstbr.com/thoughts/css-in-js
-https://css-tricks.com/bridging-the-gap-between-css-and-javascript-css-in-js/
-https://css-tricks.com/bridging-the-gap-between-css-and-javascript-css-modules-postcss-and-the-future-of-css/
-https://css-tricks.com/css-modules-part-1-need/
-https://jxnblk.com/blog/two-steps-forward/
-https://css-tricks.com/breaking-css-custom-properties-out-of-root-might-be-a-good-idea/
+<https://www.xfive.co/blog/itcss-scalable-maintainable-css-architecture/>
+<https://medium.com/dailyjs/what-is-actually-css-in-js-f2f529a2757>
+<https://gist.github.com/threepointone/731b0c47e78d8350ae4e105c1a83867d>
+<https://medium.com/free-code-camp/the-tradeoffs-of-css-in-js-bee5cf926fdb>
+<https://mxb.dev/blog/the-css-mindset/> <https://mxstbr.com/thoughts/css-in-js>
+<https://css-tricks.com/bridging-the-gap-between-css-and-javascript-css-in-js/>
+<https://css-tricks.com/bridging-the-gap-between-css-and-javascript-css-modules-postcss-and-the-future-of-css/>
+<https://css-tricks.com/css-modules-part-1-need/>
+<https://jxnblk.com/blog/two-steps-forward/>
+<https://css-tricks.com/breaking-css-custom-properties-out-of-root-might-be-a-good-idea/>
