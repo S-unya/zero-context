@@ -64,6 +64,7 @@ h4,
 h5 {
     font-family: var(--t-family-alt);
     font-weight: 200;
+    line-height: 1;
 }
 
 * {
