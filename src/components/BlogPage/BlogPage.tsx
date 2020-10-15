@@ -26,7 +26,9 @@ export const BlogPage: React.FC<Props> = ({
     return (
         <section className={cx(className, styles.component)} {...rest}>
             <header className={styles.header}>
-                <h1>{data.markdownRemark.frontmatter.title}</h1>
+                <h1 className={styles.articleHeading}>
+                    {data.markdownRemark.frontmatter.title}
+                </h1>
                 <p className={styles.info}>
                     First published on{" "}
                     <time dateTime={data.markdownRemark.frontmatter.date}>

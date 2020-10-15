@@ -6,6 +6,7 @@ import BlogPage from "../components/BlogPage";
 import { BlogData, MarkdownRemark } from "../types/data";
 import PageHeader from "../components/PageHeader";
 import PageFooter from "../components/PageFooter";
+import ScrollWrapper from "../components/ScrollWrapper";
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
     data: MarkdownRemark<BlogData>;
@@ -13,15 +14,19 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
 export const BlogTemplate: React.FC<Props> = ({ className, data, ...rest }) => {
     console.log(data.markdownRemark.frontmatter.headerImage);
     return (
-        <div>
-            <PageHeader
-                backgroundImage={data.markdownRemark.frontmatter.headerImage}
-            />
-            <Layout className={cx(className)}>
-                <BlogPage data={data} />
-            </Layout>
-            <PageFooter />
-        </div>
+        <ScrollWrapper>
+            <div>
+                <PageHeader
+                    backgroundImage={
+                        data.markdownRemark.frontmatter.headerImage
+                    }
+                />
+                <Layout className={cx(className)}>
+                    <BlogPage data={data} />
+                </Layout>
+                <PageFooter />
+            </div>
+        </ScrollWrapper>
     );
 };
 

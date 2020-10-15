@@ -1,5 +1,5 @@
 ---
-title: Creating re-usable Components by standing on the shoulders of giants
+title: Another way to re-usable Components
 date: 2020-04-08
 headerImage: ../../assets/headers/highlands.jpg
 ---
@@ -36,33 +36,37 @@ import React from "react";
 import styles from "./ContentCard.module.css";
 
 export const ContentCard = ({
-  uri,
-  imageSrc,
-  imageAlt,
-  heading,
-  taxonomy,
-  published,
-  citation,
+    uri,
+    imageSrc,
+    imageAlt,
+    heading,
+    taxonomy,
+    published,
+    citation,
 }) => {
-  return (
-    <article className={styles.component}>
-      <a href={uri} className={styles.link}>
-        <figure className={styles.imageWrap}>
-          <img alt={imageAlt} src={imageSrc} className={styles.image} />
-        </figure>
-        <div className={styles.contentWrap}>
-          <header className={styles.header}>
-            <p className={styles.taxonomy}>{taxonomy}</p>
-            <h3>{heading}</h3>
-          </header>
-          <p className={styles.info}>
-            <span className={styles.published}>{published}</span> /{" "}
-            <span className={styles.citation}>{citation}</span>
-          </p>
-        </div>
-      </a>
-    </article>
-  );
+    return (
+        <article className={styles.component}>
+            <a href={uri} className={styles.link}>
+                <figure className={styles.imageWrap}>
+                    <img
+                        alt={imageAlt}
+                        src={imageSrc}
+                        className={styles.image}
+                    />
+                </figure>
+                <div className={styles.contentWrap}>
+                    <header className={styles.header}>
+                        <p className={styles.taxonomy}>{taxonomy}</p>
+                        <h3>{heading}</h3>
+                    </header>
+                    <p className={styles.info}>
+                        <span className={styles.published}>{published}</span> /{" "}
+                        <span className={styles.citation}>{citation}</span>
+                    </p>
+                </div>
+            </a>
+        </article>
+    );
 };
 ```
 
@@ -76,64 +80,64 @@ We are going to assume that we have a theme setup as described in part 1. I am n
 /** ContentCard.module.css **/
 
 .component {
-  /* This is actually an object famously described by OOCSS, so this component can map to that perfectly */
-  position: relative;
-  padding: calc(var(--s-1) * 1.5) 0;
-  border-bottom: 1px solid var(--c-gray-500);
+    /* This is actually an object famously described by OOCSS, so this component can map to that perfectly */
+    position: relative;
+    padding: calc(var(--s-1) * 1.5) 0;
+    border-bottom: 1px solid var(--c-gray-500);
 }
 
 .link {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  color: var(--c-body);
-  text-decoration: none;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    color: var(--c-body);
+    text-decoration: none;
 }
 
 .imageWrap {
-  width: 10.625rem;
-  height: 6rem;
+    width: 10.625rem;
+    height: 6rem;
 }
 
 .contentWrap {
-  flex: 1;
-  align-self: stretch;
-  margin-left: var(--s-2);
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: max-content 1fr max-content;
+    flex: 1;
+    align-self: stretch;
+    margin-left: var(--s-2);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: max-content 1fr max-content;
 }
 
 .image {
-  width: 100%;
-  max-height: 100%;
-  object-fit: cover;
+    width: 100%;
+    max-height: 100%;
+    object-fit: cover;
 }
 
 .metaText {
-  font-family: var(--font-family-1);
-  font-size: var(--t-body-xs);
+    font-family: var(--font-family-1);
+    font-size: var(--t-body-xs);
 }
 
 .taxonomy {
-  margin: 0 0 var(--s-1);
-  text-transform: uppercase;
-  font-weight: var(--tw-bold);
-  composes: metaText;
+    margin: 0 0 var(--s-1);
+    text-transform: uppercase;
+    font-weight: var(--tw-bold);
+    composes: metaText;
 }
 
 .heading {
-  font-size: var(--t-body-m);
-  font-family: var(--font-family-2);
-  font-weight: var(--tw-m);
-  line-height: 1.3em;
-  margin-bottom: 0;
+    font-size: var(--t-body-m);
+    font-family: var(--font-family-2);
+    font-weight: var(--tw-m);
+    line-height: 1.3em;
+    margin-bottom: 0;
 }
 
 .info {
-  align-self: flex-end;
-  composes: metaText;
-  margin-bottom: 0;
+    align-self: flex-end;
+    composes: metaText;
+    margin-bottom: 0;
 }
 ```
 
@@ -167,23 +171,23 @@ First reaction - Oh well! Easy fix! Just add some rules allow it to wrap in flex
 /* ContentCard.module.css */
 
 .link {
-  display: flex;
-  /* Just allow wrapping in the link */
-  flex-flow: row wrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-  ...;
+    display: flex;
+    /* Just allow wrapping in the link */
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    ...;
 }
 
 .contentWrap {
-  flex: 1;
-  align-self: stretch;
-  margin-left: var(--s-2);
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: max-content 1fr max-content;
-  /* and add a min-width here... */
-  min-width: 170px;
+    flex: 1;
+    align-self: stretch;
+    margin-left: var(--s-2);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: max-content 1fr max-content;
+    /* and add a min-width here... */
+    min-width: 170px;
 }
 ```
 
@@ -244,25 +248,25 @@ conceptual boundary that is not semantic. Some boundaries, however, such as
 hierarchy and semantics cooperate to the point of being reciprocal. It is good
 to be clear about **which of these is most important to your use case**.
 
-1.  The wrapping element - an `<article>` makes a good, semantic option
-2.  A link - an `<a>` anchor element is the semantic tag for hyperlinking
-3.  An image - we chose to semantically wrap the image in a `<figure>`, which
-    gives us a new, conceptual boundary:
-4.  An area concerned with media
-5.  To which we could add another concept, an area concerned with textual
-    content; in our case a `<div>`
-6.  Taxonomy - we chose a simple, semantic text element, `<p>`
-7.  Article heading - the heading hierarchy in HTML is well defined and
-    important for screen reader users, who can use them to navigate the page. It
-    is very hard to make a re-usable component that has a defined heading in,
-    but we had a stab at guessing the hierarchy with `<h3>`
-8.  In all the designs, there is a hierarchical boundary between the heading
-    plus taxonomy and the meta text below - in HTML there is the structural
-    element `<header>` for this.
-9.  The meta information - this is one of the areas of the design that changes
-    the most. Earlier we chose to use a `<p>` to identify this area, but
-    actually, as the text doesn't really form a coherent sentence or paragraph,
-    it would probably be better to just use a semantically neutral `<div>`
+1. The wrapping element - an `<article>` makes a good, semantic option
+2. A link - an `<a>` anchor element is the semantic tag for hyperlinking
+3. An image - we chose to semantically wrap the image in a `<figure>`, which
+   gives us a new, conceptual boundary:
+4. An area concerned with media
+5. To which we could add another concept, an area concerned with textual
+   content; in our case a `<div>`
+6. Taxonomy - we chose a simple, semantic text element, `<p>`
+7. Article heading - the heading hierarchy in HTML is well defined and
+   important for screen reader users, who can use them to navigate the page. It
+   is very hard to make a re-usable component that has a defined heading in,
+   but we had a stab at guessing the hierarchy with `<h3>`
+8. In all the designs, there is a hierarchical boundary between the heading
+   plus taxonomy and the meta text below - in HTML there is the structural
+   element `<header>` for this.
+9. The meta information - this is one of the areas of the design that changes
+   the most. Earlier we chose to use a `<p>` to identify this area, but
+   actually, as the text doesn't really form a coherent sentence or paragraph,
+   it would probably be better to just use a semantically neutral `<div>`
 10. Variously we have a published date (`<time>`), an author (`<span>`) and a
     location (`<address>`)
 
@@ -278,7 +282,7 @@ Once we are clear of the boundaries, it is time to examine the responsibilities
 and how they relate. As there are so many combinations here, we'll have to limit
 this a bit to some exemplary ones so that the concepts can be extrapolated.
 
-#### Dealing out the cards :spades: :hearts: :diamonds: :clubs:
+#### Dealing out the cards :spades: :hearts: :diamonds: :clubs
 
 As an example, there are apparently 3 ways that cards can relate to each other
 in a layout; vertical lists, horizontal lists and hero lists (which is like a
@@ -313,7 +317,7 @@ So we can make a couple of statements about layout:
 2. The white space in the layout context is part of that responsibility - or to
    put it another way; never put whitespace in your component styles!
 
-### Them's the cards :diamonds:
+### Them's the cards :diamonds
 
 Now let us look at the layouts of the card's content; to understand the layout,
 we also need to look at the UI elements and the content that sits in them.
@@ -441,76 +445,76 @@ import { NewsMetaData } from "./NewsMetaData";
 import styles from "./NewsList.module.scss";
 
 const NEWS_QUERY = gql`
-  {
-    listNewsItems {
-      results {
-        title
-        taxonomy
-        status
-        pageLink
-        publishedDate
-        primaryImage {
-          imagePath
-          imageDescription
+    {
+        listNewsItems {
+            results {
+                title
+                taxonomy
+                status
+                pageLink
+                publishedDate
+                primaryImage {
+                    imagePath
+                    imageDescription
+                }
+                author {
+                    id
+                    name
+                }
+            }
         }
-        author {
-          id
-          name
-        }
-      }
     }
-  }
 `;
 export const NewsList = ({ className, ...rest }) => {
-  const { data, loading, error } = useQuery(NEWS_QUERY);
-  const outPutNews = React.useCallback(
-    (newsItems) =>
-      newsItems.map((newsItem, index) => (
-        <li key={`news-${index}`}>
-          {/* We can use our style prop to suggest to the Card how much spacing it should use, or pass it a theme */}
-          <Card className={styles.card} uri={newsItem.pageLink}>
-            <CardImage
-              className={styles.cardImage}
-              uri={newsItem.primaryImage.imagePath}
-              alt={newsItem.primaryImage.imageDescription}
-            />
-            {/* NOTE: The wrapping boundary that represents both the media and the text content 
+    const { data, loading, error } = useQuery(NEWS_QUERY);
+    const outPutNews = React.useCallback(
+        (newsItems) =>
+            newsItems.map((newsItem, index) => (
+                <li key={`news-${index}`}>
+                    {/* We can use our style prop to suggest to the Card how much spacing it should use, or pass it a theme */}
+                    <Card className={styles.card} uri={newsItem.pageLink}>
+                        <CardImage
+                            className={styles.cardImage}
+                            uri={newsItem.primaryImage.imagePath}
+                            alt={newsItem.primaryImage.imageDescription}
+                        />
+                        {/* NOTE: The wrapping boundary that represents both the media and the text content
                             is not the responsibility of the outer layout context */}
-            <CardTaxonomy>
-              {/* We can put what ever structure of content we want into the taxonomy */}
-              <span className={styles.warning}>Sold out</span>
-              <span>Commentary</span>
-            </CardTaxonomy>
-            {/* We get to set the heading level... */}
-            <CardTitle>
-              <h3 className={styles.heading}>{newsItem.title}</h3>
-            </CardTitle>
-            {/* By looking at responsibility, we can see that the meta is only a layout; the 
+                        <CardTaxonomy>
+                            {/* We can put what ever structure of content we want into the taxonomy */}
+                            <span className={styles.warning}>Sold out</span>
+                            <span>Commentary</span>
+                        </CardTaxonomy>
+                        {/* We get to set the heading level... */}
+                        <CardTitle>
+                            <h3 className={styles.heading}>{newsItem.title}</h3>
+                        </CardTitle>
+                        {/* By looking at responsibility, we can see that the meta is only a layout; the
                             content is defined by the knowledge of the data */}
-            <CardMeta>
-              <NewsMetaData
-                publishedDate={newsItem.publishedDate}
-                author={newsItem.author}
-              />
-            </CardMeta>
-          </Card>
-        </li>
-      )),
-    []
-  );
+                        <CardMeta>
+                            <NewsMetaData
+                                publishedDate={newsItem.publishedDate}
+                                author={newsItem.author}
+                            />
+                        </CardMeta>
+                    </Card>
+                </li>
+            )),
+        []
+    );
 
-  // assume checks for loading and error etc here
-  return (
-    <>
-      {data && data.listNewsItems.results.length ? (
-        <ul className={cx(className, styles.edge)} {...rest}>
-          {outPutNews(data.listNewsItems.results)}
-        </ul>
-      ) : (
-        <p>Shockingly, there is no news right now!</p>
-      )}
-    </>
-  );
+    // assume checks for loading and error etc here
+    return (
+        <>
+            {data && data.listNewsItems.results.length ? (
+                <ul className={cx(className, styles.edge)} {...rest}>
+                    {outPutNews(data.listNewsItems.results)}
+                </ul>
+            ) : (
+                <p>Shockingly, there is no news right now!</p>
+            )}
+        </>
+    );
 };
 ```
 
@@ -520,23 +524,23 @@ not enough. The above code that uses the WBC pattern ends up with this output:
 
 ```html
 <article class="_card_d1bb0 _component_41e77">
-  <a href="/news/124" class="_link_41e77"
-    ><figure class="_imageWrap_41e77">
-      <img
-        alt="A Placeholder"
-        src="https://via.placeholder.com/340x192"
-        class="_image_41e77"
-      />
-    </figure>
-    <p class="_taxonomy_41e77 _metaText_41e77">
-      <span class="_warning_d1bb0">Sold out</span><span>Commentary</span>
-    </p>
-    <h3>A shorter heading</h3>
-    <div class="_info_41e77 _metaText_41e77">
-      <time datetime="2020-04-04T21:36:32.429Z">4 April 2020</time>
-      <span> / By <strong>Elmore Leonard</strong></span>
-    </div></a
-  >
+    <a href="/news/124" class="_link_41e77"
+        ><figure class="_imageWrap_41e77">
+            <img
+                alt="A Placeholder"
+                src="https://via.placeholder.com/340x192"
+                class="_image_41e77"
+            />
+        </figure>
+        <p class="_taxonomy_41e77 _metaText_41e77">
+            <span class="_warning_d1bb0">Sold out</span><span>Commentary</span>
+        </p>
+        <h3>A shorter heading</h3>
+        <div class="_info_41e77 _metaText_41e77">
+            <time datetime="2020-04-04T21:36:32.429Z">4 April 2020</time>
+            <span> / By <strong>Elmore Leonard</strong></span>
+        </div></a
+    >
 </article>
 ```
 
@@ -553,46 +557,46 @@ check in on its children and make sure they are behaving as expected:
 ```javascript
 // New component is only used within Card and doesn't need exporting
 const TextContent = ({ children }) => (
-  <div className={styles.contentWrap}>{children}</div>
+    <div className={styles.contentWrap}>{children}</div>
 );
 
 export const Card = ({ className, uri, children, ...rest }) => {
-  // Loop through the children and ensure that they are properly wrapped, etc
-  const wrapChildren = React.useCallback(() => {
-    const headerContent = [];
-    const textContent = [];
-    const otherContent = [];
+    // Loop through the children and ensure that they are properly wrapped, etc
+    const wrapChildren = React.useCallback(() => {
+        const headerContent = [];
+        const textContent = [];
+        const otherContent = [];
 
-    React.Children.map(children, (child) => {
-      if (
-        child.type.name === "CardTaxonomy" ||
-        child.type.name === "CardTitle"
-      ) {
-        return headerContent.push(child);
-      }
-      if (child.type.name === "CardMeta") {
-        return textContent.push(child);
-      }
+        React.Children.map(children, (child) => {
+            if (
+                child.type.name === "CardTaxonomy" ||
+                child.type.name === "CardTitle"
+            ) {
+                return headerContent.push(child);
+            }
+            if (child.type.name === "CardMeta") {
+                return textContent.push(child);
+            }
 
-      return otherContent.push(child);
-    });
+            return otherContent.push(child);
+        });
 
-    return [
-      ...otherContent,
-      <TextContent key="textContent">
-        <header className={styles.heading}>{headerContent}</header>
-        {textContent}
-      </TextContent>,
-    ];
-  }, [children]);
+        return [
+            ...otherContent,
+            <TextContent key="textContent">
+                <header className={styles.heading}>{headerContent}</header>
+                {textContent}
+            </TextContent>,
+        ];
+    }, [children]);
 
-  return (
-    <article className={cx(className, styles.component)} {...rest}>
-      <a href={uri} className={styles.link}>
-        {wrapChildren()}
-      </a>
-    </article>
-  );
+    return (
+        <article className={cx(className, styles.component)} {...rest}>
+            <a href={uri} className={styles.link}>
+                {wrapChildren()}
+            </a>
+        </article>
+    );
 };
 ```
 
@@ -600,31 +604,32 @@ Now we have our expected HTML
 
 ```html
 <article class="_card_d1bb0 _component_41e77">
-  <a href="/news/124" class="_link_41e77"
-    ><figure class="_imageWrap_41e77">
-      <img
-        alt="A Placeholder"
-        src="https://via.placeholder.com/340x192"
-        class="_image_41e77"
-      />
-    </figure>
-    <div class="_contentWrap_41e77">
-      <header class="_heading_41e77">
-        <p class="_taxonomy_41e77 _metaText_41e77">
-          <span class="_warning_d1bb0">Sold out</span><span>Commentary</span>
-        </p>
-        <h3>A shorter heading</h3>
-      </header>
-      <div class="_info_41e77 _metaText_41e77">
-        <time datetime="2020-04-04T21:36:32.429Z">4 April 2020</time>
-        <span> / By <strong>Elmore Leonard</strong></span>
-      </div>
-    </div></a
-  >
+    <a href="/news/124" class="_link_41e77"
+        ><figure class="_imageWrap_41e77">
+            <img
+                alt="A Placeholder"
+                src="https://via.placeholder.com/340x192"
+                class="_image_41e77"
+            />
+        </figure>
+        <div class="_contentWrap_41e77">
+            <header class="_heading_41e77">
+                <p class="_taxonomy_41e77 _metaText_41e77">
+                    <span class="_warning_d1bb0">Sold out</span
+                    ><span>Commentary</span>
+                </p>
+                <h3>A shorter heading</h3>
+            </header>
+            <div class="_info_41e77 _metaText_41e77">
+                <time datetime="2020-04-04T21:36:32.429Z">4 April 2020</time>
+                <span> / By <strong>Elmore Leonard</strong></span>
+            </div>
+        </div></a
+    >
 </article>
 ```
 
-## The Ace up the sleeve :clubs:
+## The Ace up the sleeve :clubs
 
 To elegantly set a number of style parameters at the same time, we can use the theming technique described in part 1. The
 really nice thing about it is that the theme is scoped in synergy with the
@@ -634,33 +639,33 @@ different way. The layout context should only try to control the things for whic
 
 ```scss
 .edge {
-  composes: noList from "../../../styles/utilities.module.css";
-  /* you could use grid here or make a theme variable for card spacing */
+    composes: noList from "../../../styles/utilities.module.css";
+    /* you could use grid here or make a theme variable for card spacing */
 }
 .card {
-  border-bottom: 1px solid var(--c-gray-300);
-  /* variables are scoped to the edge component, mobile first so we can add the layout context spacing for our cards */
-  --media-spacing: 0 0 8px;
-  --media-width: 100%;
-  --media-height: auto;
-  --card-flow: row wrap;
-  --card-justify: flex-start;
-  --card-align: flex-start;
+    border-bottom: 1px solid var(--c-gray-300);
+    /* variables are scoped to the edge component, mobile first so we can add the layout context spacing for our cards */
+    --media-spacing: 0 0 8px;
+    --media-width: 100%;
+    --media-height: auto;
+    --card-flow: row wrap;
+    --card-justify: flex-start;
+    --card-align: flex-start;
 }
 
 .warning {
-  color: var(--c-red);
-  margin-right: 1em;
+    color: var(--c-red);
+    margin-right: 1em;
 }
 
 @media (min-width: 375px) {
-  .card {
-    --media-spacing: 0 16px 0 0;
-    --media-width: 10.625rem;
-    --card-flow: row nowrap;
-    --card-justify: flex-start;
-    --card-align: flex-start;
-  }
+    .card {
+        --media-spacing: 0 16px 0 0;
+        --media-width: 10.625rem;
+        --card-flow: row nowrap;
+        --card-justify: flex-start;
+        --card-align: flex-start;
+    }
 }
 ```
 
@@ -714,4 +719,4 @@ By understanding that "knowledge" is a boundary and boundaries equate to respons
 
 ## Further reading
 
-https://kentcdodds.com/blog/the-state-reducer-pattern-with-react-hooks
+<https://kentcdodds.com/blog/the-state-reducer-pattern-with-react-hooks>

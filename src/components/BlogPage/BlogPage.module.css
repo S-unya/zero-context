@@ -1,17 +1,23 @@
 .component {
-  max-width: 83ch;
-  margin: auto;
+    max-width: 84ch;
+    margin: auto;
+    transform: translateX(-4vw);
 }
 .readingTime {
-  font-weight: 200;
+    font-weight: 200;
 }
 .info {
-  font-size: var(--t-info);
-  margin-bottom: 0.5em;
+    font-size: var(--t-info);
+    margin-bottom: 0.5em;
 }
 
 .header {
-  margin-bottom: 1.5em;
+    margin-bottom: 1.5em;
+    margin-left: -3.5vw;
+    margin-right: -3.5vw;
+}
+.articleHeading {
+    margin-bottom: var(--t-body)
 }
 
 .blog {

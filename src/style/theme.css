@@ -1,60 +1,60 @@
 :root {
-  /* spacing */
-  --s-1: 8px;
-  --s-2: calc(2 * var(--s-1));
-  --s-3: calc(3 * var(--s-1));
-  --s-4: calc(4 * var(--s-1));
-  --s-page-header: 40vw;
+    /* spacing */
+    --s-1: 8px;
+    --s-2: calc(2 * var(--s-1));
+    --s-3: calc(3 * var(--s-1));
+    --s-4: calc(4 * var(--s-1));
+    --s-page-header: 40vw;
 
-  /* color */
-  --c-white: #fff;
-  --c-body: #131313;
-  --c-body-bg: #fff;
-  --c-light-blue: #8ee7f6;
-  --c-mid-blue: #022755;
-  --c-dark-blue: #000a45;
-  --c-mid-green: #879a57;
+    /* color */
+    --c-white: #fff;
+    --c-body: #131313;
+    --c-body-bg: #fff;
+    --c-light-blue: #8ee7f6;
+    --c-mid-blue: #022755;
+    --c-dark-blue: #000a45;
+    --c-mid-green: #879a57;
 
-  --c-brand-base: var(--c-dark-blue);
-  --c-brand-alt: var(--c-mid-blue);
+    --c-brand-base: var(--c-dark-blue);
+    --c-brand-alt: var(--c-mid-blue);
 
-  --c-link: var(--c-dark-blue);
-  --c-link-active: var(--c-light-blue);
+    --c-link: var(--c-dark-blue);
+    --c-link-active: var(--c-light-blue);
 
-  /* typography */
-  --t-base: 18;
-  --t-h1: 5.653em;
-  --t-h2: 3.998em;
-  --t-h3: 2.827em;
-  --t-h4: 1.999em;
-  --t-h5: 1.414em;
-  --t-body: 1rem;
-  --t-small: 0.707em;
-  --t-family-main: "Noto Sans SC", sans-serif;
-  --t-family-alt: "Montserrat", sans-serif;
+    /* typography */
+    --t-base: 18;
+    --t-h1: 5.653em;
+    --t-h2: 3.998em;
+    --t-h3: 2.827em;
+    --t-h4: 1.999em;
+    --t-h5: 1.414em;
+    --t-body: 1rem;
+    --t-small: 0.707em;
+    --t-family-main: "Noto Sans SC", sans-serif;
+    --t-family-alt: "Montserrat", sans-serif;
 }
 
 html {
-  font-size: calc((var(--t-base) / 16) * 100%);
+    font-size: calc((var(--t-base) / 16) * 100%);
 }
 
 html,
 body {
-  padding: 0;
-  margin: 0;
+    padding: 0;
+    margin: 0;
 }
 
 body {
-  max-width: 100vw;
-  min-height: 100vh;
-  font-family: var(--t-family-main);
-  line-height: 1.65;
-  color: var(--c-body);
-  background-color: var(--c-body-bg);
+    max-width: 100vw;
+    min-height: 100vh;
+    font-family: var(--t-family-main);
+    line-height: calc(1ex / 0.32);
+    color: var(--c-body);
+    background-color: var(--c-body-bg);
 }
 
 p {
-  margin-bottom: 1.15rem;
+    margin-bottom: 1.15rem;
 }
 
 h1,
@@ -62,67 +62,74 @@ h2,
 h3,
 h4,
 h5 {
-  margin: 2.75rem 0 1.05rem;
-  font-family: var(--t-family-alt);
-  font-weight: 200;
-  line-height: 1.15;
+    font-family: var(--t-family-alt);
+    font-weight: 200;
+    line-height: 1;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 #___gatsby {
-  overflow-x: hidden;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 h1 {
-  font-size: var(--t-h1);
+    font-size: var(--t-h1);
 }
 h2 {
-  font-size: var(--t-h2);
+    font-size: var(--t-h2);
+    line-height: calc(1ex / 0.42);
+    margin: calc(1ex / 0.42) 0;
 }
 h3 {
-  font-size: var(--t-h3);
+    font-size: var(--t-h3);
+    line-height: calc(1ex / 0.38);
+    margin: calc(1ex / 0.38) 0;
 }
 h4 {
-  font-size: var(--t-h4);
+    font-size: var(--t-h4);
+    line-height: calc(1ex / 0.37);
+    margin: calc(1ex / 0.37) 0;
 }
 
 p {
-  margin-bottom: 1.25em;
+    line-height: calc(1ex / 0.32);
+    margin: calc(1ex / 0.32) 0;
 }
 
 a {
-  color: var(--c-link);
-  text-decoration: none;
-  display: inline-block;
-  position: relative;
+    color: var(--c-link);
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
 }
 
 a::after {
-  content: "";
-  height: 5px;
-  width: calc(100% + 1em);
-  position: absolute;
-  bottom: 0;
-  left: -0.5em;
-  opacity: 0.5;
-  z-index: -1;
-  background-color: var(--c-link-active);
-  transition: height 0.5s ease 0s;
+    content: "";
+    height: 5px;
+    width: calc(100% + 1em);
+    position: absolute;
+    bottom: 0;
+    left: -0.5em;
+    opacity: 0.5;
+    z-index: -1;
+    background-color: var(--c-link-active);
+    transition: height 0.5s ease 0s;
 
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
 }
 
 a:hover::after,
 a:focus::after {
-  height: 100%;
+    height: 100%;
 }
 
 .section {
-  padding: var(--s-2);
-  border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: var(--s-2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
