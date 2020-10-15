@@ -4,29 +4,28 @@ date: 2020-05-24
 headerImage: ../../assets/headers/tree-lines.png
 ---
 
-This workshop will cover the puzzle pieces of the GraphQL architecture; introducing each part and where it fits in the greater puzzle. This is necessary because GraphQL is not a single thing or a single piece of technology; rather it spans the full stack and can be implemented in many different ways
-This is an outline of the general shape of the "pieces" of GraphQL. It will touch on the benefits, but the main aim is to provide an overview of how the various pieces work together and where they will be coding in that jigsaw.
+The intention of this series of articles is to take a high level overview the puzzle pieces of the GraphQL architecture; introducing each piece and where it fits in the puzzle and how the pieces work together. This seems necessary because GraphQL is not a single thing or a single piece of technology, rather it spans the full stack and can be implemented in many different ways
 
-## What is it
+## What is GraphQL
 
-GraphQL is a specification for a "query Language" designed to query (and mutate) "graphs" of data... coff. Unpacking that...
+Technically, GraphQL is a specification for a "query Language" designed to query (and mutate) "graphs" of data... aaand unpacking that...
 
-A "specification" is a description of something (like the WC3 specification for HTML or CSS), whereas there may be a number of implementations of a specification (like the various browser implementations of HTML/CSS).
+**A "specification"** is a description of something (like the WC3 specification for HTML or CSS), as distinct from the implementations of that thing (like the various browser implementations of HTML/CSS).
 
-A "graph" of data is fundamentally a set of data that has **a defined relationship**; graphs are a Computer Science term for a data structure made up of "nodes" (or "points" or "vertices") and the connections between them, "links" (or "edges" or "lines" or "arrows"). This means that the data connections (relationships) are part of the data and not inferred through things like foreign keys, etc.
+**A "graph"** of data is fundamentally a set of data that has **a defined relationship**; graphs are a Computer Science term for a data structure made up of "nodes" (or "points" or "vertices") and the connections between them, "links" (or "edges" or "lines" or "arrows"). This means that the data connections (relationships) are part of the data and not added on through things like foreign keys, etc.
 
-**So, GraphQL is a language specification for querying data with and from their relationships.**
+So we can say that **GraphQL is a language specification for querying and mutating data with and from their relationships.**
 
-In practice it is a bit more than that. On the one hand it is a query language, for querying and mutating graphs of data. On the other it is a language for describing those graphs (GraphQL schema). And on the third hand, it is a programming pattern to allow the schema to remain absolutely agnostic to the origin and shape of the original data (the resolver pattern).
+In practice however, it is a bit more than that. On the one hand it is a query language. On the other it is a language for describing those graphs (GraphQL schema). And on the third hand, it is a architectural pattern to allow the schema to remain absolutely agnostic to the origin and shape of the original data (the resolver pattern).
 
-These 3 things make up the "pieces" of GraphQL and we will look at each in turn and what each means.
+These 3 things make up the "pieces" of a GraphQL system regardless of the rest of the system. This series is about an overview of each and how it works with the others. It will be as example laden as possible to illustrate the terms and ideas.
 
-First up Schema.
+First up Schema because it sits in the middle of the architecture and underpins the other parts.
 
 ## Schema
 
 The Schema in a GraphQL API is designed to be an "expressive shared language" between all parts of your stack and as such,
-the GraphQL Schema language has been specifically designed to expressively describe data - specifically, graphs of data. It has a really small but flexible syntax, with only a few very simple data types - called Scalar types.
+the GraphQL Schema language has been specifically designed to describe data - specifically, graphs of data. It has a really small but flexible syntax, with only a few very simple data types - called Scalar types.
 
 1. **Int**: A signed 32‐bit integer, e.g. `10`, `1000`, `26`, etc
 2. **Float**: A signed double-precision floating-point value, e.g. `3.14159`
@@ -37,7 +36,7 @@ the GraphQL Schema language has been specifically designed to expressively descr
 and 2 main structural types:
 
 1. **list** and
-1. **object**
+2. **object**
 
 Combined, these allow us to describe most structures of data. For the few situations where these are insufficient (e.g. Dates), it is usually possible to declare custom data types. There _are_ some other scalars and structural types (some of which we'll cover below) but these ones do the bulk of the work.
 
@@ -52,11 +51,11 @@ type Person {
 }
 ```
 
-Firstly we declare a `type` and name it `Person`. The most basic components of a schema are **object** types, which describe an object you can fetch from your API, and what fields it has. Our `Person` is an object with a `name`, `age` and some `hobbies`... The `name` is a string, as you might expect, and age is a number (`Int`) as you might expect. For `hobbies`, we wanted to allow our `Person` to be passionate about more than one thing, so we allow them to name more than one by using the **list** structure and setting the hobby name to be a string.
+Firstly we declare a new `type` and name it `Person`. The most fundamental components of a schema are **object** types, which describe a number of related fields that you can fetch from your API - this is a small graph. Our `Person` is an object with a `name`, `age` and some `hobbies`... The `name` is a string, as you might expect, and age is a number (`Int`) as you might expect. For `hobbies`, we wanted to allow our `Person` to be passionate about more than one thing, so we allow them to have more than one hobby `String` by using the **list** structure.
 
-In Schema language everything is optional unless we specifically say it is required and so far we have not required the people of our system to have names, hobbies or even an age, but because we want to be able to uniquely identify them, we use the built in `ID` type to describe a unique identifier, and we indicate that this is required with a `!`.
+In Schema language everything is optional unless we specifically say it is required and so far we have not required the people of our system to have names, hobbies or even an age, but because we want each `Person` that we create to be uniquely identifiable, we use the built in `ID` type to describe a unique identifier, and we indicate that this is required with a `!`.
 
-So you can see that it is relatively easy to understand and describe these types. So far this is not much different from a `Person` table in a database... but as the people in our system tend to be very outgoing, they make a lot of friends from different neighbourhoods.
+So you can see that we can achieve a lot with relatively simple set of "scalar" types. So far this is not much different from a `Person` table in a database... but as the people in our system tend to be very outgoing, they make a lot of friends from different neighbourhoods.
 
 ```gql
 type Person {
