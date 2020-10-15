@@ -13,6 +13,11 @@
 
 .header {
     margin-bottom: 1.5em;
+    margin-left: -3.5vw;
+    margin-right: -3.5vw;
+}
+.articleHeading {
+    margin-bottom: var(--t-body)
 }
 
 .blog {
