@@ -76,14 +76,14 @@
 .logo {
     composes: baseLogo;
     font-size: 11vw;
-    margin-bottom: -3vw;
+    margin-bottom: 3.3vw;
 }
 
 .stuckLogo {
     composes: baseLogo;
     font-size: calc(3vw + 1.5rem);
     transform: skewY(var(--cmp-rotation)) translate(-123%, 49%);
-    clip-path: circle(10% at 31.2% 56%);
+    clip-path: circle(7.57% at 30.41% 76.39%);
     text-shadow: var(--c-white) 0 0 6px;
 }
 
