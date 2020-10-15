@@ -81,6 +81,7 @@ type Person {
     address: [Address]
 }
 
+<!-- Declare a completely custom scalar (that our system must implement) -->
 scalar AddressUnit
 type Address {
     id: ID!
@@ -116,9 +117,9 @@ enum Country {
 }
 ```
 
-There are a few of interesting things to note in these new descriptions of our data relationships. We have a described some complex relationships and also introduced a couple of new types.
+There are a few interesting things to note in these new descriptions of data relationships. We have a described some complex relationships and also introduced a couple of new types.
 
-The first new type is the `Address` type's `unitNameOrNumber` field; the `AddressUnit` is a new `scalar` because it needs to be either a `String` or an `Int`. GraphQL doesn't [currently support scalar union types](https://github.com/facebook/graphql/issues/215), but with custom scalars, essentially it is up to the implementation how this is validated.
+The first new type is the `Address` type's `unitNameOrNumber` field; the `AddressUnit` is a new `scalar` that can be either a `String` or an `Int`. GraphQL doesn't [currently support scalar union types](https://github.com/facebook/graphql/issues/215), but with custom scalars, essentially it is up to the implementation how this is validated.
 
 Another way to allow different values for a field, but limit it to a limited set of values is to use the `enum` (enumeration) type, like the `Country` enum type. Enums allow you to:
 
@@ -127,13 +128,13 @@ Another way to allow different values for a field, but limit it to a limited set
 
 The final thing of interest to note is the type declaration for the `points` field in the `GeoShape` type, `[LatLong!]!`. The `!` tells us that the value is required or cannot be `null`, but here we are saying that the field must always have a list, which can be empty but none of the values in the list can be `null`.
 
-That is pretty much it for describing data shapes and relationships; there is one more utility that can help reduce code which is ubiquitous in strongly typed languages - the `interface`.
+That is pretty much it for describing data shapes and relationships; there is one more utility that can help describe data shape expectations - the `interface`. Interfaces are ubiquitous in strongly typed languages, but in GraphQL Schema language, they might be a little confusing.
 
 ## Implementation details
 
-Interfaces are a way of describing the shape of something without describing the thing itself - like describing a car by saying "it has 4 wheels, an engine, no more than 6 seats and some windows', we can make look at a Tesla and agree that fits that description, and a Ferrari fits that description but we haven't described the actual, "concrete" cars themselves.
+Interfaces are a way of describing the shape of something without describing the thing itself - like describing a car by saying "it has 4 wheels, an engine, no more than 6 seats and some windows', we can make look at a Tesla, and a Ferrari and agree that both fit that description even thought we haven't described the actual, "concrete" cars themselves.
 
-Interfaces are called "abstract" because they are not used directly, rather we use them to make sure that "concrete" types fit the description, or interface described like a contract. When this happens, we say that the concrete type "implements" the interface. As an example, let's say that we have a number of different peoples of our lands. Let's convert our `Person` type into an `interface` and make some more specific people.
+Interfaces are called "abstract" because they are not used directly, rather we use them to make sure that "concrete" types fit the description, or interface described. When this happens, we say that the concrete type "implements" the interface. As an example, let's say that we have a number of different peoples of our lands. Let's convert our `Person` type into an `interface` and make some more specific, concrete people `types`.
 
 ```gql
 interface Person {
@@ -176,9 +177,9 @@ type Jellyfish implements Person {
 }
 ```
 
-With the above code, we can ensure all the fields in the `Person` interface are in our "concrete" type's declaration by telling the Schema that the type `implements Person`; anything that we do add to the type declaration is additional to the fields in `Person` - e.g. the `Human` type also has a `eyeColour` field.
+With the above code, we can ensure all the fields in the `Person` interface are in our "concrete" type's declaration by telling the Schema that the type `implements Person`; anything that we add to the concrete type's declaration is additional to the fields in `Person` - e.g. the `Human` type also has a `eyeColour` field.
 
-There are other benefits to using `interfaces` that we'll cover in Part 2.
+There are other benefits to using `interfaces` that we'll cover in Part 2, GraphQL, Say what? Queries and Mutations.
 
 ## Describing data summary
 
@@ -186,4 +187,9 @@ The Schema language gives us a powerful way to both describe data and to describ
 
 As an interesting exercise to embed some of these concepts, you could try making some types for the people and characters of the Lord of the Rings universe, or the Marvel
 
-Next up, GraphQl schema [Part 2] - describing what you can do with the data.
+## Further reading
+
+-   [GraphQL.org's amazing reference](https://graphql.org/learn/)
+-   [How to GraphQL](https://www.howtographql.com/)
+-   [Tutorials point article](https://www.tutorialspoint.com/graphql/graphql_introduction.htm)
+-   [GraphQL.com's tutorial](https://www.graphql.com/tutorials/)
