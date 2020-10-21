@@ -71,11 +71,133 @@ Lot's of people get overwhelmed by TS when they first start because the type che
 
 So really, it better to think about those little pointers as a gift of foresight and hindsight.
 
--   Reading TS Errors
--   Bad types are worse than no types
-    -   eg use of any, unknown, never
+### So, "Errors" you say
+
+Given that we're using TS to expose our intentions and using the type checker to tell us wether we have described them all and are sticking to them...it would help to be able to understand the messages it gives us when we don't!
+
+For the most part these will be simple like the error we got above when we started documenting our intentions with TS, `Argument of type 'string' is not assignable to parameter of type 'number'`. Nevertheless, even this "simple" message contains a lot of information. Let's assume that we don't know anything except this message, we can extract a lot of information from it:
+
+1. A function was called - we infer this from the fact that is says "Argument", which is what we call the values recieved in a function call
+2. The function was given and argument of type 'string'
+3. The function has a parameter which is documented as being a 'number'
+
+This illustrates that our type checking chum is very careful in the words they choose, so we need to read very carefully...
+
+Now let's look at a MUCH more complicated error as a way of exploring the logic of these messages.
+
+```bash
+@uui/ui-core: ~/test/packages/ui-core/src/components/widgets/VulnerabilitiesFilter/VulnerabilitiesFilter.tsx
+@uui/ui-core: TypeScript error in ~/test/packages/ui-core/src/components/widgets/VulnerabilitiesFilter/VulnerabilitiesFilter.tsx(113,47):
+@uui/ui-core: No overload matches this call.
+
+@uui/ui-core:   Overload 1 of 2, '(predicate: (value: Pick<Finding, "id" | "type" | "title" | "severity" | "asset" | "firstFound" | "lastFound">, index: number, array: Pick<Finding, "id" | "type" | "title" | "severity" | "asset" | "firstFound" | "lastFound">[]) => value is Pick<...>, thisArg?: any): Pick<...>[] | undefined', gave the following error.
+@uui/ui-core:     Argument of type '(finding: Pick<Finding, "id" | "type" | "status" | "title" | "severity" | "assetId" | "asset" | "firstFound" | "lastFound">) => boolean' is not assignable to parameter of type '(value: Pick<Finding, "id" | "type" | "title" | "severity" | "asset" | "firstFound" | "lastFound">, index: number, array: Pick<Finding, "id" | "type" | "title" | "severity" | "asset" | "firstFound" | "lastFound">[]) => value is Pick<...>'.
+@uui/ui-core:       Types of parameters 'finding' and 'value' are incompatible.
+@uui/ui-core:         Property 'assetId' is missing in type 'Pick<Finding, "id" | "type" | "title" | "severity" | "asset" | "firstFound" | "lastFound">' but required in type 'Pick<Finding, "id" | "type" | "status" | "title" | "severity" | "assetId" | "asset" | "firstFound" | "lastFound">'.
+
+@uui/ui-core:   Overload 2 of 2, '(predicate: (value: Pick<Finding, "id" | "type" | "title" | "severity" | "asset" | "firstFound" | "lastFound">, index: number, array: Pick<Finding, "id" | "type" | "title" | "severity" | "asset" | "firstFound" | "lastFound">[]) => unknown, thisArg?: any): Pick<...>[] | undefined', gave the following error.
+@uui/ui-core:     Argument of type '(finding: Pick<Finding, "id" | "type" | "status" | "title" | "severity" | "assetId" | "asset" | "firstFound" | "lastFound">) => boolean' is not assignable to parameter of type '(value: Pick<Finding, "id" | "type" | "title" | "severity" | "asset" | "firstFound" | "lastFound">, index: number, array: Pick<Finding, "id" | "type" | "title" | "severity" | "asset" | "firstFound" | "lastFound">[]) => unknown'.
+@uui/ui-core:       Types of parameters 'finding' and 'value' are incompatible.
+@uui/ui-core:         Type 'Pick<Finding, "id" | "type" | "title" | "severity" | "asset" | "firstFound" | "lastFound">' is not assignable to type 'Pick<Finding, "id" | "type" | "status" | "title" | "severity" | "assetId" | "asset" | "firstFound" | "lastFound">'.  TS2769
+
+
+@uui/ui-core:     111 |     predicate: (finding: VulnerabilityFindingData) => boolean
+@uui/ui-core:     112 | ) => (findings?: TaskFindingData[]): number => {
+@uui/ui-core:   > 113 |     const filteredFindings = findings?.filter(predicate) ?? [];
+@uui/ui-core:         |                                               ^
+@uui/ui-core:     114 |
+@uui/ui-core:     115 |     return filteredFindings.length;
+@uui/ui-core:     116 | };
+```
+
+The first thing we have to do is NOT BE OVERWHELMED by all this information, TS is just trying to give us enough information to understand what is wrong. I tend to take each statement at a time as it is easier to digest small mouthfulls:
+
+1. The start and end of the message show where the error occurred (because this a TS transpilation error in a log). Sometimes this is enough to debug the issue - this snippet is clearly doing something interesting!
+2. The next thing it tells us is very generally what went wrong, `@uui/ui-core: No overload matches this call.`. From this we can infer that a function is called and that a Type is provided that has at least 1 overload.
+3. Then TS shows how each overload doesn't match expectations. It makes 4 statements for each overload.
+4. It seems to be repeating itself, but if we read carefully we can see that making progressively more specific statements.
+    1. `Overload * of *, ...general shapes..., gave the following error.`. So the next thing we see is an error in expectations.
+    2. The error is exactly the same as the "simple" example above `Argument of type ... not assignable to parameter of type ...`. Which means that we just need to check that we are passing the shape of data to the function that we have said it expects.
+    3. Then TS helpfully tries to say that to us, `Types of parameters 'finding' and 'value' are incompatible.`. So now we know that there are 2 functions, because here is is saying that we have a function that expects a type of `finding` and another that expects a type of `value`... and they are incompatible.
+    4. Finally TS shows just the 2 types that are inconpatable. And indeed they appear to have been constructed using `Pick` from the same original `Finding` type, so are similar but have different shapes.
+
+So, even without looking at the original code, we now know that the `predicate` function on line 113 (whose shape is declared on line 111) is being called with data of the wrong shape... which means that the `findings` on line 113 is not what we are expecting!
+
+### Do less, declare your intentions
+
+All of the above is caught for us because somebody took the time to declare the types of those things, consequently TS can check expectaionts are met as we code.
+
+This leads to the first practical tip when writing TS, not just thinking about TS:
+
+> Allow TS to do the work for you.
+
+Followed swiftly by the second:
+
+> Declare expectations early
+
+Let's look at an example of why this is a good idea.
+
+```typescript
+let one;
+
+function declareExpectations(aThing) {
+    if (aThing === "happy") {
+        return "The weather is lovely and there's plenty of coffee!";
+    }
+
+    if (aThing === "sad") {
+        return "We ran out of coffee, gosh darn it!";
+    }
+
+    if (aThing === "ambivalent") {
+        return "Meeting at 9am?";
+    }
+}
+
+one = declareExpectations(1); // ts type: `let one: any`
+one = declareExpectations("happy"); // ts type: `let one: any`
+```
+
+This seems like a simple function, but what do we really know about this function? It might not be what you expect, but our friend TS can tell us what we can know about it:
+
+`function declareExpectations(aThing: any): "The weather is lovely and there's plenty of coffee!" | "We ran out of coffee, gosh darn it!" | "Meeting at 9am?" | undefined`
+
+You were probably expecting that `aThing: any` from the example earlier, but did you expect that return type? Do you think that the original intention of this function was to return those specific strings? Did you expect that final `undefined`?
+
+The point is that TS is extremely good at inferring what is going on in a program, so let it... Nevertheless we absolutely should declare our intentions as soon as we are aware of them as a way of documenting how our application works. For example, a developer using our function might use it like this `one = declareExpectations(1);` and neither they nor TS would know whether that was expected use or not unless we declared our intention for that parameter.
+
+Whereas if we declare outr intentions early TS can help us and other devlopers understand both how the code should be used and how our expectation might not be met.
+
+```typescript
+let one: string;
+
+function declareExpectations(aThing: string) {
+    if (aThing === "happy") {
+        return "The weather is lovely and there's plenty of coffee!";
+    }
+
+    if (aThing === "sad") {
+        return "We ran out of coffee, gosh darn it!";
+    }
+
+    if (aThing === "ambivalent") {
+        return "Meeting at 9am?";
+    }
+}
+
+one = declareExpectations(1);
+// Error - expectation not met: Type 'string | undefined' is not assignable to type 'string'.Type 'undefined' is not assignable to type 'string'.ts(2322)
+// Error - code expected to be used differently: Argument of type 'number' is not assignable to parameter of type 'string'.ts(2345)
+```
+
 -   Allow inference
-    -   declare data shapes early
+
+    -   declare data shapes early - e.g. let n; pattern
     -   declare expectations
+
+-   Bad types are worse than no types
+
+    -   eg use of any, unknown, never
+
 -   Local types vs global types
 -   Some TS things that are not available in other typed langs
