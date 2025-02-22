@@ -23,7 +23,7 @@ export default defineConfig({
   vite: {
     plugins: [
       copy({
-        // Copy only on first build. We dont want to trigger additional server reloads.
+        // Copy only on first build. We don't want to trigger additional server reloads.
         copyOnce: true,
         hook: 'buildStart',
         targets: [
