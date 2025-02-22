@@ -1,5 +1,5 @@
 {
-  "name": "astro-blog",
+  "name": "zero-context",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -30,5 +30,5 @@
     "sass": "^1.85.0",
     "typescript": "^5.7.3"
   },
-  "packageManager": "yarn@3.8.7"
+  "packageManager": "npm@10.9.2"
 }
