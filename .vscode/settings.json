@@ -1,14 +1,3 @@
 {
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "typescript.format.semicolons": "insert",
-  "editor.codeActionsOnSave": {
-    "source.fixAll": true
-  },
-  "scss.lint.validProperties": ["composes"],
-  "jest.enableInlineErrorMessages": true,
-  "jest.pathToJest": "node_modules/.bin/jest",
-  "spellright.language": ["en"],
-  "spellright.documentTypes": ["markdown", "latex", "plaintext"]
+    "html.customData": ["./node_modules/@shoelace-style/shoelace/dist/vscode.html-custom-data.json"]
 }

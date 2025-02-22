@@ -1,0 +1,111 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import layoutStyles from "../theme/layout.module.scss";
+import { Image } from 'astro:assets';
+
+const blogEntries = await getCollection("blithering");
+---
+
+<Layout>
+    <header class="spacing">
+        <h1>Welcome to my blitherings</h1>
+        <p>
+            I am a self-taught, neurodivergent developer. I have been working with web
+            technologies since 1999. My interests (and blithering), are concerned with inclusivity, patterns, fun and thought provoking nuance. I tend to write about the things I learn, the things I
+            make and the my odd musings.
+        </p>
+    </header>
+
+    <section class={`${layoutStyles.full} ${layoutStyles.row} fullHighlight`}>
+        <header>
+            <h2>Latest musings</h2>
+        </header>
+        <ul role="list" class={`articleGrid`}>
+            {
+                blogEntries
+                    .filter((blogEntry) => {
+                        return blogEntry.data.draft === undefined;
+                    })
+                    // @ts-ignore this does work with Dates
+                    .sort((a, b) => (b.data.pubDate) - a.data.pubDate)
+                    .map(async (blogPostEntry) => {
+                        const image = import(`${blogPostEntry.data.image.src.src}`);
+
+                        return (
+                        <li class="articleItem">
+                            <sl-card class="card-image">
+                                <Image slot="image" class="cardImageWrapper" src={image} alt={blogPostEntry.data.image.alt}
+                                widths={[536, 360, 303, 297]} width={360} height={203}
+                                sizes={`(max-width: 536px) 536px, (max-width: 804px) 360px, (max-width: 938px) 303px, (max-width: 1064) 360px, 360px`}
+                                format="webp"
+                                />
+                                <header class="cardHeader">
+                                    <h3 class="cardHeading">
+                                        <a
+                                            href={`/blithering/${blogPostEntry.slug}`}
+                                        >
+                                            {blogPostEntry.data.title}
+                                        </a>
+                                    </h3>
+                                <time
+                                    datetime={blogPostEntry.data.pubDate.toISOString()}
+                                    class="info"
+                                >
+                                    {blogPostEntry.data.pubDate.toDateString()}
+                                </time>
+                                </header>
+                                <p>{blogPostEntry.data.description}</p>
+                            </sl-card>
+                        </li>
+                    )})
+            }
+        </ul>
+    </section>
+</Layout>
+
+<style>
+    .articleGrid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+        gap: var(--s-3);
+        padding: 0;
+    }
+    .articleItem {
+        list-style: none;
+        display: flex;
+        flex-direction: row nowrap;
+        justify-content: flex-start;
+        align-items: stretch;
+    }
+    .fullHighlight {
+        background-color: var(--c-brand-tertiary-25);
+        padding-block: var(--s-min-gutter);
+    }
+    .spacing {
+        padding-block: var(--s-min-gutter);
+    }
+    .card-image {
+        flex: 1 1 100%;
+    }
+    .card-image::part(base) {
+        height: 100%;
+    }
+    .cardImageWrapper {
+        margin: 0;
+    }
+    .cardHeader {
+        display: flex;
+        flex-direction: column;
+        gap: var(--s-2);
+        padding-block: 0 var(--s-1);
+    }
+    .cardHeading {
+        margin: 0 ;
+    }
+    .info {
+        display: block;
+        color: var(--sl-color-neutral-600);
+        font-size: var(--sl-font-size-small);
+    }
+</style>

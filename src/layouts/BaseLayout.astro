@@ -1,0 +1,93 @@
+---
+import "../theme/index.scss";
+import layoutStyles from "../theme/layout.module.scss";
+import Header from "../components/PageHeader.astro";
+import "typeface-montserrat";
+import "typeface-noto-sans";
+import "@shoelace-style/shoelace/dist/themes/light.css";
+
+const props = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <title>
+            {props?.title ?? props?.entry?.data?.title} "Zero context"
+        </title>
+    </head>
+    <body class="pageLayout">
+        <a href="#main-content" class="skip-link"> Skip to main content</a>
+        <Header image={props?.entry?.data?.image} />
+        <main class={`pageMain ${layoutStyles.row}`} id="main-content">
+            <slot {...props} />
+        </main>
+    </body>
+</html>
+<script>
+  // setBasePath to tell Shoelace where to load icons from.
+  import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js';
+  setBasePath('/shoelace-assets/');
+
+  // Load all components.
+  import '@shoelace-style/shoelace';
+</script>
+<style is:global>
+    .skip-link {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -100%);
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        z-index: var(--z-modal);
+        background: var(--c-white);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .skip-link:focus-visible {
+        transform: translate(-50%, 100%);
+    }
+
+    code {
+        grid-column: full;
+    }
+
+    .pageMain {
+        padding-block: 17vw ;
+    }
+
+    .pageMain > * {
+        max-width: var(--s-readable-text-width);
+    }
+
+    .pageMain img {
+        max-width: 100%;
+        height: auto
+    }
+
+   .astro-code {
+        grid-column: full;
+        display: grid;
+        grid-template-columns:
+            [full-start] minmax(var(--s-5), 1fr)
+            [content-start] minmax(0, var(--s-max-content-width))
+            [content-end] minmax(var(--s-5), 1fr) [full-end];
+        grid-auto-rows: min-content;
+        max-width: unset;
+
+    }
+
+    .astro-code [style="color:#6A737D"] {
+        /* default is not accessible */
+        color: var(--sl-color-neutral-300)!important;
+    }
+
+    .pageMain > pre > * {
+        grid-column: content;
+    }
+</style>

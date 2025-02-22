@@ -1,0 +1,18 @@
+.visuallyHidden {
+  appearance: none !important;
+  clip-path: circle(0) !important;
+  position: absolute !important;
+  overflow: hidden !important;
+  line-height: 0 !important;
+  text-indent: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.noListStyle {
+  list-style-type: none;
+}
+
+.noPointer {
+  pointer-events: none;
+}

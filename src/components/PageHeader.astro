@@ -1,0 +1,26 @@
+---
+import styles from "./PageHeader.module.scss";
+import { Image } from "astro:assets";
+
+const { image } = Astro.props;
+---
+
+<header class={styles.baseComponent}>
+    <div class={styles.wrapper}>
+        {
+            image && (
+                <div aria-hidden="true" class={styles.backgroundImage}>
+                    <Image
+                        {...image}
+                        formats={["avif", "webp"]}
+                        class={styles.picture}
+                        preload
+                        widths={[1700, 1200, 992, 768, 650, 375]}
+                    />
+                </div>
+            )
+        }
+        <a href="/" class={styles.logo}> Zero Context</a>
+    </div>
+    <div class={styles.scrollOverlay}></div>
+</header>

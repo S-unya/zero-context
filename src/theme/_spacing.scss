@@ -1,0 +1,43 @@
+@use "./breakpoints" as breakpoints;
+
+$content-max-width: 1128px;
+$content-min-width: breakpoints.$view-breakpoint-5;
+
+$context-content-max-width: 712px;
+$context-content-table-max-width: 880px;
+
+:root {
+  // spacing
+  --s-1: 8px;
+  --s-2: calc(2 * var(--s-1));
+  --s-3: calc(3 * var(--s-1));
+  --s-4: calc(4 * var(--s-1));
+  --s-5: calc(5 * var(--s-1));
+  --s-6: calc(6 * var(--s-1));
+  --s-8: calc(8 * var(--s-1));
+  --s-10: calc(10 * var(--s-1));
+  --s-min-gutter: var(--s-2);
+
+  --s-border-width: 1px;
+  --s-border-radius-xs: 4px;
+  --s-border-radius-s: var(--s-1);
+  --s-border-radius-m: calc(var(--s-1) * 1.5);
+
+  --s-icon: 24px;
+  --s-readable-text-width: 70ch;
+  --s-max-content-width: #{$content-max-width};
+  --s-max-context-content-width: #{$context-content-max-width};
+
+  --z-dropdown: 1000;
+  --z-modal: 2000;
+  --z-tooltip: 1000;
+  --z-toast: 10;
+  --z-raised: 1;
+  --z-app-shell: 2;
+}
+
+@media (min-width: breakpoints.$view-breakpoint-5) {
+  :root {
+    --s-min-gutter: var(--s-4);
+  }
+}

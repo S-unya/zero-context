@@ -1,0 +1,137 @@
+---
+import { getCollection } from "astro:content";
+import layoutStyles from "../theme/layout.module.scss";
+
+const blogEntries = await getCollection("blithering");
+
+const blogEntriesSorted = blogEntries
+    .filter((blogEntry) => {
+        return blogEntry.data.draft === undefined;
+    })
+    // @ts-ignore this does work with Dates
+    .sort((a, b) => b.data.pubDate - a.data.pubDate);
+
+const { currentArticleFile } = Astro.props;
+
+let nextArticle: typeof blogEntriesSorted[number] | undefined;
+let previousArticle: typeof blogEntriesSorted[number] | undefined;
+
+// add some links to other articles if there are more than one
+
+if (blogEntriesSorted.length > 1) {
+    for (let i = 0; i < blogEntriesSorted.length; i++) {
+        if (currentArticleFile.endsWith(blogEntriesSorted[i]?.id)) {
+            if (i === 0) {
+                previousArticle = blogEntriesSorted[blogEntriesSorted.length - 1];
+            } else {
+                previousArticle = blogEntriesSorted[i - 1];
+            }
+            if (i === blogEntriesSorted.length - 1) {
+                nextArticle = blogEntriesSorted[0];
+            } else {
+                nextArticle = blogEntriesSorted[i + 1];
+            }
+            if (nextArticle?.id === previousArticle?.id) {
+                previousArticle = undefined;
+            }
+
+            break;
+        }
+    }
+}
+---
+
+<footer class={`${layoutStyles.full} footer`}>
+    <nav aria-label="Article quick navigation" class="nav">
+        {
+            previousArticle && (
+                <a
+                    href={`/blithering/${previousArticle.slug}`}
+                    class="navItem  nextPrev previous"
+                    aria-label="Previous article, {previousArticle.data.title}"
+                >
+                    <sl-icon name="arrow-left" class="icon"></sl-icon>
+                    <span class="linkText">{previousArticle.data.title}</span>
+                </a>
+            )
+        }
+        <a href="/" aria-label="To my blitherings" class="navItem homeLink"><sl-icon name="house-door" class="icon"></sl-icon></a>
+        {
+            nextArticle && (
+                <a
+                    href={`/blithering/${nextArticle.slug}`}
+                    class="navItem nextPrev next"
+                    aria-label="Next article, {nextArticle.data.title}"
+                >
+                    <span class="linkText">{nextArticle.data.title}</span>
+                    <sl-icon name="arrow-right" class="icon"></sl-icon>
+                </a>
+            )
+        }
+    </nav>
+</footer>
+
+<style>
+    .footer {
+        background-color: var(--c-brand-secondary);
+        color: var(--c-white);
+        position: fixed;
+        inset-block-end: 0;
+        inset-inline-end: 0;
+    }
+
+    .nav {
+        display: flex;
+        justify-content: stretch;
+        align-items: stretch;
+        padding: var(--s-3) var(--s-min-gutter) ;
+    }
+
+    .homeLink {
+        font-size: 40px;
+        padding: var(--s-2);
+        justify-content: center;
+        align-items: center;
+        width: 80px;
+    }
+
+    .navItem {
+        display: flex;
+        text-decoration: none;
+        color: var(--c-white);
+        transition: background-color var(--ease-duration-l) var(--ease-1);
+        padding: var(--s-1);
+        align-self: stretch;
+    }
+
+    .navItem:focus,
+    .navItem:hover {
+        color: var(--c-white);
+        background-color: rgba(255, 255, 255, 0.3);
+        margin-bottom: -4px;
+    }
+
+    .linkText {
+        display: inline-block;
+        flex: 1;
+    }
+
+    .nextPrev {
+        flex-flow: row nowrap;
+        flex: 1;
+        align-items: flex-start;
+        gap: var(--s-1);
+        
+    }
+    .next {
+        text-align: right;
+        padding-right: var(--s-min-gutter);
+        padding-left: 0;
+    }
+
+    .icon {
+        display: inline-block;
+        margin-top: -0.2rem;
+        font-size: 32px;
+    }
+</style>

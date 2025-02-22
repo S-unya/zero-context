@@ -1,0 +1,81 @@
+---
+import { getCollection } from "astro:content";
+import BlitheringFooter from "../../components/BlitheringFooter.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+// Generate a new path for every collection entry
+export async function getStaticPaths() {
+    const blogEntries = await getCollection("blithering");
+    return blogEntries.map((entry) => ({
+        params: { slug: entry.slug },
+        props: { entry },
+    }));
+}
+
+// Extract and format the data for the current entry
+const { entry } = Astro.props;
+const { Content, remarkPluginFrontmatter } = await entry.render();
+const { title, pubDate, author = "Śūnya" } = entry.data;
+const readingTime = remarkPluginFrontmatter?.readingTime;
+
+const localeDateOptions = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+} as const;
+---
+
+<BaseLayout {...Astro.props}>
+    <header class="blog-header">
+        <h1>{title}</h1>
+        <dl>
+            <dt>Date:</dt>
+            <dd>
+                <time datetime={new Date(pubDate).toString()}
+                    >{
+                        new Date(pubDate).toLocaleDateString(
+                            undefined,
+                            localeDateOptions,
+                        )
+                    }</time
+                >
+            </dd>
+            <dt>Author:</dt>
+            <dd>{author}</dd>
+            {
+                readingTime && (
+                    <>
+                        <dt>Reading time:</dt>
+                        <dd>{readingTime}</dd>
+                    </>
+                )
+            }
+        </dl>
+    </header>
+    <Content />
+    <BlitheringFooter currentArticleFile={entry.id} />
+</BaseLayout>
+
+<style>
+    .blog-header {
+        --s-readable-text-width: 100%;
+    }
+    dl {
+        display: flex;
+        flex-flow: row wrap;
+        gap: var(--s-1);
+        color: var(--c-gray-600);
+        font-size: var(--t-body-s);
+        border-bottom: 1px solid var(--c-gray-200);
+        padding-block-end: var(--s-1);
+    }
+    dd {
+        padding-inline-end: var(--s-1);
+        border-right: 1px solid var(--c-gray-200);
+    }
+    dd:last-child {
+        padding-inline-end: 0;
+        border-right: 0 none;
+    }
+</style>

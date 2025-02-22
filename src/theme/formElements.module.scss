@@ -1,0 +1,81 @@
+.label {
+  margin-bottom: 0;
+  line-height: var(--lh-body-s);
+}
+
+.hiddenLabel {
+  composes: visuallyHidden from "./utils.module.scss";
+}
+
+.input {
+  display: block;
+  width: 100%;
+  align-self: stretch;
+  font-size: var(--t-body-m);
+  line-height: var(--lh-body-s);
+  border-width: var(--s-border-width);
+  border-radius: var(--s-border-radius-xs);
+  border-color: var(--c-input-border);
+  border-style: solid;
+  background-color: var(--c-input-bg);
+  padding: calc(var(--s-1) - var(--s-border-width)) var(--s-2);
+}
+
+.input::placeholder {
+  color: var(--c-input-placeholder);
+}
+
+.input:focus:enabled {
+  background-color: var(--c-input-bg-focus);
+}
+
+.input:focus-visible:enabled {
+  border-color: var(--c-input-border-focus);
+  background-color: var(--c-input-bg-focus);
+}
+
+.input:active {
+  border-color: var(--c-input-border-active);
+  background-color: var(--c-input-bg-active);
+}
+
+.disabled,
+.disabled > *,
+.input:disabled {
+  /* can't compose in pseudo elements, so duplicating the style here */
+  color: var(--c-input-disabled);
+  border-color: var(--c-input-border-disabled);
+  background-color: var(--c-input-bg-disabled);
+  cursor: not-allowed;
+}
+
+.textArea {
+  composes: input;
+  min-height: 11ch;
+}
+
+.error {
+  color: var(--c-input-invalid);
+  border-color: var(--c-input-border-invalid);
+}
+
+.helpTextBase {
+  font-size: var(--t-body-s);
+  line-height: var(--lh-body-s);
+  margin: 0;
+}
+
+.helpText {
+  composes: helpTextBase;
+  color: var(--c-input-helper-text);
+}
+.errorMessage {
+  composes: helpTextBase;
+  color: var(--c-negative);
+}
+
+.characterCount {
+  font-size: var(--t-body-xs);
+  color: var(--c-input-helper-text);
+  align-self: flex-end;
+}

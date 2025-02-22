@@ -1,0 +1,102 @@
+@use "./breakpoints.scss" as breakpoints;
+
+$app-bar-width: 216px;
+
+:root {
+  --cmp-banner-height: 56px;
+}
+
+@media (min-width: breakpoints.$view-breakpoint-5) {
+  :root {
+    --cmp-banner-height: 64px;
+  }
+}
+
+/* use this to fill the .row space */
+.full {
+  max-width: unset!important;
+  grid-column: full !important;
+}
+
+/* use this to place content so that it has gutters to each side */
+.content {
+  grid-column: content;
+}
+
+/* use this to make a layout with gutters on each side */
+.row {
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(var(--s-min-gutter), 1fr) [content-start] minmax(
+      0,
+      var(--s-max-content-width)
+    )
+    [content-end] minmax(var(--s-min-gutter), 1fr) [full-end];
+  grid-auto-rows: min-content;
+}
+
+.row > * {
+  grid-column: content;
+}
+
+/* DASHBOARD PAGE LAYOUT */
+.pageLayout {
+  position: relative;
+  display: grid;
+  grid-template-areas: "bar main";
+  grid-template-columns: 0 minmax(0, 1fr);
+  align-items: flex-start;
+  justify-content: center;
+  /* prepare layout to be fixed */
+  height: 100vh;
+  overflow-y: hidden;
+
+  @media (min-width: breakpoints.$view-breakpoint-4) {
+    grid-template-columns: 216px minmax(0, 1fr);
+  }
+}
+
+/* CONTENT LAYOUTS */
+.contentLayout {
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    "userBar"
+    "contentWrap";
+  grid-template-columns: auto;
+  grid-template-rows: var(--cmp-banner-height) 1fr;
+  align-self: stretch;
+  overflow-y: auto;
+
+  @media (min-width: breakpoints.$view-breakpoint-5) {
+    grid-template-rows: var(--cmp-banner-height) 1fr;
+  }
+}
+
+/* use this to place content within the .pageLayout main content area */
+.main {
+  grid-area: main;
+}
+
+/* use this to place content in the .pageLayout app bar area */
+.appBar {
+  transform: translateX(-100%);
+  overflow: hidden;
+  width: 0px;
+
+  @media (min-width: breakpoints.$view-breakpoint-4) {
+    width: $app-bar-width;
+    transform: none;
+    grid-area: bar;
+    align-self: stretch;
+    display: block;
+  }
+}
+
+.userBar {
+  grid-area: userBar;
+}
+
+.contentWrap {
+  grid-area: contentWrap;
+}

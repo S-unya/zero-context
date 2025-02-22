@@ -1,0 +1,117 @@
+:root {
+  /*****
+  Primary Brand Palette (SCSS variables for local scoping)
+  Do not use these values directly if you can help it
+  *****/
+  --c-brand-primary: hsl(136, 72%, 30%);
+  --c-brand-primary-50: hsl(136, 72%, 61%);
+  --c-brand-primary-25: hsl(136, 72%, 75%);
+
+  --c-brand-secondary: hsl(240, 100%, 13%);
+  --c-brand-secondary-50: hsl(240, 100%, 25%);
+  --c-brand-secondary-25: hsl(240, 100%, 35%);
+
+  --c-brand-tertiary: hsl(36, 90%, 50%);
+  --c-brand-tertiary-50: hsl(36, 90%, 65%);
+  --c-brand-tertiary-25: hsl(36, 90%, 95%);
+
+  --c-green: rgb(0, 128, 0);
+  --c-blue: rgb(32, 69, 157);
+  --c-amber: rgb(220, 153, 45);
+  --c-red: rgb(223, 32, 42);
+  --c-black: #000;
+  --c-white: #fff;
+
+  /***** Grayscale Palette *****/
+  --c-gray-100: hsl(0, 0%, 96%);
+  --c-gray-200: hsl(0, 0%, 92%);
+  --c-gray-300: hsl(0, 0%, 78%);
+  --c-gray-400: hsl(0, 0%, 69%);
+  --c-gray-500: hsl(0, 0%, 56%);
+  --c-gray-600: hsl(0, 0%, 44%);
+  --c-gray-700: hsl(0, 0%, 20%);
+  --c-gray-800: hsl(0, 0%, 17%);
+
+  /***** Usage Semantics (design tokens) *****/
+  --c-focus: var(--c-brand-tertiary);
+  --c-active: var(--c-brand-tertiary);
+
+  // Misc
+  --c-separator: var(--c-gray-200);
+
+  // Signposting colours
+  --c-positive: var(--c-green);
+  --c-negative: var(--c-red);
+  --c-informational: var(--c-blue);
+  --c-advisory: var(--c-amber);
+
+  // Body
+  --c-body-bg: var(--c-white);
+  --c-body: var(--c-gray-800);
+
+  // Link
+  --c-link: var(--c-brand-primary);
+  --c-link-hover: var(--c-brand-secondary);
+  --c-link-disabled: var(--c-gray-600);
+
+  // Global input colours
+  --c-input-disabled: var(--c-gray-500);
+  --c-input-bg-disabled: transparent;
+  --c-input-border-disabled: var(--c-gray-400);
+  --c-input-bg: var(--c-white);
+  --c-input-bg-focus: var(--c-gray-100);
+  --c-input-bg-active: var(--c-gray-100);
+  --c-input-border: var(--c-gray-600);
+  --c-input-border-focus: var(--c-focus);
+  --c-input-border-active: var(--c-active);
+  --c-input-invalid: var(--c-negative);
+  --c-input-bg-invalid: var(--c-white);
+  --c-input-border-invalid: var(--c-negative);
+  --c-input-placeholder: var(--c-gray-600);
+  --c-input-helper-text: var(--c-gray-600);
+
+  // Button
+  --c-btn: var(--c-brand-secondary);
+  --c-btn-bg: var(--c-white);
+  --c-btn-border: var(--c-brand-secondary);
+  --c-btn-hover: var(--c-brand-quaternary);
+  --c-btn-hover-bg: var(--c-white);
+  --c-btn-hover-border: var(--c-brand-quaternary);
+  --c-btn-disabled: var(--c-gray-600);
+  --c-btn-disabled-border: var(--c-gray-600);
+  --c-btn-disabled-bg: var(--c-gray-200);
+  // Primary
+  --c-btn-primary: var(--c-brand-secondary);
+  --c-btn-primary-bg: var(--c-brand-primary);
+  --c-btn-primary-border: var(--c-brand-secondary);
+  --c-btn-primary-hover: var(--c-brand-secondary);
+  --c-btn-primary-hover-bg: var(--c-brand-quaternary);
+  --c-btn-primary-hover-border: var(--c-brand-secondary);
+  --c-btn-primary-disabled: var(--c-gray-600);
+  --c-btn-primary-disabled-border: var(--c-gray-600);
+  --c-btn-primary-disabled-bg: var(--c-gray-200);
+  // Important/negative
+  --c-btn-important: var(--c-white);
+  --c-btn-important-bg: var(--c-negative);
+  --c-btn-important-border: var(--c-negative);
+  --c-btn-important-hover: var(--c-brand-secondary);
+  --c-btn-important-hover-bg: var(--c-brand-quaternary);
+  --c-btn-important-hover-border: var(--c-brand-secondary);
+  --c-btn-important-disabled: var(--c-gray-600);
+  --c-btn-important-disabled-border: var(--c-gray-600);
+  --c-btn-important-disabled-bg: var(--c-gray-200);
+  // (buttons that look like links)
+  --c-btn-tertiary: var(--c-link);
+  --c-btn-tertiary-bg: transparent;
+  --c-btn-tertiary-border: transparent;
+  --c-btn-tertiary-hover: var(--c-link-hover);
+  --c-btn-tertiary-hover-border: transparent;
+  --c-btn-tertiary-hover-bg: transparent;
+  --c-btn-tertiary-disabled: var(--c-link-disabled);
+  --c-btn-tertiary-disabled-border: transparent;
+  --c-btn-tertiary-disabled-bg: transparent;
+
+  // Overlays
+  --c-overlay-opacity: 0.9;
+  --c-overlay-bg-color: var(--c-black);
+}

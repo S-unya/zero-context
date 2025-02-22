@@ -1,0 +1,23 @@
+/*
+* THIS FILE SHOULD HAVE NO STYLES AS IT IS IMPORTED BY OTHER FILES
+* IMPORT `@use` this file to use the breakpoints
+*/
+$view-breakpoint-6: 106.25rem; /* 1700 as rem */
+$view-breakpoint-5: 75rem; /* 1200 as rem */
+$view-breakpoint-4: 62rem; /* 992 as rem */
+$view-breakpoint-3: 48rem; /* 768 as rem */
+$view-breakpoint-2: 40.625rem; /* 650 as rem */
+$view-breakpoint-1: 23.4375rem; /* 375 as rem */
+
+/* Please use these like this with min-width and NOT max-width unless absolutely necessary
+* e.g. @media (min-width: $view-breakpoint-6)
+*/
+
+/*
+    Designs are based on 0, 600, 900, 1280, 1920. Best practice is to overshoot common screen sizes so as to take into account the massive variety possible, so this is how the breakpoints map:
+
+    0 -> DEFAULT
+    600 -> 375 + (min-width: $view-breakpoint-1) - 650 + (min-width: $view-breakpoint-2). This covers the larger mobile sizes and above
+    900 -> 768 + (min-width: $view-breakpoint-3) - 992 + (min-width: $view-breakpoint-4). This covers tablets to small desktops. The 992 breakpoint covers the crucial 1024 screen size.
+    1280 -> 1200 + ($view-breakpoint-6).
+*/
