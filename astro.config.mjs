@@ -8,8 +8,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // todo
-  // site: "https://zerocontext.netlify.app",
+  site: "https://zero-context.com",
 	integrations: [mdx(), sitemap()],
   markdown: {
     remarkPlugins: [[remarkToc, { heading: "contents" }], remarkReadingTime],
