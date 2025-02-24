@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro build && npm cache clean --force && npm install --ignore-engines --os=linux sharp",
     "preview": "astro preview",
     "astro": "astro"
   },

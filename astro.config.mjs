@@ -3,7 +3,6 @@ import { defineConfig } from 'astro/config';
 import remarkToc from "remark-toc";
 import { remarkReadingTime } from "./src/transforms/remarkReadingTime.ts";
 import copy from 'rollup-plugin-copy';
-
 import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
