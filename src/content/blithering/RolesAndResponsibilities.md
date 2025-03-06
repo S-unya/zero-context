@@ -96,7 +96,7 @@ In our woodland story, James might be new to tree work but could have valuable e
 
 ### Psychological safety and boundary permeability
 
-For boundaries to function effectively without becoming barriers, teams need psychological safety - the shared belief that team members can take interpersonal risks without facing negative consequences. When psychological safety is present, boundaries become appropriately permeable:
+For boundaries to function effectively without becoming barriers, teams need psychological safety[^6] - the shared belief that team members can take interpersonal risks without facing negative consequences. When psychological safety is present, boundaries become appropriately permeable:
 
 - Team members feel comfortable asking questions that might cross knowledge boundaries
 - People can request help without fear of appearing incompetent
@@ -116,7 +116,7 @@ Research shows that Google's highest-performing teams were characterized not by 
 
 ### The power dynamics of hierarchies
 
-Organizational structures inevitably create hierarchies, which serve practical purposes but also establish power dynamics[^7]. These power structures can manifest in:
+Organizational structures inevitably create hierarchies, which serve practical purposes but also establish power dynamics. These power structures can manifest in:
 
 - Direct control over resources, compensation, and advancement
 - Information asymmetry where some team members have more context than others
@@ -126,7 +126,7 @@ In our story, Jenny holds significant power through her comprehensive understand
 
 Had Jenny shared more context - explaining where logs ultimately needed to go and why - James and Jay might have adjusted their approach or even suggested better solutions based on their ground-level perspective. Additionally, this would give them a sense of ownership and purpose beyond the immediate task.
 
-This simple example illustrates how information flows in organizations directly impact effectiveness, innovation, and team member satisfaction.
+This simple example illustrates how information flows in organizations directly impact effectiveness, innovation, and team member satisfaction[^7].
 
 ## Creating space for diversity and inclusion
 
@@ -166,7 +166,7 @@ Research from McKinsey & Company consistently shows that companies in the top qu
 
 ### The organizational advantage of inclusion
 
-Companies that create flexible, permeable boundaries gain several concrete advantages:
+All this shows that companies that create flexible, permeable boundaries gain several concrete advantages:
 
 1. **Access to wider talent pools** - When you accommodate diverse ways of working, you can recruit from previously untapped groups
 
@@ -214,7 +214,9 @@ However, this framework must be applied with mindfulness of human complexity. Pe
 
 By balancing clear role boundaries with respect for individual complexity, organizations can create environments where both structured productivity and creative growth flourish[^8]. This balance allows teams to benefit from the predictability of well-defined responsibilities while still harnessing the full potential of the humans who inhabit those roles.
 
-The most effective teams don't just define boundaries well - they know when and how to cross them productively, creating space for both reliable execution and unexpected innovation.
+The most effective teams don't just define boundaries well - they feel safe, and know when and how to cross them productively, creating space for both reliable execution and unexpected innovation.
+
+While these concepts are not the only way to reach these insights, they do provide a helpful framework, facilitating organisations to embrace this balance to gain a happy, equanimous personnel along with a competitive advantage!
 
 ## Further reading
 
