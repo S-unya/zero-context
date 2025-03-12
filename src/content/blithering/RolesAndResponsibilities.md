@@ -10,7 +10,7 @@ image:
     aspectRatio: "16:9"
     width: 3968
     height: 2240
-tags: ["programming", "architecture", "teamwork", "management"]
+tags: ["programming", "architecture", "teamwork", "management", "accessibility", "neurodiversity"]
 ---
 
 One of the great things about having a simple paradigm is that it allows you to think about things in a different way and thereby come to understand them more deeply. Due to my neurological makeup I lean into these methodologies and outlooks (to a fault), and I have to remember to balance them with the understanding that these types of "filters" inherently simplify and remove information.
