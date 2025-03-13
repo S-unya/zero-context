@@ -124,7 +124,7 @@ Organizational structures inevitably create hierarchies, which serve practical p
 
 In our story, Jenny holds significant power through her comprehensive understanding of the project's context and goals. She controls what information James and Jay receive, which limits their ability to align their work with broader objectives.
 
-Had Jenny shared more context - explaining where logs ultimately needed to go and why - James and Jay might have adjusted their approach or even suggested better solutions based on their ground-level perspective. Additionally, this would give them a sense of ownership and purpose beyond the immediate task.
+Had Jenny shared more context, or adopted a more inclusive strategy - explaining where logs ultimately needed to go and why - James and Jay might have adjusted their approach or even suggested better solutions based on their ground-level perspective[^9]. Additionally, this would give them a sense of psychological security, ownership and purpose beyond the immediate task.
 
 This simple example illustrates how information flows in organizations directly impact effectiveness, innovation, and team member satisfaction[^7].
 
@@ -180,7 +180,7 @@ All this shows that companies that create flexible, permeable boundaries gain se
 
 By viewing areas of responsibility as containers for diverse approaches rather than prescriptions for specific behaviors, companies create environments where difference becomes strength rather than friction.
 
-The key is moving from rigid boundaries that define not just what must be done, but precisely how and when, to resilient boundaries that clearly delineate responsibilities while allowing for varied approaches to fulfilling them. This shift doesn't sacrifice clarity or accountability—it enhances them by focusing on outcomes rather than processes.
+The key is moving from rigid boundaries that define not just what must be done, but precisely how and when, to resilient boundaries that clearly delineate responsibilities while allowing for varied approaches to fulfilling them. This shift doesn't sacrifice clarity or accountability — it enhances them by focusing on outcomes rather than processes.
 
 ## Practical applications
 
@@ -235,3 +235,5 @@ While these concepts are not the only way to reach these insights, they do provi
 [^7]: Conway, M. E. (1968). How do Committees Invent? <https://www.melconway.com/Home/pdf/committees.pdf>
 
 [^8]: Dweck, C. S. (2006). Mindset: The New Psychology of Success. Random House.
+
+[^9]: Schein, E. (2013),  Humble Inquiry: The Gentle Art of Asking Instead of Telling, <https://www.leadingsapiens.com/humble-inquiry/>
