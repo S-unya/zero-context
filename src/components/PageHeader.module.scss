@@ -18,6 +18,8 @@
   align-items: flex-end;
   backface-visibility: hidden;
   background-clip: content-box;
+    display: flex;
+  justify-content: center;
 }
 
 .wrapper::after {
@@ -37,7 +39,6 @@
   height: 4vh;
   max-width: unset;
   background: transparent;
-  z-index: var(--z-modal);
   pointer-events: none;
   box-shadow: 0 2vh 2vh var(--c-white);
   rotate: 3.5deg;
