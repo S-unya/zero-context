@@ -112,9 +112,9 @@ This approach promises _a way to deliver better products that cost less to devel
 
 1. [WHO on disability](https://www.who.int/news-room/fact-sheets/detail/disability-and-health)
 1. [Microsoft Inclusive Design](https://www.microsoft.com/design/inclusive/)
-1. [Microsoft accessibility training](https://learn.microsoft.com/en-us/training/modules/intro-accessibility-disability/00-what-is-accessibility?ns-enrollment-type=learningpath&ns-enrollment-id=learn.accessibility-fundamentals )
-1. [Inclusive Design Toolkit](https://inclusivedesigntoolkit.com/ )
-1. [Inclusive Design Principles](https://inclusivedesignprinciples.org/)
+1. [Microsoft accessibility training](https://learn.microsoft.com/en-us/training/modules/intro-accessibility-disability/00-what-is-accessibility?ns-enrollment-type=learningpath&ns-enrollment-id=learn.accessibility-fundamentals)
+1. [Inclusive Design Toolkit](https://inclusivedesigntoolkit.com/)
+1. [Inclusive Design Principles](https://inclusivedesignprinciples.info/)
 1. [Writing commons, inclusive language](https://writingcommons.org/section/style/elements-of-style/inclusive-language/disability-studies-abelist-language-inappropriate-disability-metaphors/)
 1. [5 illustrated metaphors to explain and advocate for accessibility](https://stephaniewalter.design/blog/5-illustrations-to-understand-and-promote-accessibility/ )
 1. [The A11y Project](https://www.a11yproject.com/)
