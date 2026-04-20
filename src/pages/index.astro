@@ -2,109 +2,396 @@
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import layoutStyles from "../theme/layout.module.scss";
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 
 const blogEntries = await getCollection("blithering");
+const publishedEntries = blogEntries
+  .filter((e) => e.data.draft === undefined)
+  .sort(
+    (a, b) =>
+      (b.data.pubDate as Date).valueOf() - (a.data.pubDate as Date).valueOf(),
+  );
+
+// Collect all unique tags, sorted alphabetically
+const tagCounts = new Map<string, number>();
+publishedEntries.forEach((e) => {
+  e.data.tags?.forEach((tag: string) => {
+    tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  });
+});
+const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
 ---
 
 <Layout>
-    <header class="spacing">
-        <h1>Welcome to my blitherings</h1>
-        <p>
-            I am a self-taught, neurodivergent developer. I have been working with web
-            technologies since 1999. My interests (and blithering), are concerned with inclusivity, patterns, fun and thought provoking nuance. I tend to write about the things I learn, the things I
-            make and the my odd musings.
-        </p>
+  <header class="intro">
+    <h1>Welcome to my blitherings</h1>
+    <p>
+      I am a self-taught, neurodivergent developer. I have been working with web
+      technologies since 1999. My interests (and blithering), are concerned with
+      inclusivity, patterns, fun and thought provoking nuance. I tend to write
+      about the things I learn, the things I make and my odd musings.
+    </p>
+  </header>
+
+  <section class={`${layoutStyles.full} ${layoutStyles.row} musingsSection`}>
+    <header class="musingsHeader">
+      <h2>Latest musings</h2>
     </header>
 
-    <section class={`${layoutStyles.full} ${layoutStyles.row} fullHighlight`}>
-        <header>
-            <h2>Latest musings</h2>
-        </header>
-        <ul role="list" class={`articleGrid`}>
-            {
-                blogEntries
-                    .filter((blogEntry) => {
-                        return blogEntry.data.draft === undefined;
-                    })
-                    // @ts-ignore this does work with Dates
-                    .sort((a, b) => (b.data.pubDate) - a.data.pubDate)
-                    .map(async (blogPostEntry) => {
+    <div class="filterControls" role="search" aria-label="Filter posts by tag">
+      <!-- Mobile: select element -->
+      <label for="tag-select" class="sr-only">Filter by tag</label>
+      <select
+        id="tag-select"
+        class="tagSelect"
+        aria-label="Filter posts by tag"
+      >
+        <option value="">All posts</option>
+        {filterTags.map((tag) => <option value={tag}>{tag}</option>)}
+      </select>
 
-                        return (
-                        <li class="articleItem">
-                            <sl-card class="card-image">
-                                <Image slot="image" class="cardImageWrapper" {...blogPostEntry.data.image}
-                                widths={[536, 360, 303, 297]} width={360} height={203}
-                                sizes={`(max-width: 536px) 536px, (max-width: 804px) 360px, (max-width: 938px) 303px, (max-width: 1064) 360px, 360px`}
-                                formats={["avif", "webp"]}
-                                />
-                                <header class="cardHeader">
-                                    <h3 class="cardHeading">
-                                        <a
-                                            href={`/blithering/${blogPostEntry.slug}`}
-                                        >
-                                            {blogPostEntry.data.title}
-                                        </a>
-                                    </h3>
-                                <time
-                                    datetime={blogPostEntry.data.pubDate.toISOString()}
-                                    class="info"
-                                >
-                                    {blogPostEntry.data.pubDate.toDateString()}
-                                </time>
-                                </header>
-                                <p>{blogPostEntry.data.description}</p>
-                            </sl-card>
-                        </li>
-                    )})
-            }
-        </ul>
-    </section>
+      <!-- Desktop: chip buttons -->
+      <div class="tagChips" role="group" aria-label="Filter by tag">
+        {
+          filterTags.map((tag) => (
+            <button
+              type="button"
+              class="tagChip"
+              data-tag={tag}
+              aria-pressed="false"
+            >
+              {tag}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <p
+      class="filterStatus sr-only"
+      id="filter-status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+    </p>
+
+    <ul role="list" class="articleGrid" id="article-grid">
+      {
+        publishedEntries.map((entry) => (
+          <li
+            class="articleItem"
+            data-tags={JSON.stringify(entry.data.tags ?? [])}
+          >
+            <article class="articleCard">
+              <a
+                href={`/blithering/${entry.slug}`}
+                class="cardImageLink"
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                <Image
+                  {...entry.data.image}
+                  widths={[536, 360, 303]}
+                  width={360}
+                  height={203}
+                  sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 360px"
+                  class="cardImage"
+                  transition:name={`post-image-${entry.slug}`}
+                />
+              </a>
+              <div class="cardBody">
+                <h3 class="cardHeading">
+                  <a href={`/blithering/${entry.slug}`}>{entry.data.title}</a>
+                </h3>
+                <time
+                  datetime={entry.data.pubDate.toISOString()}
+                  class="cardDate"
+                >
+                  {entry.data.pubDate.toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
+                <p class="cardDescription">{entry.data.description}</p>
+              </div>
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
 </Layout>
 
+<script>
+  function applyFilter(activeTag: string | null) {
+    const items = document.querySelectorAll<HTMLElement>("[data-tags]");
+    const chips = document.querySelectorAll<HTMLButtonElement>("[data-tag]");
+    const statusEl = document.getElementById("filter-status");
+    const select = document.getElementById(
+      "tag-select",
+    ) as HTMLSelectElement | null;
+
+    let visibleCount = 0;
+
+    for (const item of items) {
+      const tags: string[] = JSON.parse(item.dataset.tags ?? "[]");
+      const visible = !activeTag || tags.includes(activeTag);
+      item.hidden = !visible;
+      if (visible) visibleCount++;
+    }
+
+    for (const chip of chips) {
+      const pressed = chip.dataset.tag === activeTag;
+      chip.setAttribute("aria-pressed", pressed ? "true" : "false");
+    }
+
+    if (select) {
+      select.value = activeTag ?? "";
+    }
+
+    if (statusEl) {
+      statusEl.textContent = activeTag
+        ? `Showing ${visibleCount} post${visibleCount !== 1 ? "s" : ""} tagged "${activeTag}"`
+        : "";
+    }
+  }
+
+  function getActiveTag(): string | null {
+    return new URLSearchParams(window.location.search).get("tag");
+  }
+
+  function setTag(tag: string | null) {
+    const url = new URL(window.location.href);
+    if (tag) {
+      url.searchParams.set("tag", tag);
+    } else {
+      url.searchParams.delete("tag");
+    }
+    history.pushState({}, "", url);
+    applyFilter(tag);
+  }
+
+  function init() {
+    applyFilter(getActiveTag());
+
+    document
+      .querySelectorAll<HTMLButtonElement>("[data-tag]")
+      .forEach((chip) => {
+        chip.addEventListener("click", () => {
+          const current = getActiveTag();
+          const tag = chip.dataset.tag ?? null;
+          setTag(tag === current ? null : tag);
+        });
+      });
+
+    const select = document.getElementById(
+      "tag-select",
+    ) as HTMLSelectElement | null;
+    select?.addEventListener("change", () => {
+      setTag(select.value || null);
+    });
+
+    window.addEventListener("popstate", () => {
+      applyFilter(getActiveTag());
+    });
+  }
+
+  // Re-run on Astro view transitions
+  document.addEventListener("astro:page-load", init);
+</script>
+
 <style>
-    .articleGrid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-        gap: var(--s-3);
-        padding: 0;
+  .intro {
+    padding-block: var(--s-4);
+  }
+
+  .musingsSection {
+    background-color: var(--c-brand-tertiary-25);
+    padding-block: var(--s-4) var(--s-6);
+    row-gap: var(--s-3);
+  }
+
+  .musingsHeader {
+    max-width: unset !important;
+  }
+
+  /* ---- Filter controls ---- */
+
+  .filterControls {
+    max-width: unset !important;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Mobile: show select, hide chips */
+  .tagSelect {
+    display: block;
+    width: 100%;
+    padding: var(--s-1) var(--s-2);
+    font-size: var(--t-body-m);
+    font-family: var(--font-family);
+    border: 1px solid var(--c-input-border);
+    border-radius: var(--s-border-radius-s);
+    background-color: var(--c-input-bg);
+    color: var(--c-body);
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--c-focus);
+      outline-offset: 2px;
     }
-    .articleItem {
-        list-style: none;
-        display: flex;
-        flex-direction: row nowrap;
-        justify-content: flex-start;
-        align-items: stretch;
+  }
+
+  .tagChips {
+    display: none;
+    flex-wrap: wrap;
+    gap: var(--s-1);
+  }
+
+  /* Desktop: hide select, show chips */
+  @media (min-width: 650px) {
+    .tagSelect {
+      display: none;
     }
-    .fullHighlight {
-        background-color: var(--c-brand-tertiary-25);
-        padding-block: var(--s-min-gutter);
+
+    .tagChips {
+      display: flex;
     }
-    .spacing {
-        padding-block: var(--s-min-gutter);
+  }
+
+  .tagChip {
+    padding: var(--s-1) var(--s-2);
+    font-size: var(--t-body-s);
+    font-family: var(--font-family);
+    border: 1px solid var(--c-brand-primary);
+    border-radius: 100px;
+    background-color: transparent;
+    color: var(--c-brand-primary);
+    cursor: pointer;
+    transition:
+      background-color var(--ease-duration-s) var(--ease-1),
+      color var(--ease-duration-s) var(--ease-1);
+
+    &:hover {
+      background-color: var(--c-brand-primary-25);
     }
-    .card-image {
-        flex: 1 1 100%;
+
+    &:focus-visible {
+      outline: 2px solid var(--c-focus);
+      outline-offset: 2px;
     }
-    .card-image::part(base) {
-        height: 100%;
+
+    &[aria-pressed="true"] {
+      background-color: var(--c-brand-primary);
+      color: var(--c-white);
     }
-    .cardImageWrapper {
-        margin: 0;
+  }
+
+  /* ---- Article grid ---- */
+
+  .articleGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--s-3);
+    padding: 0;
+    max-width: unset !important;
+    list-style: none;
+  }
+
+  .articleItem {
+    display: flex;
+  }
+
+  .articleCard {
+    display: flex;
+    flex-direction: column;
+    background: var(--c-white);
+    border-radius: var(--s-border-radius-m);
+    overflow: hidden;
+    box-shadow: var(--sh-box-xs);
+    transition: box-shadow var(--ease-duration-s) var(--ease-1);
+    width: 100%;
+
+    &:hover {
+      box-shadow: var(--sh-box-l);
     }
-    .cardHeader {
-        display: flex;
-        flex-direction: column;
-        gap: var(--s-2);
-        padding-block: 0 var(--s-1);
+  }
+
+  .cardImageLink {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+
+    &:focus-visible {
+      outline: 2px solid var(--c-focus);
+      outline-offset: -2px;
     }
-    .cardHeading {
-        margin: 0 ;
+  }
+
+  .cardImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--ease-duration-m) var(--ease-1);
+
+    .articleCard:hover & {
+      transform: scale(1.03);
     }
-    .info {
-        display: block;
-        color: var(--sl-color-neutral-600);
-        font-size: var(--sl-font-size-small);
+  }
+
+  .cardBody {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-1);
+    padding: var(--s-3);
+    flex: 1;
+  }
+
+  .cardHeading {
+    font-size: var(--t-heading-xs);
+    line-height: var(--lh-heading-xs);
+    margin: 0;
+
+    & a {
+      color: var(--c-body);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--c-brand-primary);
+        text-decoration: underline;
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--c-focus);
+        outline-offset: 2px;
+      }
     }
+  }
+
+  .cardDate {
+    display: block;
+    color: var(--c-gray-600);
+    font-size: var(--t-body-s);
+  }
+
+  .cardDescription {
+    color: var(--c-gray-700);
+    font-size: var(--t-body-s);
+    line-height: var(--lh-body-s);
+    margin: 0;
+    margin-top: auto;
+    padding-top: var(--s-1);
+  }
 </style>
