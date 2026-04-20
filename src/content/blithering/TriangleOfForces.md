@@ -10,7 +10,7 @@ image:
     aspectRatio: "16:9"
     width: 4032
     height: 2268
-tags: ["CSS", "CSS-in-JS", "Styling", "React", "Components", "Boundaries", "Mental Model", "CSS Modules", "Styled Components", "Emotion", "JSS", "Radium", "Aphrodite", "Glamorous", "Linaria", "Stitches", "Theme UI", "Styled System", "CSS Blocks", "CSS Modules"]
+tags: ["CSS", "CSS-in-JS", "React"]
 ---
 
 Over some years I have developed some observations that suggest a potential approach to using _CSS-the-good-bits_ in blissful harmony with CSS-in-JS for a reasonable and flexible styling solution. Most of this article looks at historical and modern contexts for attempts to "tame" CSS using a mental model to support the reasoning behind the [bit at the end](#enter-the-triangle-of-forces-).

@@ -10,7 +10,7 @@ image:
     aspectRatio: "16:9"
     width: 4032
     height: 2268
-tags: ["accessibility", "inclusivity", "neurodivergence", "design", "tech industry"]
+tags: ["Accessibility", "Inclusivity", "Neurodivergence"]
 ---
 
 I am a neurodivergent software developer, and I have been working in the tech industry for over 24 years. I only became aware of myself as neurodivergent in the last 4 or 5 years. You might ask yourself how could I have gone so long and not have known? Well, I have always been aware I was different, but I have always thought that I was just "weird", and "introverted" and just that I was kinda "stupid" about some things and good at others. I have multiple divergences, which has meant that, counter-intuitively, some of the worst difficulties I have are masked by aspects of the others. Consequently, I have been able to convince myself (in most areas) that I just need to try harder, and that mostly works, but there is a price to pay each day.
