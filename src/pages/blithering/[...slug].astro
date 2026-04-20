@@ -3,7 +3,6 @@ import { getCollection } from "astro:content";
 import BlitheringFooter from "../../components/BlitheringFooter.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-// Generate a new path for every collection entry
 export async function getStaticPaths() {
     const blogEntries = await getCollection("blithering");
     return blogEntries.map((entry) => ({
@@ -12,10 +11,9 @@ export async function getStaticPaths() {
     }));
 }
 
-// Extract and format the data for the current entry
 const { entry } = Astro.props;
 const { Content, remarkPluginFrontmatter } = await entry.render();
-const { title, pubDate, author = "Śūnya" } = entry.data;
+const { title, pubDate, author = "Śūnya", tags = [] } = entry.data;
 const readingTime = remarkPluginFrontmatter?.readingTime;
 
 const localeDateOptions = {
@@ -52,6 +50,20 @@ const localeDateOptions = {
                 )
             }
         </dl>
+        {
+            tags.length > 0 && (
+                <div class="tagList" aria-label="Post tags">
+                    {tags.map((tag: string) => (
+                        <a
+                            href={`/?tag=${encodeURIComponent(tag)}`}
+                            class="tag"
+                        >
+                            {tag}
+                        </a>
+                    ))}
+                </div>
+            )
+        }
     </header>
     <Content />
     <BlitheringFooter currentArticleFile={entry.id} />
@@ -61,6 +73,7 @@ const localeDateOptions = {
     .blog-header {
         --s-readable-text-width: 100%;
     }
+
     dl {
         display: flex;
         flex-flow: row wrap;
@@ -70,12 +83,44 @@ const localeDateOptions = {
         border-bottom: 1px solid var(--c-gray-200);
         padding-block-end: var(--s-1);
     }
+
     dd {
         padding-inline-end: var(--s-1);
         border-right: 1px solid var(--c-gray-200);
     }
+
     dd:last-child {
         padding-inline-end: 0;
         border-right: 0 none;
+    }
+
+    .tagList {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--s-1);
+        margin-block-start: var(--s-2);
+    }
+
+    .tag {
+        display: inline-block;
+        padding: calc(var(--s-1) / 2) var(--s-2);
+        font-size: var(--t-body-xs);
+        font-weight: var(--fw-medium);
+        border: 1px solid var(--c-brand-primary);
+        border-radius: 100px;
+        color: var(--c-brand-primary);
+        text-decoration: none;
+        transition:
+            background-color var(--ease-duration-s) var(--ease-1),
+            color var(--ease-duration-s) var(--ease-1);
+
+        &:hover {
+            background-color: var(--c-brand-primary-25);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--c-focus);
+            outline-offset: 2px;
+        }
     }
 </style>

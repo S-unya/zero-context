@@ -2,9 +2,9 @@
 import "../theme/index.scss";
 import layoutStyles from "../theme/layout.module.scss";
 import Header from "../components/PageHeader.astro";
+import { ClientRouter } from "astro:transitions";
 import "typeface-montserrat";
 import "typeface-noto-sans";
-import "@shoelace-style/shoelace/dist/themes/light.css";
 
 const props = Astro.props;
 ---
@@ -19,23 +19,17 @@ const props = Astro.props;
     <title>
       {props?.title ?? props?.entry?.data?.title} - Zero context
     </title>
+    <ClientRouter />
   </head>
-  <body class="pageLayout">
-    <a href="#main-content" class="skip-link"> Skip to main content</a>
-    <Header image={props?.entry?.data?.image} />
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <Header image={props?.entry?.data?.image} slug={props?.entry?.slug} />
     <main class={`pageMain ${layoutStyles.row}`} id="main-content">
       <slot {...props} />
     </main>
   </body>
 </html>
-<script>
-  // setBasePath to tell Shoelace where to load icons from.
-  import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
-  setBasePath("/shoelace-assets/");
 
-  // Load all components.
-  import "@shoelace-style/shoelace";
-</script>
 <style is:global>
   .skip-link {
     position: absolute;
@@ -58,7 +52,7 @@ const props = Astro.props;
   }
 
   .pageMain {
-    padding-block: 17vw;
+    padding-block: var(--s-4) var(--s-8);
   }
 
   .pageMain > * {
@@ -82,8 +76,7 @@ const props = Astro.props;
   }
 
   .astro-code [style="color:#6A737D"] {
-    /* default is not accessible */
-    color: var(--sl-color-neutral-300) !important;
+    color: hsl(0, 0%, 70%) !important;
   }
 
   .pageMain > pre > * {
