@@ -12,7 +12,7 @@ image:
     aspectRatio: "16:9"
     width: 4032
     height: 2268
-tags: ["CSS", "CSS-in-JS", "React", "Styling", "Components", "Boundaries"]
+tags: ["CSS", "CSS-in-JS", "React"]
 draft: true
 ---
 

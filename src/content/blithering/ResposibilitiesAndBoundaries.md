@@ -10,7 +10,7 @@ image:
     aspectRatio: "16:9"
     width: 3968
     height: 2240
-tags: ["programming", "architecture", "clean code"]
+tags: ["Programming", "Architecture"]
 ---
 
 Over the years I have come to realise that I regularly use 2 simple concepts to help me write clean, maintainable code, architect systems and to apply consistent concepts in reviewing and refactoring code.

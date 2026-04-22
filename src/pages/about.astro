@@ -1,0 +1,58 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="About">
+  <header class="page-header">
+    <h1>About</h1>
+  </header>
+
+  <section class="about-content">
+    <p>
+      I go by Śūnya (shoo-nya) — a self-taught, neurodivergent developer who has
+      been building things for the web since 1999. I started in an era when
+      style was an argument, JavaScript was a novelty, and accessibility was
+      rarely a conversation at all. A lot has changed - at the same time, not
+      enough has.
+    </p>
+
+    <p>
+      My work sits at the intersection of front-end engineering, inclusive
+      design, and the kind of stubborn curiosity that makes you rewrite a
+      component three times just to understand it properly. I care deeply about
+      building software that works for everyone — not as a compliance checkbox,
+      but as a basic act of respect.
+    </p>
+
+    <p>
+      This site is a place for my blitherings: the things I'm learning, the
+      patterns I observe and find interesting, the opinions I've formed slowly
+      and am happy to have challenged. Topics drift across accessibility,
+      assistive technology, CSS, architecture, neurodiversity, and the
+      occasional philosophical tangent about what "good software" even means.
+    </p>
+
+    <p>
+      If something here is useful to you, or wrong enough that you want to argue
+      about it, I'm glad either way.
+    </p>
+  </section>
+</Layout>
+
+<style>
+  .page-header {
+    padding-block-start: var(--s-2);
+  }
+
+  .about-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+
+    & p {
+      max-width: var(--s-readable-text-width);
+      line-height: var(--lh-body-l);
+      margin: 0;
+    }
+  }
+</style>

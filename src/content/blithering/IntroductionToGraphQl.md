@@ -11,7 +11,7 @@ image:
     aspectRatio: "16:9"
     width: 4032
     height: 2268
-tags: ["GraphQL", "Architecture", "Schema", "Resolver", "Query", "Mutation", "Subscription"]
+tags: ["GraphQL", "Architecture"]
 draft: true
 ---
 
