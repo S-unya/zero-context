@@ -29,38 +29,36 @@
   -webkit-font-smoothing: antialiased;
   border-color: transparent;
   border-width: 4px;
+  outline: 2px solid transparent;
 
   &:hover,
   &:focus-visible {
     color: var(--c-white);
-    text-shadow: 0 0 1rem rgba(255, 255, 255, 0.6);
-    outline: 2px solid rgba(255, 255, 255, 0.3);
+    text-shadow: 0 0 0.5rem rgba(255, 255, 255, 1), -1px -1px 2px rgba(255, 255, 255, 1), 1px 1px 2px rgba(255, 255, 255, 1);
+    outline: 2px solid transparent; // rgba(255, 255, 255, 0.3);
     outline-offset: 0px;
     border-width: 4px;
+    background-color: transparent;
   }
 }
 
 .logoFull {
   display: none;
 
-  &:hover {
-    text-shadow: 0 0 1rem rgba(255, 255, 255, 0.9);
-  }
-
   @media (min-width: breakpoints.$view-breakpoint-2) {
     display: block;
     color: var(--c-white);
     font-family: var(--font-family-alt);
     font-weight: 100;
+    white-space: nowrap;
     font-size: 5.9vw;
     line-height: 0.65;
-    white-space: nowrap;
+    translate: 0 5.4vw;
     margin-block: -7vw;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     user-select: none;
     rotate: -2deg;
-    translate: 0 5.4vw;
 
     @media screen and (min-width: breakpoints.$view-breakpoint-3) {
       font-size: 5.9vw;
@@ -71,6 +69,12 @@
 
 .logoShort {
   display: block;
+  font-family: var(--font-family-alt);
+  font-weight: 100;
+  font-size: 11vw;
+  line-height: 0.65;
+  translate: 0 5.4vw;
+  margin-block: -9vw;
 
   @media (min-width: breakpoints.$view-breakpoint-2) {
     display: none;
