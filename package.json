@@ -26,6 +26,7 @@
     "typeface-noto-sans": "^1.1.13"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.8",
     "@biomejs/biome": "^2.4.4",
     "@vitest/ui": "^4.0.18",
     "jsdom": "^28.1.0",
