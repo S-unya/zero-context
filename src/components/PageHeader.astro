@@ -2,28 +2,8 @@
 import styles from "./PageHeader.module.scss";
 import { Image } from "astro:assets";
 
-const { image, slug } = Astro.props;
+const { image } = Astro.props;
 ---
-
-<div class={styles.hero}>
-  {
-    image && (
-      <div
-        class={styles.backgroundImage}
-        transition:name={slug ? `post-image-${slug}` : "post-image-hero"}
-      >
-        <Image
-          {...image}
-          class={styles.picture}
-          widths={[1700, 1200, 992, 768, 650, 375]}
-          aria-hidden="true"
-        />
-      </div>
-    )
-  }
-  <span class={styles.heroLogo} aria-hidden="true">Zero Context</span>
-  <div class={styles.scrollOverlay}></div>
-</div>
 
 <header class={styles.stickyBar}>
   <a href="/" class={styles.stickyLogo} aria-label="Zero Context – home">
@@ -49,3 +29,19 @@ const { image, slug } = Astro.props;
     </a>
   </nav>
 </header>
+
+{
+  image && (
+    <div class={styles.hero}>
+      <div class={styles.backgroundImage}>
+        <Image
+          {...image}
+          class={styles.picture}
+          widths={[1700, 1200, 992, 768, 650, 375]}
+          aria-hidden="true"
+        />
+      </div>
+      <div class={styles.scrollOverlay} />
+    </div>
+  )
+}
