@@ -1,3 +1,5 @@
+@use "./breakpoints" as breakpoints;
+
 :root {
   --font-family: "Noto Sans SC", system-ui, sans-serif;
   --font-family-alt: "Montserrat", sans-serif;
@@ -23,24 +25,40 @@
   --t-heading-xs: calc(18rem / var(--t-base));
   --t-heading-s: calc(24rem / var(--t-base));
   --t-heading-m: calc(28rem / var(--t-base));
-  --t-heading-l: calc(36rem / var(--t-base));
-  --t-heading-xl: calc(48rem / var(--t-base));
-  --t-heading-xxl: calc(68rem / var(--t-base));
+  --t-heading-l: calc(34rem / var(--t-base));
+  --t-heading-xl: calc(38rem / var(--t-base));
+  --t-heading-xxl: calc(48rem / var(--t-base));
 
   // Line Height
-  --lh-body-xs: calc(22rem / var(--t-base));
-  --lh-body-s: calc(24rem / var(--t-base));
-  --lh-body-m: calc(26rem / var(--t-base));
-  --lh-body-l: calc(28rem / var(--t-base));
+  --lh-body-xs: 1;
+  --lh-body-s: 1.25;
+  --lh-body-m: 1.5;
+  --lh-body-l: 1.8;
 
-  --lh-heading-xs: calc(28rem / var(--t-base));
-  --lh-heading-s: calc(34rem / var(--t-base));
-  --lh-heading-m: calc(36rem / var(--t-base));
-  --lh-heading-l: calc(42rem / var(--t-base));
-  --lh-heading-xl: calc(54rem / var(--t-base));
-  --lh-heading-xxl: calc(68rem / var(--t-base));
+  --lh-heading-xs: 1.2;
+  --lh-heading-s: 1.3;
+  --lh-heading-m: 1.4;
+  --lh-heading-l: 1.5;
+  --lh-heading-xl: 1.6;
+  --lh-heading-xxl: 1.7;
 
   // link
   --td-link-decoration: underline;
   --td-link-hover-decoration: none;
+}
+
+@media (min-width: breakpoints.$view-breakpoint-5) {
+  :root {
+
+    /** Design token **/
+
+    --t-heading-xxs: calc(14rem / var(--t-base));
+    --t-heading-xs: calc(18rem / var(--t-base));
+    --t-heading-s: calc(24rem / var(--t-base));
+    --t-heading-m: calc(28rem / var(--t-base));
+    --t-heading-l: calc(36rem / var(--t-base));
+    --t-heading-xl: calc(48rem / var(--t-base));
+    --t-heading-xxl: calc(68rem / var(--t-base));
+
+  }
 }

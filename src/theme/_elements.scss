@@ -21,9 +21,10 @@ h1 {
   font-family: var(--font-family-alt);
   font-size: var(--t-heading-xxl);
   font-weight: var(--fw-light);
-  line-height: var(--lh-heading-xxl);
+  line-height: var(--lh-heading-l);
   margin-bottom: var(--s-4);
   margin-top: var(--s-4);
+  word-break: break-word;
 }
 
 h2 {
@@ -50,20 +51,25 @@ strong {
 
 a {
   color: var(--c-link);
-  text-decoration: none;
-  border-block-end-style: solid;
-     border-width: 4px;
-        border-color: var(--c-brand-primary-25);
-     margin-block-end: -4px;
-     transition: all 0.1s ease-out;
+  text-decoration: underline;
+  text-underline-offset: 0.125em;
+  border-color: var(--c-brand-primary-25);
+  font-weight: var(--fw-medium);
+  border-radius: var(--s-border-radius-xs);
+  transition: all var(--ease-duration-s) var(--ease-1);
 
+  &:hover {
+    color: var(--c-link-hover);
+    background-color: rgba(255, 255, 255, 0.15);
+    text-underline-offset: 0.33em;
+    text-decoration-color: var(--c-focus);
+  }
 
-  &:hover,
   &:focus-visible {
     color: var(--c-link-hover);
-    text-decoration: none;
-    margin-block-end: 4px;
-    border-width: 0;
+    background-color: rgba(255, 255, 255, 0.15);
+    outline: 2px solid var(--c-focus);
+    outline-offset: 2px;
   }
 
   &:disabled {
