@@ -5,3 +5,14 @@
   --sh-box-l: 0px 10px 38px -10px rgba(22, 23, 24, 0.35),
     0px 10px 20px -15px rgba(22, 23, 24, 0.2);
 }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sh-box-xs: 0 10px 24px -16px rgba(0, 0, 0, 0.5),
+      0 3px 8px -4px rgba(0, 0, 0, 0.45),
+      0 0 0 1px hsla(0, 0%, 100%, 0.05);
+    --sh-box-l: 0 18px 40px -18px rgba(0, 0, 0, 0.62),
+      0 10px 22px -12px rgba(0, 0, 0, 0.48),
+      0 0 0 1px hsla(0, 0%, 100%, 0.08);
+  }
+}
