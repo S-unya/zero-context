@@ -31,11 +31,13 @@ async function getSocialImageUrl(image: SeoImage | undefined, currentUrl: URL, s
     return undefined;
   }
 
+  const outputFormat = "webp";
+
   const transformedImage = await getImage({
     src: image.src,
     width: image.width,
     height: image.height,
-    format: image.src.format === "png" ? "png" : "jpg",
+    ...(outputFormat ? { format: outputFormat } : {}),
   });
 
   return new URL(
