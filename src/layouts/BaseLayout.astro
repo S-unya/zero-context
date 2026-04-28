@@ -3,7 +3,13 @@ import "../theme/index.scss";
 import layoutStyles from "../theme/layout.module.scss";
 import Header from "../components/PageHeader.astro";
 import { ClientRouter } from "astro:transitions";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import {
+  SITE_COLOR_SCHEME,
+  SITE_DESCRIPTION,
+  SITE_THEME_COLOR_DARK,
+  SITE_THEME_COLOR_LIGHT,
+  SITE_TITLE,
+} from "../consts";
 import { getSeoData } from "../lib/seo";
 import "typeface-montserrat";
 import "typeface-noto-sans";
@@ -31,10 +37,22 @@ const seo = await getSeoData({
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={seo.canonicalUrl} />
     <meta name="generator" content={Astro.generator} />
+    <meta name="color-scheme" content={SITE_COLOR_SCHEME} />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content={SITE_THEME_COLOR_LIGHT}
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content={SITE_THEME_COLOR_DARK}
+    />
     <meta name="description" content={seo.description} />
     <title>{seo.fullTitle}</title>
 
@@ -89,7 +107,6 @@ const seo = await getSeoData({
     display: inline-block;
     padding: 0.5rem 1rem;
     z-index: var(--z-modal);
-    background: var(--c-white);
     transition: transform 0.2s ease-in-out;
   }
 
@@ -126,7 +143,7 @@ const seo = await getSeoData({
   }
 
   .astro-code [style="color:#6A737D"] {
-    color: hsl(0, 0%, 70%) !important;
+    color: var(--c-code-comment) !important;
   }
 
   .pageMain > pre > * {

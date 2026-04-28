@@ -31,7 +31,15 @@ async function getSocialImageUrl(image: SeoImage | undefined, currentUrl: URL, s
     return undefined;
   }
 
-  const outputFormat = "webp";
+  const sourceFormat = image.src.format.toLowerCase();
+  const outputFormat =
+    sourceFormat === "png"
+      ? "png"
+      : sourceFormat === "jpg" || sourceFormat === "jpeg"
+        ? "jpg"
+        : sourceFormat === "webp"
+          ? "webp"
+          : "webp";
 
   const transformedImage = await getImage({
     src: image.src,

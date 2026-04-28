@@ -80,6 +80,8 @@ const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
                 href={`/blithering/${entry.slug}`}
                 class="cardImageLink"
                 aria-hidden="true"
+                role="presentation"
+                tabindex="-1"
               >
                 <Image
                   {...entry.data.image}
@@ -209,7 +211,7 @@ const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
   }
 
   .musingsSection {
-    background-color: var(--c-brand-tertiary-25);
+    background-color: var(--c-section-accent-bg);
     padding-block: var(--s-4) var(--s-6);
     row-gap: var(--s-3);
   }
@@ -307,7 +309,8 @@ const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
   .articleCard {
     display: flex;
     flex-direction: column;
-    background: var(--c-white);
+    background: var(--c-surface);
+    border: 1px solid var(--c-surface-border);
     border-radius: var(--s-border-radius-m);
     overflow: hidden;
     box-shadow: var(--sh-box-xs);
@@ -357,14 +360,19 @@ const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
 
     & a {
       color: var(--c-body);
-      text-decoration: none;
+      text-decoration: underline;
+      text-decoration-thickness: 0.08em;
+      text-decoration-color: currentColor;
+      text-underline-offset: 0.16em;
 
       &:hover {
-        color: var(--c-brand-primary);
-        text-decoration: underline;
+        color: var(--c-link-hover);
+        text-decoration-thickness: 0.12em;
       }
 
       &:focus-visible {
+        color: var(--c-link-hover);
+        text-decoration-thickness: 0.12em;
         outline: 2px solid var(--c-focus);
         outline-offset: 2px;
       }

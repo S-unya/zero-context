@@ -1,4 +1,6 @@
 :root {
+  color-scheme: light dark;
+
   /*****
   Primary Brand Palette (SCSS variables for local scoping)
   Do not use these values directly if you can help it
@@ -48,41 +50,56 @@
   --c-informational: var(--c-blue);
   --c-advisory: var(--c-amber);
 
-  // Body
+  // Body and surfaces
   --c-body-bg: var(--c-white);
   --c-body: var(--c-gray-800);
+  --c-surface: var(--c-white);
+  --c-surface-hover: var(--c-gray-100);
+  --c-surface-border: var(--c-gray-200);
+  --c-section-accent-bg: var(--c-brand-tertiary-25);
 
   // Link
   --c-link: var(--c-brand-primary);
   --c-link-hover: var(--c-brand-secondary);
   --c-link-disabled: var(--c-gray-600);
+  --c-interactive-overlay-subtle: hsla(0, 0%, 100%, 0.15);
+
+  // Tags / pills
+  --c-tag: var(--c-brand-secondary);
+  --c-tag-bg: transparent;
+  --c-tag-border: var(--c-brand-primary);
+  --c-tag-hover: var(--c-brand-secondary);
+  --c-tag-hover-bg: var(--c-brand-primary-25);
+  --c-tag-active: var(--c-white);
+  --c-tag-active-bg: var(--c-brand-primary);
 
   // Global input colours
   --c-input-disabled: var(--c-gray-500);
   --c-input-bg-disabled: transparent;
   --c-input-border-disabled: var(--c-gray-400);
-  --c-input-bg: var(--c-white);
-  --c-input-bg-focus: var(--c-gray-100);
-  --c-input-bg-active: var(--c-gray-100);
+  --c-input-bg: var(--c-surface);
+  --c-input-bg-focus: var(--c-surface-hover);
+  --c-input-bg-active: var(--c-surface-hover);
   --c-input-border: var(--c-gray-600);
   --c-input-border-focus: var(--c-focus);
   --c-input-border-active: var(--c-active);
   --c-input-invalid: var(--c-negative);
-  --c-input-bg-invalid: var(--c-white);
+  --c-input-bg-invalid: var(--c-surface);
   --c-input-border-invalid: var(--c-negative);
   --c-input-placeholder: var(--c-gray-600);
   --c-input-helper-text: var(--c-gray-600);
 
   // Button
   --c-btn: var(--c-brand-secondary);
-  --c-btn-bg: var(--c-white);
+  --c-btn-bg: var(--c-surface);
   --c-btn-border: var(--c-brand-secondary);
   --c-btn-hover: var(--c-brand-quaternary);
-  --c-btn-hover-bg: var(--c-white);
+  --c-btn-hover-bg: var(--c-surface);
   --c-btn-hover-border: var(--c-brand-quaternary);
   --c-btn-disabled: var(--c-gray-600);
   --c-btn-disabled-border: var(--c-gray-600);
   --c-btn-disabled-bg: var(--c-gray-200);
+
   // Primary
   --c-btn-primary: var(--c-brand-secondary);
   --c-btn-primary-bg: var(--c-brand-primary);
@@ -93,6 +110,7 @@
   --c-btn-primary-disabled: var(--c-gray-600);
   --c-btn-primary-disabled-border: var(--c-gray-600);
   --c-btn-primary-disabled-bg: var(--c-gray-200);
+
   // Important/negative
   --c-btn-important: var(--c-white);
   --c-btn-important-bg: var(--c-negative);
@@ -103,6 +121,7 @@
   --c-btn-important-disabled: var(--c-gray-600);
   --c-btn-important-disabled-border: var(--c-gray-600);
   --c-btn-important-disabled-bg: var(--c-gray-200);
+
   // (buttons that look like links)
   --c-btn-tertiary: var(--c-link);
   --c-btn-tertiary-bg: transparent;
@@ -117,4 +136,95 @@
   // Overlays
   --c-overlay-opacity: 0.9;
   --c-overlay-bg-color: var(--c-black);
+  --c-image-overlay-strong: rgba(0, 0, 0, 0.7);
+  --c-image-overlay-soft: rgba(0, 0, 0, 0.05);
+
+  // Code
+  --c-code-comment: hsl(0, 0%, 70%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --c-gray-100: hsl(240, 15%, 10%);
+    --c-gray-200: hsl(240, 14%, 14%);
+    --c-gray-300: hsl(240, 12%, 20%);
+    --c-gray-400: hsl(240, 10%, 32%);
+    --c-gray-500: hsl(240, 9%, 48%);
+    --c-gray-600: hsl(240, 10%, 68%);
+    --c-gray-700: hsl(240, 12%, 84%);
+    --c-gray-800: hsl(240, 16%, 94%);
+
+    --c-separator: var(--c-gray-300);
+
+    --c-body-bg: hsl(228, 20%, 14%);
+    --c-body: var(--c-gray-800);
+    --c-surface: hsl(228, 18%, 12%);
+    --c-surface-hover: hsl(228, 17%, 15%);
+    --c-surface-border: hsl(228, 14%, 24%);
+    --c-section-accent-bg: hsl(228, 18%, 18%);
+
+    --c-link: hsl(136, 72%, 72%);
+    --c-link-hover: hsl(36, 90%, 78%);
+    --c-link-disabled: var(--c-gray-500);
+    --c-interactive-overlay-subtle: hsla(0, 0%, 0%, 0.1);
+
+    --c-tag: var(--c-brand-primary-50);
+    --c-tag-bg: hsl(232, 18%, 16%);
+    --c-tag-border: hsl(136, 50%, 45%);
+    --c-tag-hover: var(--c-white);
+    --c-tag-hover-bg: hsl(136, 32%, 24%);
+    --c-tag-active: hsl(232, 24%, 12%);
+    --c-tag-active-bg: var(--c-brand-primary-50);
+
+    --c-input-disabled: var(--c-gray-500);
+    --c-input-bg-disabled: var(--c-gray-200);
+    --c-input-border-disabled: var(--c-gray-400);
+    --c-input-bg: var(--c-surface);
+    --c-input-bg-focus: var(--c-surface-hover);
+    --c-input-bg-active: var(--c-surface-hover);
+    --c-input-border: var(--c-gray-600);
+    --c-input-border-focus: var(--c-focus);
+    --c-input-border-active: var(--c-active);
+    --c-input-invalid: var(--c-negative);
+    --c-input-bg-invalid: var(--c-surface);
+    --c-input-border-invalid: var(--c-negative);
+    --c-input-placeholder: var(--c-gray-600);
+    --c-input-helper-text: var(--c-gray-600);
+
+    --c-btn: var(--c-gray-800);
+    --c-btn-bg: var(--c-surface);
+    --c-btn-border: var(--c-gray-500);
+    --c-btn-hover: var(--c-gray-800);
+    --c-btn-hover-bg: var(--c-surface-hover);
+    --c-btn-hover-border: var(--c-focus);
+    --c-btn-disabled: var(--c-gray-500);
+    --c-btn-disabled-border: var(--c-gray-400);
+    --c-btn-disabled-bg: var(--c-gray-200);
+
+    --c-btn-primary: var(--c-gray-100);
+    --c-btn-primary-bg: var(--c-brand-primary-50);
+    --c-btn-primary-border: var(--c-brand-primary-25);
+    --c-btn-primary-hover: var(--c-gray-100);
+    --c-btn-primary-hover-bg: var(--c-brand-primary-25);
+    --c-btn-primary-hover-border: var(--c-brand-primary-25);
+    --c-btn-primary-disabled: var(--c-gray-500);
+    --c-btn-primary-disabled-border: var(--c-gray-400);
+    --c-btn-primary-disabled-bg: var(--c-gray-200);
+
+    --c-btn-important: var(--c-white);
+    --c-btn-important-bg: var(--c-negative);
+    --c-btn-important-border: var(--c-negative);
+    --c-btn-important-hover: var(--c-white);
+    --c-btn-important-hover-bg: hsl(355, 75%, 58%);
+    --c-btn-important-hover-border: hsl(355, 75%, 58%);
+    --c-btn-important-disabled: var(--c-gray-500);
+    --c-btn-important-disabled-border: var(--c-gray-400);
+    --c-btn-important-disabled-bg: var(--c-gray-200);
+
+    --c-image-overlay-strong: rgba(0, 0, 0, 0.55);
+    --c-image-overlay-soft: rgba(0, 0, 0, 0.15);
+    --c-code-comment: var(--c-gray-500);
+  }
 }
