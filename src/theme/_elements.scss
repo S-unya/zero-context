@@ -52,6 +52,8 @@ strong {
 a {
   color: var(--c-link);
   text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-decoration-color: currentColor;
   text-underline-offset: 0.125em;
   border-color: var(--c-brand-primary-25);
   font-weight: var(--fw-medium);
@@ -60,14 +62,17 @@ a {
 
   &:hover {
     color: var(--c-link-hover);
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: var(--c-interactive-overlay-subtle);
+    text-decoration-thickness: 0.12em;
     text-underline-offset: 0.33em;
-    text-decoration-color: var(--c-focus);
+    text-decoration-color: currentColor;
   }
 
   &:focus-visible {
     color: var(--c-link-hover);
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: var(--c-interactive-overlay-subtle);
+    text-decoration-thickness: 0.12em;
+    text-decoration-color: currentColor;
     outline: 2px solid var(--c-focus);
     outline-offset: 2px;
   }

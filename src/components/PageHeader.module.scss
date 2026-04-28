@@ -35,7 +35,7 @@
   &:focus-visible {
     color: var(--c-white);
     text-shadow: 0 0 0.5rem rgba(255, 255, 255, 1), -1px -1px 2px rgba(255, 255, 255, 1), 1px 1px 2px rgba(255, 255, 255, 1);
-    outline: 2px solid transparent; // rgba(255, 255, 255, 0.3);
+    outline: 2px solid transparent;
     outline-offset: 0px;
     border-width: 4px;
     background-color: transparent;
@@ -99,7 +99,7 @@
   &:hover,
   &:focus-visible {
     color: var(--c-white);
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: var(--c-interactive-overlay-subtle);
     outline: 2px solid var(--c-focus);
     outline-offset: 2px;
   }
@@ -125,7 +125,11 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.05));
+  background: linear-gradient(
+    to top,
+    var(--c-image-overlay-strong),
+    var(--c-image-overlay-soft)
+  );
 }
 
 .backgroundImage {
