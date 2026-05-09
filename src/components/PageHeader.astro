@@ -5,7 +5,7 @@ import { Image } from "astro:assets";
 const { image } = Astro.props;
 ---
 
-<header class={styles.stickyBar}>
+<header class={styles.stickyBar} transition:name="page-header">
   <a href="/" class={styles.stickyLogo} aria-label="Zero Context – home">
     <span class={styles.logoFull}>Zero Context</span>
     <span class={styles.logoShort} aria-hidden="true">O</span>
@@ -32,13 +32,14 @@ const { image } = Astro.props;
 
 {
   image && (
-    <div class={styles.hero}>
+    <div class={styles.hero} transition:name="article-image-wrapper">
       <div class={styles.backgroundImage}>
         <Image
           {...image}
           class={styles.picture}
           widths={[1700, 1200, 992, 768, 650, 375]}
           aria-hidden="true"
+          transition:name="article-image"
         />
       </div>
       <div class={styles.scrollOverlay} />

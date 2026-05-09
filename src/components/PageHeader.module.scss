@@ -112,7 +112,6 @@
   overflow: hidden;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 82%);
   background-color: var(--c-brand-secondary-50);
-  /* Reduced height — logo text removed, image-only hero */
   min-height: 30vw;
 
   @media (min-width: breakpoints.$view-breakpoint-3) {
@@ -125,11 +124,9 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: linear-gradient(
-    to top,
-    var(--c-image-overlay-strong),
-    var(--c-image-overlay-soft)
-  );
+  background: linear-gradient(to top,
+      var(--c-image-overlay-strong),
+      var(--c-image-overlay-soft));
 }
 
 .backgroundImage {

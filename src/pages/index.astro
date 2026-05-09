@@ -70,18 +70,17 @@ const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
 
     <ul role="list" class="articleGrid" id="article-grid">
       {
-        publishedEntries.map((entry) => (
+        publishedEntries.map((entry, index) => (
           <li
             class="articleItem"
             data-tags={JSON.stringify(entry.data.tags ?? [])}
           >
-            <article class="articleCard">
-              <a
+            <a
                 href={`/blithering/${entry.slug}`}
-                class="cardImageLink"
-                aria-hidden="true"
-                tabindex="-1"
-              >
+                class="cardLink"
+                data-target={`article-${index}`}
+              ><article class="articleCard" id={`article-${index}`}>
+              <figure class="cardImageWrapper" role="presentation">
                 <Image
                   {...entry.data.image}
                   widths={[536, 360, 303]}
@@ -90,24 +89,28 @@ const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
                   sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 360px"
                   class="cardImage"
                 />
-              </a>
+                <!-- div to transition to image overlay -->
+                <div />
+              </figure>
               <div class="cardBody">
                 <h3 class="cardHeading">
-                  <a href={`/blithering/${entry.slug}`}>{entry.data.title}</a>
+                    {entry.data.title}
                 </h3>
-                <time
-                  datetime={entry.data.pubDate.toISOString()}
-                  class="cardDate"
-                >
-                  {entry.data.pubDate.toLocaleDateString(undefined, {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </time>
+                <div class="articleMeta">
+                  <time
+                    datetime={entry.data.pubDate.toISOString()}
+                    class="cardDate"
+                  >
+                    {entry.data.pubDate.toLocaleDateString(undefined, {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                </div>
                 <p class="cardDescription">{entry.data.description}</p>
               </div>
-            </article>
+            </article></a>
           </li>
         ))
       }
@@ -116,6 +119,53 @@ const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
 </Layout>
 
 <script>
+  function resetViewTransitionNames() {
+    const namedElements = document.querySelectorAll<HTMLElement>(
+      "[style*='view-transition-name']",
+    );
+
+    for (const el of namedElements) {
+      el.style.viewTransitionName = "none";
+    }
+  }
+
+  function addViewTransition(event: Event) {
+    const target = event.target as HTMLElement | null;
+    const trigger = target?.closest<HTMLElement>("[data-target]");
+
+    if (!trigger) {
+      return;
+    }
+
+    const articleId = trigger.dataset.target;
+
+    if (!articleId) {
+      return;
+    }
+
+    const el = document.getElementById(articleId);
+
+    if (!el) return;
+
+    const imageWrapper = el.querySelector<HTMLElement>(".cardImageWrapper");
+    const image = el.querySelector<HTMLElement>("img");
+    const title = el.querySelector<HTMLElement>("h3");
+    const meta = el.querySelector<HTMLElement>(".articleMeta");
+
+    resetViewTransitionNames();
+
+    if (image && imageWrapper) {
+      imageWrapper.style.viewTransitionName = "article-image-wrapper";
+      image.style.viewTransitionName = "article-image";
+    }
+    if (title) {
+      title.style.viewTransitionName = "article-title";
+    }
+    if (meta) {
+      meta.style.viewTransitionName = "article-meta";
+    }
+  }
+
   function applyFilter(activeTag: string | null) {
     const items = document.querySelectorAll<HTMLElement>("[data-tags]");
     const chips = document.querySelectorAll<HTMLButtonElement>("[data-tag]");
@@ -172,33 +222,53 @@ const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
     applyFilter(tag);
   }
 
-  function init() {
-    applyFilter(getActiveTag());
+  let listenersBound = false;
 
-    for (const chip of document.querySelectorAll<HTMLButtonElement>(
-      "[data-tag]",
-    )) {
-      chip.addEventListener("click", () => {
-        const current = getActiveTag();
-        const tag = chip.dataset.tag ?? null;
-        setTag(tag === current ? null : tag);
-      });
-    }
+  function onTagChipClick(event: Event) {
+    const target = event.target as Element | null;
+    const chip = target?.closest<HTMLButtonElement>("[data-tag]");
+    if (!chip) return;
 
-    const select = document.getElementById(
-      "tag-select",
-    ) as HTMLSelectElement | null;
-    select?.addEventListener("change", () => {
-      setTag(select.value || null);
-    });
-
-    document
-      .getElementById("clear-filter")
-      ?.addEventListener("click", () => setTag(null));
+    const current = getActiveTag();
+    const tag = chip.dataset.tag ?? null;
+    setTag(tag === current ? null : tag);
   }
 
-  // popstate is global — only add once
-  window.addEventListener("popstate", () => applyFilter(getActiveTag()));
+  function onTagSelectChange(event: Event) {
+    const target = event.target as Element | null;
+    const select = target?.closest<HTMLSelectElement>("#tag-select");
+    if (!select) return;
+    setTag(select.value || null);
+  }
+
+  function onClearFilterClick(event: Event) {
+    const target = event.target as Element | null;
+    const clearButton = target?.closest<HTMLButtonElement>("#clear-filter");
+    if (!clearButton) return;
+    setTag(null);
+  }
+
+  function onPopState() {
+    applyFilter(getActiveTag());
+  }
+
+  function bindListenersOnce() {
+    if (listenersBound) return;
+    listenersBound = true;
+
+    document.addEventListener("click", onTagChipClick);
+    document.addEventListener("change", onTagSelectChange);
+    document.addEventListener("click", onClearFilterClick);
+    document.addEventListener("click", addViewTransition, {
+      capture: true,
+    });
+    window.addEventListener("popstate", onPopState);
+  }
+
+  function init() {
+    bindListenersOnce();
+    applyFilter(getActiveTag());
+  }
 
   // Re-run on Astro view transitions (fires on initial load too)
   document.addEventListener("astro:page-load", init);
@@ -305,31 +375,68 @@ const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
     display: flex;
   }
 
-  .articleCard {
-    display: flex;
-    flex-direction: column;
-    background: var(--c-surface);
+  .cardLink {
+    all: unset;
+    display: block;
     border: 1px solid var(--c-surface-border);
     border-radius: var(--s-border-radius-m);
     overflow: hidden;
     box-shadow: var(--sh-box-xs);
     transition: box-shadow var(--ease-duration-s) var(--ease-1);
     width: 100%;
+    cursor: pointer;
 
     &:hover {
       box-shadow: var(--sh-box-l);
-    }
-  }
 
-  .cardImageLink {
-    display: block;
-    overflow: hidden;
-    aspect-ratio: 16 / 9;
+      .cardHeading {
+        transition: color var(--ease-duration-s) var(--ease-1),
+          text-decoration-thickness var(--ease-duration-s) var(--ease-1),
+           text-underline-offset var(--ease-duration-s) var(--ease-1) 100ms;
+        color: var(--c-link-hover);
+        text-decoration-thickness: 0.12em;
+        text-underline-offset: 0.33em;
+    text-decoration-color: currentColor;
+      }
+    }
 
     &:focus-visible {
       outline: 2px solid var(--c-focus);
-      outline-offset: -2px;
+      outline-offset: 2px;
+
+      .cardHeading {
+        color: var(--c-link-hover);
+        text-decoration-thickness: 0.12em;
+      }
     }
+
+    * {
+      text-decoration: none;
+    }
+
+    .cardHeading {
+    font-size: var(--t-heading-xs);
+    line-height: var(--lh-heading-xs);
+    margin: 0;
+    color: var(--c-body);
+    text-decoration: underline;
+    text-decoration-thickness: 0.08em;
+    text-decoration-color: currentColor;
+    text-underline-offset: 0.16em;
+  }
+  }
+
+  .articleCard {
+    display: flex;
+    flex-direction: column;
+    background: var(--c-surface);
+  }
+
+  .cardImageWrapper {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    margin: 0;
   }
 
   .cardImage {
@@ -350,32 +457,6 @@ const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
     gap: var(--s-1);
     padding: var(--s-3);
     flex: 1;
-  }
-
-  .cardHeading {
-    font-size: var(--t-heading-xs);
-    line-height: var(--lh-heading-xs);
-    margin: 0;
-
-    & a {
-      color: var(--c-body);
-      text-decoration: underline;
-      text-decoration-thickness: 0.08em;
-      text-decoration-color: currentColor;
-      text-underline-offset: 0.16em;
-
-      &:hover {
-        color: var(--c-link-hover);
-        text-decoration-thickness: 0.12em;
-      }
-
-      &:focus-visible {
-        color: var(--c-link-hover);
-        text-decoration-thickness: 0.12em;
-        outline: 2px solid var(--c-focus);
-        outline-offset: 2px;
-      }
-    }
   }
 
   .cardDate {
