@@ -27,8 +27,8 @@ const localeDateOptions = {
 
 <BaseLayout {...Astro.props}>
   <header class="blog-header">
-    <h1>{title}</h1>
-    <dl>
+    <h1 class="title" transition:name="article-title">{title}</h1>
+    <dl transition:name="article-meta">
       <dt>Date:</dt>
       <dd>
         <time datetime={new Date(pubDate).toString()}
@@ -50,13 +50,19 @@ const localeDateOptions = {
     </dl>
     {tags.length > 0 && <TagPills tags={tags} ariaLabel="Post tags" />}
   </header>
-  <Content />
+  <section>
+    <Content />
+  </section>
   <BlitheringFooter currentArticleFile={entry.id} />
 </BaseLayout>
 
 <style>
   .blog-header {
     --s-readable-text-width: 100%;
+  }
+
+  .title {
+    view-transition-name: article-title;
   }
 
   dl {
@@ -67,6 +73,7 @@ const localeDateOptions = {
     font-size: var(--t-body-s);
     border-bottom: 1px solid var(--c-gray-200);
     padding-block-end: var(--s-1);
+    view-transition-name: article-meta;
   }
 
   dd {
