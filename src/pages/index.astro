@@ -222,40 +222,53 @@ const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
     applyFilter(tag);
   }
 
-  function init() {
+  let listenersBound = false;
+
+  function onTagChipClick(event: Event) {
+    const target = event.target as Element | null;
+    const chip = target?.closest<HTMLButtonElement>("[data-tag]");
+    if (!chip) return;
+
+    const current = getActiveTag();
+    const tag = chip.dataset.tag ?? null;
+    setTag(tag === current ? null : tag);
+  }
+
+  function onTagSelectChange(event: Event) {
+    const target = event.target as Element | null;
+    const select = target?.closest<HTMLSelectElement>("#tag-select");
+    if (!select) return;
+    setTag(select.value || null);
+  }
+
+  function onClearFilterClick(event: Event) {
+    const target = event.target as Element | null;
+    const clearButton = target?.closest<HTMLButtonElement>("#clear-filter");
+    if (!clearButton) return;
+    setTag(null);
+  }
+
+  function onPopState() {
     applyFilter(getActiveTag());
+  }
 
-    for (const chip of document.querySelectorAll<HTMLButtonElement>(
-      "[data-tag]",
-    )) {
-      chip.addEventListener("click", () => {
-        const current = getActiveTag();
-        const tag = chip.dataset.tag ?? null;
-        setTag(tag === current ? null : tag);
-      });
-    }
+  function bindListenersOnce() {
+    if (listenersBound) return;
+    listenersBound = true;
 
-    const select = document.getElementById(
-      "tag-select",
-    ) as HTMLSelectElement | null;
-    select?.addEventListener("change", () => {
-      setTag(select.value || null);
-    });
-
-    document
-      .getElementById("clear-filter")
-      ?.addEventListener("click", () => setTag(null));
-
-    document.removeEventListener("click", addViewTransition, {
-      capture: true,
-    });
+    document.addEventListener("click", onTagChipClick);
+    document.addEventListener("change", onTagSelectChange);
+    document.addEventListener("click", onClearFilterClick);
     document.addEventListener("click", addViewTransition, {
       capture: true,
     });
+    window.addEventListener("popstate", onPopState);
   }
 
-  // popstate is global — only add once
-  window.addEventListener("popstate", () => applyFilter(getActiveTag()));
+  function init() {
+    bindListenersOnce();
+    applyFilter(getActiveTag());
+  }
 
   // Re-run on Astro view transitions (fires on initial load too)
   document.addEventListener("astro:page-load", init);
