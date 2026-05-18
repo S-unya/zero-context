@@ -10,7 +10,7 @@ image:
     aspectRatio: "16:9"
     width: 4032
     height: 2268
-tags: ["Accessibility", "POUR"]
+tags: ["Accessibility", "POUR", "Assistive Technology"]
 ---
 
 ## Introduction
