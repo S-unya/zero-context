@@ -1,5 +1,5 @@
 ---
-title: WCAG 3.0: Direction of Travel for Designers and Developers
+title: WCAG 3.0 - Direction of Travel for Designers and Developers
 description: WCAG 3.0 is still in draft, but we can see the direction of travel, and it looks good
 created: "2026-05-18T18:35:00.000Z"
 pubDate: "2026-05-18T18:35:00.000Z"
