@@ -1,6 +1,12 @@
 ---
 import styles from "./PageHeader.module.scss";
 import { Image } from "astro:assets";
+import {
+  ARTICLE_HERO_IMAGE_FORMAT,
+  ARTICLE_HERO_IMAGE_QUALITY,
+  ARTICLE_HERO_IMAGE_SIZES,
+  ARTICLE_HERO_IMAGE_WIDTHS,
+} from "../lib/articleHeroImage";
 
 const { image } = Astro.props;
 ---
@@ -37,8 +43,12 @@ const { image } = Astro.props;
         <Image
           {...image}
           class={styles.picture}
-          widths={[1700, 1200, 992, 768, 650, 375]}
+          priority
+          widths={ARTICLE_HERO_IMAGE_WIDTHS}
+          sizes={ARTICLE_HERO_IMAGE_SIZES}
           aria-hidden="true"
+          format={ARTICLE_HERO_IMAGE_FORMAT}
+          quality={ARTICLE_HERO_IMAGE_QUALITY}
           transition:name="article-image"
         />
       </div>

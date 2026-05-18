@@ -1,6 +1,8 @@
+import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
 const blitheringCollection = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/blithering" }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),

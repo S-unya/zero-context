@@ -1,19 +1,20 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import BlitheringFooter from "../../components/BlitheringFooter.astro";
 import TagPills from "../../components/TagPills.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection("blithering");
+
   return blogEntries.map((entry) => ({
-    params: { slug: entry.slug },
-    props: { entry },
+    params: { slug: entry.id },
+    props: entry,
   }));
 }
 
-const { entry } = Astro.props;
-const { Content, remarkPluginFrontmatter } = await entry.render();
+const entry = Astro.props;
+const { Content, remarkPluginFrontmatter } = await render(entry);
 const { title, pubDate, author = "Śūnya", tags = [] } = entry.data;
 const readingTime = remarkPluginFrontmatter?.readingTime;
 

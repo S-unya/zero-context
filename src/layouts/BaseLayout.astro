@@ -15,21 +15,21 @@ import "typeface-montserrat";
 import "typeface-noto-sans";
 
 const props = Astro.props;
-const image = props?.image ?? props?.entry?.data?.image;
+const image = props?.image ?? props?.data?.image;
 const site = Astro.site ?? new URL(Astro.url.origin);
 
 const seo = await getSeoData({
-  title: props?.title ?? props?.entry?.data?.title,
-  description: props?.description ?? props?.entry?.data?.description,
+  title: props?.title ?? props?.data?.title,
+  description: props?.description ?? props?.data?.description,
   siteTitle: SITE_TITLE,
   siteDescription: SITE_DESCRIPTION,
   image,
   currentUrl: Astro.url,
   site,
-  isArticle: Boolean(props?.entry),
-  publishedTime: props?.entry?.data?.pubDate,
-  author: props?.entry?.data?.author,
-  tags: props?.entry?.data?.tags,
+  isArticle: Boolean(props?.data),
+  publishedTime: props?.data?.pubDate,
+  author: props?.data?.author,
+  tags: props?.data?.tags,
 });
 ---
 
@@ -91,7 +91,7 @@ const seo = await getSeoData({
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <Header image={props?.entry?.data?.image} slug={props?.entry?.slug} />
+    <Header image={image} />
     <main class={`pageMain ${layoutStyles.row}`} id="main-content">
       <slot {...props} />
     </main>

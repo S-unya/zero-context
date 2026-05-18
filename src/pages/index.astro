@@ -4,6 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import layoutStyles from "../theme/layout.module.scss";
 import { Image } from "astro:assets";
 import TagPills from "../components/TagPills.astro";
+import { getArticleHeroPreloadCandidates } from "../lib/articleHeroImage";
 
 const blogEntries = await getCollection("blithering");
 const publishedEntries = blogEntries
@@ -21,6 +22,13 @@ publishedEntries.forEach((e) => {
   });
 });
 const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
+const publishedEntriesWithHeroPreload = await Promise.all(
+  publishedEntries.map(async (entry) => ({
+    entry,
+    heroPreloadCandidates: await getArticleHeroPreloadCandidates(entry.data.image),
+  })),
+);
+
 ---
 
 <Layout>
@@ -70,23 +78,25 @@ const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
 
     <ul role="list" class="articleGrid" id="article-grid">
       {
-        publishedEntries.map((entry, index) => (
+        publishedEntriesWithHeroPreload.map(({ entry, heroPreloadCandidates }, index) => (
           <li
             class="articleItem"
             data-tags={JSON.stringify(entry.data.tags ?? [])}
           >
             <a
-                href={`/blithering/${entry.slug}`}
-                class="cardLink"
-                data-target={`article-${index}`}
-              ><article class="articleCard" id={`article-${index}`}>
+              href={`/blithering/${entry.id}`}
+              class="cardLink"
+              data-target={`article-${index}`}
+              data-prefetch-images={JSON.stringify(heroPreloadCandidates)}
+            ><article class="articleCard" id={`article-${index}`}>
               <figure class="cardImageWrapper" role="presentation">
                 <Image
                   {...entry.data.image}
-                  widths={[536, 360, 303]}
+                  densities={[3]}
                   width={360}
                   height={203}
-                  sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 360px"
+                  quality={70}
+                  // sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 360px"
                   class="cardImage"
                 />
                 <!-- div to transition to image overlay -->
@@ -94,7 +104,7 @@ const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
               </figure>
               <div class="cardBody">
                 <h3 class="cardHeading">
-                    {entry.data.title}
+                  {entry.data.title}
                 </h3>
                 <div class="articleMeta">
                   <time
@@ -164,6 +174,135 @@ const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
     if (meta) {
       meta.style.viewTransitionName = "article-meta";
     }
+  }
+
+  const heroPreloadPromises = new Map<string, Promise<void>>();
+  const heroReady = new Set<string>();
+
+  function getArticleLink(target: EventTarget | null) {
+    if (!(target instanceof Element)) {
+      return null;
+    }
+
+    return target.closest<HTMLAnchorElement>(".cardLink[data-prefetch-images]");
+  }
+
+  function getHeroPreloadSrc(link: HTMLAnchorElement | null) {
+    const encodedCandidates = link?.dataset.prefetchImages;
+
+    if (!encodedCandidates) {
+      return undefined;
+    }
+
+    const candidates = JSON.parse(encodedCandidates) as Array<{
+      width: number;
+      src: string;
+    }>;
+
+    if (candidates.length === 0) {
+      return undefined;
+    }
+
+    const requiredWidth = Math.ceil(window.innerWidth * window.devicePixelRatio);
+    const match = candidates.find((candidate) => candidate.width >= requiredWidth);
+
+    return match?.src ?? candidates[candidates.length - 1]?.src;
+  }
+
+  function preloadHeroImage(link: HTMLAnchorElement | null) {
+    const src = getHeroPreloadSrc(link);
+
+    if (!src) {
+      return Promise.resolve();
+    }
+
+    if (heroReady.has(src)) {
+      return Promise.resolve();
+    }
+
+    const existingPromise = heroPreloadPromises.get(src);
+    if (existingPromise) {
+      return existingPromise;
+    }
+
+    const preloadPromise = new Promise<void>((resolve) => {
+      const preloadImage = new Image();
+      preloadImage.decoding = "async";
+      let settled = false;
+
+      const finish = (ready: boolean) => {
+        if (settled) {
+          return;
+        }
+
+        settled = true;
+        if (ready) {
+          heroReady.add(src);
+        }
+        resolve();
+      };
+
+      const decodeIfPossible = () => {
+        preloadImage.decode().then(
+          () => finish(true),
+          () => finish(true),
+        );
+      };
+
+      preloadImage.addEventListener(
+        "load",
+        () => {
+          decodeIfPossible();
+        },
+        { once: true },
+      );
+
+      preloadImage.addEventListener(
+        "error",
+        () => {
+          finish(false);
+        },
+        { once: true },
+      );
+
+      preloadImage.src = src;
+
+      if (preloadImage.complete) {
+        if (preloadImage.naturalWidth > 0) {
+          decodeIfPossible();
+        } else {
+          finish(false);
+        }
+      }
+    });
+
+    heroPreloadPromises.set(src, preloadPromise);
+    return preloadPromise;
+  }
+
+  function onArticleIntent(event: Event) {
+    const link = getArticleLink(event.target);
+
+    if (!link) {
+      return;
+    }
+
+    void preloadHeroImage(link);
+  }
+
+  function onArticlePointerOver(event: Event) {
+    const link = getArticleLink(event.target);
+
+    if (!link) {
+      return;
+    }
+
+    const relatedTarget = event instanceof MouseEvent ? event.relatedTarget : null;
+    if (relatedTarget instanceof Node && link.contains(relatedTarget)) {
+      return;
+    }
+
+    void preloadHeroImage(link);
   }
 
   function applyFilter(activeTag: string | null) {
@@ -261,6 +400,11 @@ const filterTags = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b));
     document.addEventListener("click", onClearFilterClick);
     document.addEventListener("click", addViewTransition, {
       capture: true,
+    });
+    document.addEventListener("pointerover", onArticlePointerOver);
+    document.addEventListener("focusin", onArticleIntent);
+    document.addEventListener("touchstart", onArticleIntent, {
+      passive: true,
     });
     window.addEventListener("popstate", onPopState);
   }

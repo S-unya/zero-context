@@ -45,7 +45,7 @@ if (blogEntriesSorted.length > 1) {
     {
       previousArticle && (
         <a
-          href={`/blithering/${previousArticle.slug}`}
+          href={`/blithering/${previousArticle.id}`}
           class="navItem previous"
           aria-label={`Previous article: ${previousArticle.data.title}`}
         >
@@ -87,7 +87,7 @@ if (blogEntriesSorted.length > 1) {
     {
       nextArticle && (
         <a
-          href={`/blithering/${nextArticle.slug}`}
+          href={`/blithering/${nextArticle.id}`}
           class="navItem next"
           aria-label={`Next article: ${nextArticle.data.title}`}
         >
